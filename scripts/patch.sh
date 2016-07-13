@@ -4,12 +4,13 @@
 #
 
 # get pwd
-#PWD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#PIGROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PIGROOT="/piGarden/scripts"
+cd $PIGROOT
 
 # local versions are stored here
-VERSION_CURRENT_FILE="$PIGROOT/patch.version"
-VERSION_TARGET_FILE="$PIGROOT/patch.target"
+VERSION_CURRENT_FILE="./patch.version"
+VERSION_TARGET_FILE="./patch.target"
 
 # get current version
 if [ ! -f "$VERSION_CURRENT_FILE" ]; then
@@ -30,16 +31,16 @@ do
 	VERSION_CURRENT=$((VERSION_CURRENT+1))
 
 	# increment version
-   	if [ ! -f "$PIGROOT/updates/update-$VERSION_CURRENT.sh" ]; then
+   	if [ ! -f "./updates/update-$VERSION_CURRENT.sh" ]; then
 		echo "Update $VERSION_CURRENT not available."
-		break
+		exit 1
    	fi
 	echo "Running updates update-$VERSION_CURRENT.sh"
-	chmod +x "$PIGROOT/updates/update-$VERSION_CURRENT.sh"
-	"$PIGROOT/updates/update-$VERSION_CURRENT.sh"
+	chmod +x "./updates/update-$VERSION_CURRENT.sh"
+	"./updates/update-$VERSION_CURRENT.sh"
 
 	# is there any point in this?
-	chmod -x "$PIGROOT/updates/update-$VERSION_CURRENT.sh"
+	chmod -x "./updates/update-$VERSION_CURRENT.sh"
 
 	# save the last version
 	echo "VERSION_CURRENT=$VERSION_CURRENT" > $VERSION_CURRENT_FILE
