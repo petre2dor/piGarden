@@ -1,7 +1,9 @@
+#! /bin/bash
 echo "************************************"
 echo "**********Getting updates***********"
 echo "************************************"
-sudo apt update
+sudo apt update -qq
+
 
 echo "************************************"
 echo "**********Installing nodejs and dependencies***********"
@@ -31,9 +33,12 @@ nvm install 6.3.0
 echo "*************************"
 echo "**********Install maria DB***********"
 echo "*************************"
-# to finish this
-sudo apt install mariadb-server -y -qq #not sure this is right
+# This will turn off "frontend" (prompts) during installations
+export DEBIAN_FRONTEND=noninteractive
 
+sudo debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password password Calul€vErdemanancaDES'
+sudo debconf-set-selections <<< 'mariadb-server-5.5 mysql-server/root_password_again password Calul€vErdemanancaDES'
+sudo apt install mariadb-server-5.5 -y
 
 
 echo "*************************"

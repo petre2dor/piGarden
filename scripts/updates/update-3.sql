@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `logs` (
     `device_id`     int(11),
     `type`          char(25) COMMENT 'save a code like CREATE_AREA, READ_TEMPERATURE...',
     `description`   text NOT NULL,
-    `date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS `stats` (

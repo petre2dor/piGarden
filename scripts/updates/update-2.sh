@@ -1,2 +1,3 @@
+#! /bin/bash
 
-mysql -uroot -ppetrixpetrix < updates/update-2.sql
+mysql -uroot -pCalul€vErdemanancaDES < updates/update-2.sql
