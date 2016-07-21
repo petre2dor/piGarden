@@ -18,15 +18,9 @@ class Request {
           res.on('data', function (chunk) {
               body += chunk;
           })
-          res.on('error', (e) => {
-              console.log(`Got res error: ${e.message}`);
-          })
           res.on('end', function (){
               callback(body);
           })
-        })
-        .on('error', (e) => {
-          console.log(`Got error: ${e.message}`);
         })
         .end()
 
