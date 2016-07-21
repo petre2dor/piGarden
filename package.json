@@ -1,0 +1,22 @@
+{
+  "name": "pi_garden",
+  "version": "1.0.0",
+  "description": "watter garden with raspberry pi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petre2dor/piGarden.git"
+  },
+  "author": "DorkFarm",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/petre2dor/piGarden/issues"
+  },
+  "homepage": "https://github.com/petre2dor/piGarden#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
