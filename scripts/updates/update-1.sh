@@ -20,6 +20,7 @@ echo "************************************"
 
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
 source ~/.bashrc
+source $NVM_DIR/nvm.sh
 
 # show nvm version
 nvm -v
@@ -27,6 +28,7 @@ echo "*************************"
 echo "**********Install node 6.3.0***********"
 echo "*************************"
 nvm install 6.3.0
+nvm use 6.3.0
 
 
 
