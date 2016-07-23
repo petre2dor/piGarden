@@ -1,8 +1,11 @@
 'use strict'
 var Request = require('./util/request.js')
 
-var device = new Request('ip.jsontest.com', 80)
-device.query('/', (data) => {console.log(data)} )
+var device = new Request('localhost', 3000)
+device.post('/', {'postData': 'hello worlds'}, (data) => {
+    console.log('index: ')
+    console.log(data)
+})
 
 // var express = require('express')
 // var app = express()
