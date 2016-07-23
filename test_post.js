@@ -9,6 +9,12 @@ var jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+
+app.get('/', function (req, res) {
+    res.status(500)
+    res.json({ error: 'message' })
+})
+
 // POST /login gets urlencoded bodies
 app.post('/', urlencodedParser, function (req, res) {
     if (!req.body) return res.sendStatus(400)

@@ -6,7 +6,7 @@ class Request {
         this.options = {
               host: host,
               port: port
-        };
+        }
     }
 
     get (path, callback) {
@@ -48,15 +48,15 @@ class Request {
           res.setEncoding('utf8')
           res.on('data', (chunk) => {
             body += chunk
-          });
+          })
           res.on('end', () => {
             callback(JSON.parse(body))
-          });
-        });
+          })
+        })
 
         req.on('error', (e) => {
           console.log(`problem with request: ${e.message}`)
-        });
+        })
 
         // write data to request body
         req.write(postData)
@@ -64,5 +64,4 @@ class Request {
     }
 }
 
-// exports.Request;
 module.exports = Request
