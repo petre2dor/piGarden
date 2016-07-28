@@ -1,26 +1,31 @@
+DROP TABLE `areas`;
 CREATE TABLE IF NOT EXISTS `areas` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`          varchar(100) NOT NULL,
     `description`   varchar(255),
-    `data`          text COMMENT 'save more settings here as json'
+    `status`        char(25) COMMENT 'ACTIVE, INACTIVE, DELETED',
+    `options`       text COMMENT 'save more settings here as json'
 );
 
-
+DROP TABLE `devices`;
 CREATE TABLE IF NOT EXISTS `devices` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`          varchar(100) NOT NULL,
     `type`          char(15),
     `description`   varchar(255),
-    `data`          text COMMENT 'save more settings here as json'
+    `status`        char(25) COMMENT 'ACTIVE, INACTIVE, DELETED',
+    `options`       text COMMENT 'save more settings here as json'
 );
 
+DROP TABLE `areas_devices`;
 CREATE TABLE IF NOT EXISTS `areas_devices` (
     `area_id`       int(11) NOT NULL,
     `device_id`     int(11) NOT NULL,
-    `data`          text COMMENT 'save more settings here as json'
+    `status`        char(25) COMMENT 'ACTIVE, INACTIVE, DELETED',
+    `options`       text COMMENT 'save more settings here as json'
 );
 
-
+DROP TABLE `logs`;
 CREATE TABLE IF NOT EXISTS `logs` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `area_id`       int(11),
@@ -30,9 +35,10 @@ CREATE TABLE IF NOT EXISTS `logs` (
     `date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS `stats` (
-    `time_range_type` char(10) NOT NULL COMMENT 'DAY, MOUNTH, YEAR...',
-    `time_range_end` TIMESTAMP NOT NULL,
-    `type` char(25) NOT NULL COMMENT 'save a code like TEMPERATURE, HUMIDITY',
-    `value` int(11) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS `stats` (
+--     `time_range_type`   char(10) NOT NULL COMMENT 'DAY, MOUNTH, YEAR...',
+--     `time_range_end`    TIMESTAMP NOT NULL,
+--     `type`              char(25) NOT NULL COMMENT 'save a code like TEMPERATURE, HUMIDITY',
+--     `value`             int(11) NOT NULL,
+--     `status`            char(25) COMMENT 'ACTIVE, INACTIVE, DELETED'
+-- );

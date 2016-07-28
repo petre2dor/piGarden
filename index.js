@@ -19,16 +19,7 @@ log.setType('error')
 log.setDescription('Test insert')
 log.insert()
 
-
-function exitHandler(options, err) {
-    conn.end();
-    if (err)
-        console.log(err.stack)
-    if (options.exit)
-        process.exit();
-}
-//do something when app is closing
-process.on('exit', exitHandler.bind(null, {cleanup: true}));
+conn.end()
 
 
 

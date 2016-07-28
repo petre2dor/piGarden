@@ -35,7 +35,7 @@ class PrimaryModel {
             if (err) throw err
             if (callback) callback(result)
         })
-        this.connection.end()
+        // console.log(query.sql)
     }
 }
 
