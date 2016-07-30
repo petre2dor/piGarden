@@ -12,7 +12,6 @@ class LogModel extends PrimaryModel {
         this.fields.device_id = val
     }
     setType(val){
-        // this.type = val.toUpperCase()
         this.fields.type = val
     }
     setDescription(val){
@@ -21,6 +20,11 @@ class LogModel extends PrimaryModel {
 
     getInsertStmt(){
         return 'INSERT INTO logs SET ?'
+    }
+
+    create(fields){
+        console.log('Log: ' + fields.description + '; type: ' + fields.type);
+        super.create(fields)
     }
 }
 
