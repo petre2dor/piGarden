@@ -4,7 +4,9 @@ var Utilities = require('../util/utilities.js')
 class PrimaryModel {
     constructor(conn){
         this.connection = conn
-        this.fields = {}
+        this.fields     = {}
+        this.rowData    = []
+        this.rowIndex   = 0
     }
 
     getReadStmt(){
@@ -19,11 +21,15 @@ class PrimaryModel {
         throw 'No Read Statement defined'
     }
 
-    read (){
+    read(){
         this.query(this.getReadStmt())
     }
 
-    insert (){
+    insert(){
+        this.query(this.getInsertStmt())
+    }
+
+    update(){
         this.query(this.getInsertStmt())
     }
 
@@ -45,14 +51,31 @@ class PrimaryModel {
         this.query(this.getUpdateStmt())
     }
 
+    // query (statement, callback = false){
+    //     var query = this.connection.query(statement, this.fields, function(err, result) {
+    //         if (err) throw err
+    //         if (callback) callback(result)
+    //     })
+    //     // console.log(query.sql)
+    // }
 
-    query (statement, callback = false){
-        var query = this.connection.query(statement, this.fields, function(err, result) {
-            if (err) throw err
-            if (callback) callback(result)
+    query (statement){
+        var self = this
+        return new Promise((resolve, reject) => {
+            console.log('self.fields ', self.fields)
+            var query = self.connection.query(statement, self.fields,
+                (err, result) => {
+                    // if (err) throw err
+                    if (!err) {
+                        resolve(result)
+                    } else {
+                        throw err
+                    }
+                }
+            )
         })
-        // console.log(query.sql)
     }
+
 
     getSetterFunction(field){
         var functionName = 'set';

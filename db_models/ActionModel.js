@@ -38,52 +38,70 @@ class ActionModel extends PrimaryModel {
     }
 
     //getters
-    getId(val){
+    getId(){
         return this.fields.id
     }
-    getAreaId(val){
+    getAreaId(){
         return this.fields.area_id
     }
-    getVerb(val){
+    getVerb(){
         return this.fields.verb
     }
-    getObject(val){
+    getObject(){
         return this.fields.object
     }
-    getOptions(val){
+    getOptions(){
         return JSON.parse(this.fields.options)
     }
-    getLastRunTime(val){
+    getLastRunTime(){
         return this.fields.last_run_time
     }
-    getNextRunTime(val){
+    getNextRunTime(){
         return this.fields.next_run_time
     }
-    getSchedule(val){
+    getSchedule(){
         return JSON.parse(this.fields.schedule)
     }
-    getDescription(val){
+    getDescription(){
         return this.fields.description
     }
-    getIsRunnning(val){
+    getIsRunnning(){
         return this.fields.is_running
     }
-    getStatus(val){
+    getStatus(){
         return this.fields.status
     }
 
     getInsertStmt(){
-        return 'INSERT INTO logs SET ?'
+        return 'INSERT INTO actions SET ?'
     }
 
-    readNextAction(callback){
+    getUpdateStmt(){
+        return `UPDATE actions
+                SET area_id = :area_id, verb = :verb, object = :object,
+                    options = :options, last_run_time = :last_run_time,
+                    next_run_time = :next_run_time, schedule = :schedule,
+                    description = :description, is_running = :is_running,
+                    status = :status
+                WHERE id = :id`
+    }
+
+    readNextAction(){
         var sql = `SELECT id, area_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status
                     FROM actions
                     WHERE next_run_time <= NOW()
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
-         callback(sql);
+        // console.log(sql);
+
+        return new Promise((resolve, reject) => {
+            this.query(sql)
+                .then((result) => {
+                    this
+                    this.rawData = result
+                    this.fields = result[0]
+                    resolve(true)})})
     }
 }
 
