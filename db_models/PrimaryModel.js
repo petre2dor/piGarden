@@ -1,9 +1,9 @@
 'use strict'
-var Utilities = require('../util/utilities.js')
+var Utilities   = require('../util/utilities.js')
+var Connection  = require('../util/connection.js')
 
 class PrimaryModel {
-    constructor(conn){
-        this.connection = conn
+    constructor(){
         this.fields     = {}
         this.rowData    = []
         this.rowIndex   = 0
@@ -51,28 +51,21 @@ class PrimaryModel {
         this.query(this.getUpdateStmt())
     }
 
-    // query (statement, callback = false){
-    //     var query = this.connection.query(statement, this.fields, function(err, result) {
-    //         if (err) throw err
-    //         if (callback) callback(result)
-    //     })
-    //     // console.log(query.sql)
-    // }
-
     query (statement){
-        var self = this
+        var fields = this.fields
         return new Promise((resolve, reject) => {
-            console.log('self.fields ', self.fields)
-            var query = self.connection.query(statement, self.fields,
-                (err, result) => {
-                    // if (err) throw err
-                    if (!err) {
-                        resolve(result)
-                    } else {
-                        throw err
+            Connection.acquire(function(err, conn) {
+                var query = conn.query(statement, fields,
+                    (err, result) => {
+                        // if (err) throw err
+                        if (!err) {
+                            resolve(result)
+                        } else {
+                            throw err
+                        }
                     }
-                }
-            )
+                )
+            })
         })
     }
 

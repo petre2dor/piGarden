@@ -19,9 +19,9 @@ class LogModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return 'INSERT INTO logs SET ?'
+        return `INSERT INTO logs(area_id, device_id, type, description)
+                VALUES (:area_id, :device_id, :type, :description)`
     }
-
     create(fields){
         console.log('Log: ' + fields.description + '; type: ' + fields.type);
         super.create(fields)

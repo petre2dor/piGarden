@@ -73,7 +73,13 @@ class ActionModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return 'INSERT INTO actions SET ?'
+        return `INSERT INTO actions (area_id, verb, object, options, last_run_time,
+                    next_run_time, schedule, description, is_running, status)
+                VALUES(area_id = :area_id, verb = :verb, object = :object,
+                    options = :options, last_run_time = :last_run_time,
+                    next_run_time = :next_run_time, schedule = :schedule,
+                    description = :description, is_running = :is_running,
+                    status = :status)`
     }
 
     getUpdateStmt(){
