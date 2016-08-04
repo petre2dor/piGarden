@@ -22,15 +22,11 @@ class PrimaryModel {
     }
 
     read(){
-        this.query(this.getReadStmt())
+        return this.query(this.getReadStmt())
     }
 
     insert(){
-        this.query(this.getInsertStmt())
-    }
-
-    update(){
-        this.query(this.getInsertStmt())
+        return this.query(this.getInsertStmt())
     }
 
     create(fields){
@@ -47,16 +43,17 @@ class PrimaryModel {
         this.reset()
     }
 
-    update (){
-        this.query(this.getUpdateStmt())
+    update(){
+        return this.query(this.getUpdateStmt())
     }
 
     query (statement){
         var fields = this.fields
         return new Promise((resolve, reject) => {
             Connection.acquire(function(err, conn) {
-                var query = conn.query(statement, fields,
-                    (err, result) => {
+                if(err) throw err
+                var query = conn.query(statement, fields, (err, result) => {
+                        conn.release()
                         // if (err) throw err
                         if (!err) {
                             resolve(result)

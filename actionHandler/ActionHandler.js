@@ -12,32 +12,50 @@ class ActionHandler {
     }
 
     run() {
+        console.log('RUN FOREST! RUUUN!!!!')
         this.actionModel.readNextAction()
-        .then(() => {
-                return this.callController()
+        .then((actionModel) => {
+                console.log('set status RUNNING');
+                actionModel.setStatus('RUNNING')
+                actionModel.update().then(() => {
+                    setTimeout(() => {
+                        this.run()
+                    }, 2000)
+                })
+                return this.callController(actionModel)
             }, (err) => {
-                console.log('err: ', err)
+                console.log(err + '. sleep 5s');
+                setTimeout(() => {
+                    this.run()
+                }, 5000)
             })
         .then((result) => {
-            this.reschedule(result)
+            var actionModel = result[0]
+            var controllerResponse = result[1]
+            this.reschedule(actionModel, controllerResponse)
         })
     }
 
-    callController(){
+    callController(actionModel){
         //call to controller
         return new Promise((resolve, reject) => {
-            this.request.get('/', (result) => {
-                resolve(result)
+            this.request.get('/', (controllerResponse) => {
+                resolve([actionModel, controllerResponse])
             })
         })
     }
 
-    reschedule(controller_response){
-        // this.actionModel.setNextRunTime('2016-07-31T19:48:11.000Z')
-        this.actionModel.setNextRunTime('2016-07-01 00:00:00')
-        this.actionModel.update()
-        console.log('VERB ', this.actionModel.getSchedule())
-        // console.log('result ', controller_response)
+    reschedule(actionModel, controllerResponse){
+        
+        actionModel.setNextRunTime('2016-07-01 00:00:00')
+        actionModel.setStatus('ACTIVE_1')
+        actionModel.update()
+        .then((result) => {
+            // console.log('update result ', result);
+        },(err) => {
+            throw err
+            // console.log('update err ', err);
+        })
     }
 }
 

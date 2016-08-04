@@ -11,13 +11,13 @@ try {
     logModel.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_START', description: 'Start ActionHandler'})
 
     var actionHandler = new ActionHandler(logModel);
-    actionHandler.run();
+    actionHandler.run()
 
     var logModel = new LogModel()
     logModel.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_END', description: 'End ActionHandler'})
 } catch (e) {
     throw e
-    logModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
+    // logModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
 } finally {
-
+    console.log('---finally---')
 }

@@ -96,7 +96,7 @@ class ActionModel extends PrimaryModel {
         var sql = `SELECT id, area_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status
                     FROM actions
-                    WHERE next_run_time <= NOW()
+                    WHERE next_run_time <= NOW() AND status = 'ACTIVE'
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
         // console.log(sql);
@@ -104,10 +104,13 @@ class ActionModel extends PrimaryModel {
         return new Promise((resolve, reject) => {
             this.query(sql)
                 .then((result) => {
-                    this
-                    this.rawData = result
-                    this.fields = result[0]
-                    resolve(true)})})
+                    if(result.length > 0){
+                        this.fields = result[0]
+                        resolve(this)
+                    }else{
+                        reject('There is no next action available')
+                    }
+                })})
     }
 }
 
