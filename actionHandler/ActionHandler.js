@@ -1,4 +1,5 @@
 'use strict'
+var LocalDateTime = require('js-joda').LocalDateTime;
 var ActionModel = require('../db_models/ActionModel.js')
 var Request = require('../util/request.js')
 
@@ -46,9 +47,8 @@ class ActionHandler {
     }
 
     reschedule(actionModel, controllerResponse){
-        
-        actionModel.setNextRunTime('2016-07-01 00:00:00')
-        actionModel.setStatus('ACTIVE_1')
+        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(60).toString())
+        actionModel.setStatus('ACTIVE')
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
