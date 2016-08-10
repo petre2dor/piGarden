@@ -12,7 +12,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.get('/', function (req, res) {
     res.status(500)
-    res.json({ error: 'message' })
+    res.json({ error: 'messages' })
 })
 
 // POST /login gets urlencoded bodies

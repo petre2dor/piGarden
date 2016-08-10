@@ -1,12 +1,13 @@
 'use strict'
 var LocalDateTime = require('js-joda').LocalDateTime;
-var ActionModel = require('../db_models/ActionModel.js')
-var Request = require('../util/request.js')
+var ActionModel = require('../db_models/ActionModel')
+var LogModel    = require('../db_models/LogModel')
+var Request     = require('../util/request')
 
 class ActionHandler {
-    constructor(logModel) {
+    constructor() {
+        this.logModel       = new LogModel()
         this.actionModel    = new ActionModel()
-        this.logModel       = logModel;
         this.stop           = 42
         this.request        = new Request('date.jsontest.com', 80)
         this.logModel.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_INIT', description: 'ActionHandler initialized'})
@@ -52,6 +53,7 @@ class ActionHandler {
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
+            return true
         },(err) => {
             throw err
             // console.log('update err ', err);

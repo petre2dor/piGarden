@@ -1,25 +1,35 @@
 'use strict'
 // const MODEL_PATH = 'db_models/'
 var Request     = require('./util/request.js')
-var LogModel    = require('./db_models/LogModel.js')
-var mysql       = require('mysql')
-var conn = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'db_gardener',
-  password : 'KTgdXz3SSMCY',
-  database : 'pi_garden'
+// var LogModel    = require('./db_models/LogModel.js')
+// var mysql       = require('mysql')
+// var conn = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'db_gardener',
+//   password : 'KTgdXz3SSMCY',
+//   database : 'pi_garden'
+// })
+// conn.connect()
+//
+//
+// var log = new LogModel(conn);
+// log.setAreaId(1)
+// log.setDeviceId(1)
+// log.setType('error')
+// log.setDescription('Test insert')
+// log.insert()
+//
+// conn.end()
+
+
+
+var request = new Request('localhost', 3000)
+request.get('/').then((response) => {
+    console.log(response)
+},
+(reason) => {
+    console.log('Handle rejected promise ('+reason+') here.')
 })
-conn.connect()
-
-
-var log = new LogModel(conn);
-log.setAreaId(1)
-log.setDeviceId(1)
-log.setType('error')
-log.setDescription('Test insert')
-log.insert()
-
-conn.end()
 
 
 
