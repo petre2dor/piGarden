@@ -1,0 +1,11 @@
+{
+  apps : [{
+    name        : "ActionHandler",
+    script      : "/piGarden/actionHandler/index.js",
+    watch       : true
+  },{
+      name        : "ActionController",
+      script      : "/piGarden/actionController/index.js",
+      watch       : true
+  }]
+}

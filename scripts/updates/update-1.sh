@@ -10,7 +10,7 @@ echo "**********Installing nodejs and dependencies***********"
 echo "************************************"
 
 # install nodejs and dependencies for nvm
-sudo apt install nodejs npm build-essential libssl-dev -y
+sudo apt install nodejs nodejs-legacy npm build-essential libssl-dev -y
 
 # install nvm
 # https://github.com/creationix/nvm

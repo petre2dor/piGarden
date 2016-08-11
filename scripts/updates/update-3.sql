@@ -1,4 +1,4 @@
-DROP TABLE `areas`;
+DROP TABLE IF EXISTS `areas`;
 CREATE TABLE IF NOT EXISTS `areas` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`          varchar(100) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `areas` (
     `options`       text COMMENT 'save more settings here as json'
 );
 
-DROP TABLE `devices`;
+DROP TABLE IF EXISTS `devices`;
 CREATE TABLE IF NOT EXISTS `devices` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name`          varchar(100) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `devices` (
     `options`       text COMMENT 'save more settings here as json'
 );
 
-DROP TABLE `areas_devices`;
+DROP TABLE IF EXISTS `areas_devices`;
 CREATE TABLE IF NOT EXISTS `areas_devices` (
     `area_id`       int(11) NOT NULL,
     `device_id`     int(11) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `areas_devices` (
     `options`       text COMMENT 'save more settings here as json'
 );
 
-DROP TABLE `logs`;
+DROP TABLE IF EXISTS `logs`;
 CREATE TABLE IF NOT EXISTS `logs` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `area_id`       int(11),
