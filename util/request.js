@@ -2,7 +2,7 @@
 const http = require('http')
 const querystring = require('querystring')
 class Request {
-    constructor(host, port = 3000) {
+    constructor(host = 'localhost', port = 3000) {
         this.options = {
               host: host,
               port: port
@@ -10,7 +10,7 @@ class Request {
     }
 
     // returns a Promise
-    get (path, callback) {
+    get (path) {
         this.options.path = path
         this.options.method = 'get'
 
@@ -22,7 +22,7 @@ class Request {
     getHttpRequest() {
         var body = '';
         return new Promise( (resolve, reject) => {
-            http.request(this.options, function(res) {
+            var req = http.request(this.options, function(res) {
                 res.setEncoding('utf8');
                 res.on('data', function (chunk) {
                     body += chunk
@@ -31,10 +31,10 @@ class Request {
                     resolve(JSON.parse(body))
                 })
             })
-            .on('error', (e) => {
+            req.on('error', (e) => {
                 reject(`problem with request: ${e.message}`)
             })
-            .end()
+            req.end()
         })
     }
 

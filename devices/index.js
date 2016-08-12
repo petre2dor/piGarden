@@ -20,7 +20,7 @@ try {
 
     var server = app.listen(3001, function(){
         console.log('Server listening on port ' + server.address().port)
-        log.create({area_id: 0, device_id: 0, type: 'DEVICES_START', description: 'Server listening on port ' + server.address().port})
+        log.create({area_id: 0, device_id: 0, type: 'D_START', description: 'Devices server listening on port ' + server.address().port})
     })
 } catch (e) {
     throw e
