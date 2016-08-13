@@ -34,11 +34,3 @@ CREATE TABLE IF NOT EXISTS `logs` (
     `description`   text NOT NULL,
     `date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- CREATE TABLE IF NOT EXISTS `stats` (
---     `time_range_type`   char(10) NOT NULL COMMENT 'DAY, MOUNTH, YEAR...',
---     `time_range_end`    TIMESTAMP NOT NULL,
---     `type`              char(25) NOT NULL COMMENT 'save a code like TEMPERATURE, HUMIDITY',
---     `value`             int(11) NOT NULL,
---     `status`            char(25) COMMENT 'ACTIVE, INACTIVE, DELETED'
--- );

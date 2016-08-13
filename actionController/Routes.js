@@ -1,8 +1,10 @@
 var Connection  = require('../util/connection');
 var LogModel    = require('../db_models/LogModel.js')
+var StatsModel  = require('../db_models/StatsModel.js')
 var Request     = require('../util/request.js')
 
 var log = new LogModel()
+var stats = new StatsModel()
 
 module.exports = {
     configure: function(app) {
@@ -12,7 +14,7 @@ module.exports = {
             request.get('/temperature/1')
                 .then((response) => {
                     log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
-                    
+                    stats.create({type: 'TEMPERATURE', value: response.data.temperature})
                     res.send(
                         {
                             httpCode: 200,
@@ -40,6 +42,7 @@ module.exports = {
             request.get('/humidity/2')
                 .then((response) => {
                     log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_HUMIDITY', description: JSON.stringify(response)})
+                    stats.create({type: 'HUMIDITY', value: response.data.humidity})
                     res.send(
                         {
                             httpCode: 200,

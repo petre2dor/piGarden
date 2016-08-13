@@ -26,19 +26,24 @@ class ActionHandler {
                 })
                 return this.callController(actionModel)
             }, (err) => {
-                console.log(err + '. sleep 5s');
+                console.log(err + '. Sleep 5s');
                 setTimeout(() => {
                     this.run()
                 }, 5000)
             })
         .then((result) => {
-            var actionModel = result[0]
-            var controllerResponse = result[1]
-            this.reschedule(actionModel, controllerResponse)
+            if ( typeof result !== 'undefined' && result ){
+                console.log('second then!!!!!!!!!!!!!!!!!!!!!!!!!')
+                var actionModel = result[0]
+                console.log('actionModel ', actionModel)
+                var controllerResponse = result[1]
+                this.reschedule(actionModel, controllerResponse)
+            }
         })
     }
 
     callController(actionModel){
+        console.log('callController ', actionModel);
         //call to controller
         return new Promise((resolve, reject) => {
             this.request.get('/', (controllerResponse) => {
@@ -48,7 +53,11 @@ class ActionHandler {
     }
 
     reschedule(actionModel, controllerResponse){
-        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(60).toString())
+        // console.log('actionModel.getSchedule() ', actionModel.getSchedule())
+        // var sec = actionModel.getSchedule().every || 12
+        // console.log('Run this after ' + sec + ' seconds')
+        console.log('Run this after 15 seconds')
+        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(15).toString())
         actionModel.setStatus('ACTIVE')
         actionModel.update()
         .then((result) => {
