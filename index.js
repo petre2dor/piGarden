@@ -24,7 +24,7 @@ var Request     = require('./util/request.js')
 
 
 var request = new Request('localhost', 3000)
-request.get('/').then((response) => {
+request.get('/read/temperature/1').then((response) => {
     console.log(response)
 },
 (reason) => {

@@ -9,7 +9,7 @@ class ActionHandler {
         this.logModel       = new LogModel()
         this.actionModel    = new ActionModel()
         this.stop           = 42
-        this.request        = new Request('date.jsontest.com', 80)
+        this.request        = new Request('localhost', 3000)
         this.logModel.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_INIT', description: 'ActionHandler initialized'})
     }
 
@@ -32,32 +32,35 @@ class ActionHandler {
                 }, 5000)
             })
         .then((result) => {
-            if ( typeof result !== 'undefined' && result ){
                 console.log('second then!!!!!!!!!!!!!!!!!!!!!!!!!')
+                console.log(result)
                 var actionModel = result[0]
                 console.log('actionModel ', actionModel)
                 var controllerResponse = result[1]
                 this.reschedule(actionModel, controllerResponse)
-            }
-        })
+            },(err) => {
+                console.log('second then err', err);
+            })
     }
 
     callController(actionModel){
-        console.log('callController ', actionModel);
         //call to controller
         return new Promise((resolve, reject) => {
-            this.request.get('/', (controllerResponse) => {
-                resolve([actionModel, controllerResponse])
-            })
+            var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getAreaId()
+            console.log('path ', path)
+            this.request.get(path).then((controllerResponse) => {
+                    resolve([actionModel, controllerResponse])
+                },
+                (reason) => {
+                    console.log('Handle rejected promise ('+reason+') here.')
+                })
         })
     }
 
     reschedule(actionModel, controllerResponse){
-        // console.log('actionModel.getSchedule() ', actionModel.getSchedule())
-        // var sec = actionModel.getSchedule().every || 12
-        // console.log('Run this after ' + sec + ' seconds')
-        console.log('Run this after 15 seconds')
-        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(15).toString())
+        var sec = actionModel.getSchedule().start.every || 60 //default run after 1 min
+        console.log('Run this after ' + actionModel.getSchedule().start.every + ' seconds')
+        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(sec).toString())
         actionModel.setStatus('ACTIVE')
         actionModel.update()
         .then((result) => {
