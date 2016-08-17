@@ -96,7 +96,8 @@ class ActionModel extends PrimaryModel {
         var sql = `SELECT id, area_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status
                     FROM actions
-                    WHERE next_run_time <= NOW() AND status = 'ACTIVE'
+                    WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
+                        OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
         // console.log(sql);
