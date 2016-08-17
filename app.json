@@ -1,19 +1,31 @@
 {
-    apps : [
-      {
-        name        : "ActionHandler",
-        script      : "/piGarden/actionHandler/index.js",
-        watch       : true
-      },
-      {
-          name        : "ActionController",
-          script      : "/piGarden/actionController/index.js",
-          watch       : true
-      },
-      {
-          name        : "Devices",
-          script      : "/piGarden/devices/index.js",
-          watch       : true
-    }
-  ]
+    "apps" : [
+        {
+            "name"          : "ActionHandler",
+            "script"        : "index.js",
+            "watch"         : true,
+            "watch_options" : {
+                "usePolling"        : true
+            },
+            "cwd"           : "/piGarden/actionHandler"
+        },
+        {
+            "name"            : "ActionController",
+            "script"        : "index.js",
+            "watch"         : true,
+            "watch_options" : {
+                "usePolling"        : true
+            },
+            "cwd"           : "/piGarden/actionController"
+        },
+        {
+            "name"            : "Devices",
+            "script"        : "index.js",
+            "watch"         : true,
+            "watch_options" : {
+                "usePolling"        : true
+            },
+            "cwd"           : "/piGarden/devices"
+        }
+    ]
 }
