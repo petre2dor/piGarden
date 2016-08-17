@@ -4,20 +4,19 @@ var ActionModel = require('../db_models/ActionModel')
 var LogModel    = require('../db_models/LogModel')
 var Request     = require('../util/request')
 
+var log  = new LogModel()
+
 class ActionHandler {
     constructor() {
-        this.logModel       = new LogModel()
         this.actionModel    = new ActionModel()
-        this.stop           = 42
         this.request        = new Request('localhost', 3000)
-        this.logModel.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_INIT', description: 'ActionHandler initialized'})
+        log.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_INIT', description: 'ActionHandler initialized'})
     }
 
     run() {
-        console.log('RUN FOREST! RUUUN!!!!')
         this.actionModel.readNextAction()
         .then((actionModel) => {
-                console.log('set status RUNNING');
+
                 actionModel.setStatus('RUNNING')
                 actionModel.update().then(() => {
                     setTimeout(() => {
@@ -25,22 +24,18 @@ class ActionHandler {
                     }, 2000)
                 })
                 return this.callController(actionModel)
-            }, (err) => {
-                console.log(err + '. Sleep 5s');
-                setTimeout(() => {
-                    this.run()
-                }, 5000)
             })
         .then((result) => {
-                console.log('second then!!!!!!!!!!!!!!!!!!!!!!!!!')
-                console.log(result)
                 var actionModel = result[0]
-                console.log('actionModel ', actionModel)
                 var controllerResponse = result[1]
                 this.reschedule(actionModel, controllerResponse)
-            },(err) => {
-                console.log('second then err', err);
             })
+        .catch((reason) => {
+            console.log(reason + '. Sleep 5s');
+            setTimeout(() => {
+                this.run()
+            }, 5000)
+        })
     }
 
     callController(actionModel){
