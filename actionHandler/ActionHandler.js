@@ -16,7 +16,6 @@ class ActionHandler {
     run() {
         this.actionModel.readNextAction()
         .then((actionModel) => {
-
                 actionModel.setStatus('RUNNING')
                 actionModel.update().then(() => {
                     setTimeout(() => {
@@ -31,7 +30,7 @@ class ActionHandler {
                 this.reschedule(actionModel, controllerResponse)
             })
         .catch((reason) => {
-            console.log(reason + '. Sleep 5s');
+            log.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_RUN', description: reason + '. Sleep 5s'})
             setTimeout(() => {
                 this.run()
             }, 5000)
@@ -42,7 +41,6 @@ class ActionHandler {
         //call to controller
         return new Promise((resolve, reject) => {
             var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getAreaId()
-            console.log('path ', path)
             this.request.get(path).then((controllerResponse) => {
                     resolve([actionModel, controllerResponse])
                 },
