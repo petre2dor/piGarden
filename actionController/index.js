@@ -19,11 +19,9 @@ try {
 
     var server = app.listen(3000, function(){
         console.log('Server listening on port ' + server.address().port)
-        log.create({area_id: 0, device_id: 0, type: 'AC_START', description: 'Server listening on port ' + server.address().port})
+        log.create({action_id: 0, area_id: 0, device_id: 0, type: 'AC_START', description: 'AC Server listening on port ' + server.address().port})
     })
 } catch (e) {
+    log.create({action_id: 0, area_id: 0, device_id: 0, type: 'AC_START_ERR', description: 'Error starting AC server ' + e})
     throw e
-    // log.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
-} finally {
-    console.log('---finally---')
 }

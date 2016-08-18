@@ -84,11 +84,11 @@ class ActionModel extends PrimaryModel {
 
     getUpdateStmt(){
         return `UPDATE actions
-                SET area_id = :area_id, verb = :verb, object = :object,
-                    options = :options, last_run_time = :last_run_time,
-                    next_run_time = :next_run_time, schedule = :schedule,
-                    description = :description, is_running = :is_running,
-                    status = :status
+                SET area_id = :area_id, verb = :verb,
+                    object = :object, options = :options,
+                    last_run_time = :last_run_time, next_run_time = :next_run_time,
+                    schedule = :schedule, description = :description,
+                    is_running = :is_running, status = :status
                 WHERE id = :id`
     }
 
@@ -100,7 +100,6 @@ class ActionModel extends PrimaryModel {
                         OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
-        // console.log(sql);
 
         return new Promise((resolve, reject) => {
             this.query(sql)

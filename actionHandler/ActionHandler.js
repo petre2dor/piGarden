@@ -10,12 +10,13 @@ class ActionHandler {
     constructor() {
         this.actionModel    = new ActionModel()
         this.request        = new Request('localhost', 3000)
-        log.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_INIT', description: 'ActionHandler initialized'})
+        log.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: 'ActionHandler initialized'})
     }
 
     run() {
         this.actionModel.readNextAction()
         .then((actionModel) => {
+                log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RUN', description: 'Setting action status to RUNNING'})
                 actionModel.setStatus('RUNNING')
                 actionModel.update().then(() => {
                     setTimeout(() => {
@@ -30,7 +31,7 @@ class ActionHandler {
                 this.reschedule(actionModel, controllerResponse)
             })
         .catch((reason) => {
-            log.create({area_id: 0, device_id: 0, type: 'ACTION_HANDLER_RUN', description: reason + '. Sleep 5s'})
+            log.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_RUN', description: reason + '. Sleep 5s'})
             setTimeout(() => {
                 this.run()
             }, 5000)
@@ -41,25 +42,27 @@ class ActionHandler {
         //call to controller
         return new Promise((resolve, reject) => {
             var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getAreaId()
-            this.request.get(path).then((controllerResponse) => {
+            log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER', description: 'Calling action controller: ' + path})
+            this.request.get(path)
+                .then((controllerResponse) => {
                     resolve([actionModel, controllerResponse])
-                },
-                (reason) => {
-                    console.log('Handle rejected promise ('+reason+') here.')
+                },(reason) => {
+                    log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER_ERR', description: 'Calling action controller error: ' + reason})
                 })
         })
     }
 
     reschedule(actionModel, controllerResponse){
         var sec = actionModel.getSchedule().start.every || 60 //default run after 1 min
-        console.log('Run this after ' + actionModel.getSchedule().start.every + ' seconds')
+        log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action after ' + sec + ' sec.'})
         actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(sec).toString())
         actionModel.setStatus('ACTIVE')
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
             return true
-        },(err) => {
+        },(reason) => {
+            log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE_ERR', description: 'Rescheduling action errror ' + reason})
             throw err
             // console.log('update err ', err);
         })

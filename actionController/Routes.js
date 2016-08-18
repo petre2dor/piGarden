@@ -13,7 +13,7 @@ module.exports = {
 
             request.get('/temperature/1')
                 .then((response) => {
-                    log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
+                    log.create({action_id: 0, area_id: req.params.areaId, device_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
                     stats.create({type: 'TEMPERATURE', value: response.data.temperature})
                     res.send(
                         {
@@ -24,7 +24,7 @@ module.exports = {
                     )
                 },(err) => {
                     console.log(err)
-                    log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_TEMPERATURE_ERR', description: err})
+                    log.create({action_id: 0, area_id: req.params.areaId, device_id: 0, type: 'READ_TEMPERATURE_ERR', description: err})
                     res.send(
                         {
                             httpCode: 400,
@@ -41,7 +41,7 @@ module.exports = {
 
             request.get('/humidity/2')
                 .then((response) => {
-                    log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_HUMIDITY', description: JSON.stringify(response)})
+                    log.create({action_id: 0, area_id: req.params.areaId, device_id: 0, type: 'READ_HUMIDITY', description: JSON.stringify(response)})
                     stats.create({type: 'HUMIDITY', value: response.data.humidity})
                     res.send(
                         {
@@ -51,7 +51,7 @@ module.exports = {
                         }
                     )
                 },(err) => {
-                    log.create({area_id: req.params.areaId, device_id: 0, type: 'READ_HUMIDITY_ERR', description: err})
+                    log.create({action_id: 0, area_id: req.params.areaId, device_id: 0, type: 'READ_HUMIDITY_ERR', description: err})
                     res.send(
                         {
                             httpCode: 400,

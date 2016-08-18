@@ -6,7 +6,7 @@ var log = new LogModel()
 module.exports = {
     configure: function(app) {
         app.get('/temperature/:areaId',function(req,res) {
-            log.create({area_id: req.params.areaId, device_id: 42, type: 'D_GET_TEMPERATURE', description: 'Get mock temperature from device'})
+            log.create({action_id: 0, area_id: req.params.areaId, device_id: 42, type: 'D_GET_TEMPERATURE', description: 'Get mock temperature from device'})
 
             res.send(
                 {
@@ -18,7 +18,7 @@ module.exports = {
             )
         }),
         app.get('/humidity/:areaId',function(req,res) {
-            log.create({area_id: req.params.areaId, device_id: 84, type: 'D_GET_HUMIDITY', description: 'Get mock humidity from device'})
+            log.create({action_id: 0, area_id: req.params.areaId, device_id: 84, type: 'D_GET_HUMIDITY', description: 'Get mock humidity from device'})
 
             res.send(
                 {

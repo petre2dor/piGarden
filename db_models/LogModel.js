@@ -5,6 +5,9 @@ class LogModel extends PrimaryModel {
     setId(val){
         this.fields.id = val
     }
+    setActionId(val){
+        this.fields.action_id = val
+    }
     setAreaId(val){
         this.fields.area_id = val
     }
@@ -19,8 +22,8 @@ class LogModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return `INSERT INTO logs(area_id, device_id, type, description)
-                VALUES (:area_id, :device_id, :type, :description)`
+        return `INSERT INTO logs(action_id, area_id, device_id, type, description)
+                VALUES (:action_id, :area_id, :device_id, :type, :description)`
     }
     create(fields){
         console.log('Log: ' + fields.description + '; type: ' + fields.type);
