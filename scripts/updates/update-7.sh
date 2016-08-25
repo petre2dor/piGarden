@@ -1,5 +1,3 @@
 #! /bin/bash
-pm2 stop all
-source ~/.nvm/nvm.sh
-pm2 start all
-pm2 list
+
+mysql -udb_gardener -pKTgdXz3SSMCY pi_garden < updates/update-7.sql

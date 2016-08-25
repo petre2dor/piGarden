@@ -3,10 +3,7 @@
 # this file is run by cronjob
 #
 
-# get pwd
-#PIGROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PIGROOT="/piGarden/scripts"
-cd $PIGROOT
+cd "/piGarden/scripts"
 
 # local versions are stored here
 VERSION_CURRENT_FILE="./patch.version"
@@ -45,6 +42,9 @@ do
 	# save the last version
 	echo "VERSION_CURRENT=$VERSION_CURRENT" > $VERSION_CURRENT_FILE
 done
+
+cd "/piGarden"
+npm install
 
 echo "DONE"
 exit 0;
