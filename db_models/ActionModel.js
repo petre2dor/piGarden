@@ -72,6 +72,13 @@ class ActionModel extends PrimaryModel {
         return this.fields.status
     }
 
+    getReadStmt(){
+        return `SELECT id, area_id, verb, object, options, last_run_time,
+                    next_run_time, schedule, description, is_running, status
+                FROM actions
+                WHERE id = :id`
+    }
+
     getInsertStmt(){
         return `INSERT INTO actions (area_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status)
@@ -101,6 +108,24 @@ class ActionModel extends PrimaryModel {
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
 
+        return new Promise((resolve, reject) => {
+            this.query(sql)
+                .then((result) => {
+                    if(result.length > 0){
+                        this.fields = result[0]
+                        resolve(this)
+                    }else{
+                        reject('There is no next action available')
+                    }
+                })})
+    }
+
+
+    getReadByAreaVerbStmt(){
+        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+                        next_run_time, schedule, description, is_running, status
+                    FROM actions
+                    WHERE area_id = :area_id AND verb = :verb AND object = :object`
         return new Promise((resolve, reject) => {
             this.query(sql)
                 .then((result) => {

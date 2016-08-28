@@ -18,6 +18,4 @@ try {
 } catch (e) {
     throw e
     // logModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
-} finally {
-    console.log('---finally---')
 }

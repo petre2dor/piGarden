@@ -1,5 +1,5 @@
 'use strict'
-var LocalDateTime = require('js-joda').LocalDateTime;
+var LocalDateTime = require('js-joda').LocalDateTime
 var ActionModel = require('../db_models/ActionModel')
 var LogModel    = require('../db_models/LogModel')
 var Request     = require('../util/request')
@@ -24,7 +24,10 @@ class ActionHandler {
                     }, 2000)
                 })
                 return this.callController(actionModel)
+                // return this.prepareRelatedActions(actionModel)
             })
+        // .then((result) => {
+        // })
         .then((result) => {
                 var actionModel = result[0]
                 var controllerResponse = result[1]
@@ -38,6 +41,16 @@ class ActionHandler {
         })
     }
 
+    // prepareRelatedActions(actionModel){
+    //     switch (actionModel.getObject) {
+    //         case expression:
+    //
+    //             break;
+    //         default:
+    //
+    //     }
+    // }
+
     callController(actionModel){
         //call to controller
         return new Promise((resolve, reject) => {
@@ -46,8 +59,14 @@ class ActionHandler {
             this.request.get(path)
                 .then((controllerResponse) => {
                     resolve([actionModel, controllerResponse])
-                },(reason) => {
+                })
+                .catch((reason) => {
                     log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER_ERR', description: 'Calling action controller error: ' + reason})
+                    // set action in error state
+                    actionModel.setStatus('ERROR')
+                    actionModel.update().then(() => {
+                        log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER', description: 'Action set to status ERROR'})
+                    })
                 })
         })
     }
