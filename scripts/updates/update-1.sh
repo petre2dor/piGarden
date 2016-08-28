@@ -9,25 +9,30 @@ echo "************************************"
 echo "**********Installing nodejs and dependencies***********"
 echo "************************************"
 
-# install nodejs and dependencies for nvm
-sudo apt install nodejs nodejs-legacy npm build-essential libssl-dev -y
-
-# install nvm
-# https://github.com/creationix/nvm
-echo "************************************"
-echo "**********Installing nodejs NVM***********"
-echo "************************************"
-
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
-. ~/.nvm/nvm.sh
-. ~/.bashrc
+# # install nodejs and dependencies for nvm
+# sudo apt install nodejs nodejs-legacy npm build-essential libssl-dev -y
+#
+# # install nvm
+# # https://github.com/creationix/nvm
+# echo "************************************"
+# echo "**********Installing nodejs NVM***********"
+# echo "************************************"
+#
+# curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | bash
+# . ~/.nvm/nvm.sh
+# . ~/.bashrc
+#
+# echo "*************************"
+# echo "**********Install node 6.3.0***********"
+# echo "*************************"
+# nvm install 6.3.0
+# nvm use 6.3.0
 
 echo "*************************"
-echo "**********Install node 6.3.0***********"
+echo "**********Install node 6.x***********"
 echo "*************************"
-nvm install 6.3.0
-nvm use 6.3.0
-
+wget -qO- https://deb.nodesource.com/setup_6.x | sudo bash -
+sudo apt-get install nodejs -y
 
 
 echo "*************************"
