@@ -72,19 +72,39 @@ class ActionHandler {
     }
 
     reschedule(actionModel, controllerResponse){
-        var sec = actionModel.getSchedule().start.every || 60 //default run after 1 min
+        var nextRunTime = this.getNextRunTime(actionModel.getSchedule())
         log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action after ' + sec + ' sec.'})
-        actionModel.setNextRunTime(LocalDateTime.now().plusSeconds(sec).toString())
-        actionModel.setStatus('ACTIVE')
+        actionModel.setNextRunTime(nextRunTime)
+        // DISABLED if the
+        actionModel.setStatus(getNextStatus(actionModel, controllerResponse))
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
             return true
-        },(reason) => {
+        })
+        .catch((reason) => {
             log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE_ERR', description: 'Rescheduling action errror ' + reason})
             throw err
             // console.log('update err ', err);
         })
+    }
+
+    getNextRunTime(schedule){
+        switch (schedule.type) {
+            case "fixed":
+                return null
+                break
+            case "fixed":
+                return LocalDateTime.now()
+                break
+            default:
+                return LocalDateTime.now().plusSeconds(60)
+        }
+    }
+
+    getNextStatus(actionModel, controllerResponse){
+        // todo -> decide on status based on schedule (disable if the schedule is fixed) and controller response (set to error maybe...)
+        return 'ACTIVE'
     }
 }
 
