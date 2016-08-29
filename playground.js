@@ -8,6 +8,6 @@ var LocalDateTime   = require('js-joda').LocalDateTime
 // console.log(Duration.parse("PT10H")) // "PT10H"
 
 
-var dt = LocalDateTime.parse('2012-12-24T12:00')
+// var dt = LocalDateTime.parse('2012-12-24T12:00')
 
-console.log(dt.dayOfWeek().toString())
+console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S')).toString())

@@ -78,7 +78,7 @@ module.exports = {
                 .then(() => {
                     console.log('close action id: ', closeAction.getId());
                     var now = LocalDateTime.now()
-                    var openValveDuration = Duration.parse('PT' + '15M')
+                    var openValveDuration = Duration.parse('PT15M')
 
                     closeAction.setStatus('ACTIVE')
                     closeAction.setNextRunTime(now.plus(openValveDuration).toString())

@@ -1,8 +1,10 @@
 'use strict'
-var LocalDateTime = require('js-joda').LocalDateTime
-var ActionModel = require('../db_models/ActionModel')
-var LogModel    = require('../db_models/LogModel')
-var Request     = require('../util/request')
+var LocalDateTime   = require('js-joda').LocalDateTime
+var ActionModel     = require('../db_models/ActionModel')
+var LogModel        = require('../db_models/LogModel')
+var Request         = require('../util/request')
+var Duration        = require('js-joda').Duration
+
 
 var log  = new LogModel()
 
@@ -73,10 +75,10 @@ class ActionHandler {
 
     reschedule(actionModel, controllerResponse){
         var nextRunTime = this.getNextRunTime(actionModel.getSchedule())
-        log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action after ' + sec + ' sec.'})
+        log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action at ' + nextRunTime})
         actionModel.setNextRunTime(nextRunTime)
         // DISABLED if the
-        actionModel.setStatus(getNextStatus(actionModel, controllerResponse))
+        actionModel.setStatus(this.getNextStatus(actionModel, controllerResponse))
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
@@ -91,19 +93,30 @@ class ActionHandler {
 
     getNextRunTime(schedule){
         switch (schedule.type) {
-            case "fixed":
-                return null
+            case 'cyclic':
+                return LocalDateTime.now().plus(Duration.parse(schedule.every)).toString()
                 break
-            case "fixed":
-                return LocalDateTime.now()
+            case 'fixed':
+                return LocalDateTime.now().toString()
                 break
             default:
-                return LocalDateTime.now().plusSeconds(60)
+                return LocalDateTime.now().plus(Duration.parse('PT60S')).toString()
         }
     }
 
-    getNextStatus(actionModel, controllerResponse){
+    getNextStatus(schedule, controllerResponse){
         // todo -> decide on status based on schedule (disable if the schedule is fixed) and controller response (set to error maybe...)
+        switch (schedule.type) {
+            case 'cyclic':
+                return 'ACTIVE'
+                break
+            case 'fixed':
+                return 'COMPLETED'
+                break
+            default:
+                return 'ERROR'
+        }
+
         return 'ACTIVE'
     }
 }
