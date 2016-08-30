@@ -22,7 +22,16 @@ class PrimaryModel {
     }
 
     read(){
-        return this.query(this.getReadStmt())
+        return new Promise((resolve, reject) => {
+            this.query(this.getReadStmt())
+                .then((result) => {
+                    if(result.length > 0){
+                        this.fields = result[0]
+                        resolve(this)
+                    }else{
+                        reject('There is no result available')
+                    }
+                })})
     }
 
     insert(){

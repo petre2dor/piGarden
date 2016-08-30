@@ -10,4 +10,4 @@ var LocalDateTime   = require('js-joda').LocalDateTime
 
 // var dt = LocalDateTime.parse('2012-12-24T12:00')
 
-console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S')).toString())
+console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S').toString())

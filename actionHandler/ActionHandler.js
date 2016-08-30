@@ -26,10 +26,7 @@ class ActionHandler {
                     }, 2000)
                 })
                 return this.callController(actionModel)
-                // return this.prepareRelatedActions(actionModel)
             })
-        // .then((result) => {
-        // })
         .then((result) => {
                 var actionModel = result[0]
                 var controllerResponse = result[1]
@@ -43,22 +40,13 @@ class ActionHandler {
         })
     }
 
-    // prepareRelatedActions(actionModel){
-    //     switch (actionModel.getObject) {
-    //         case expression:
-    //
-    //             break;
-    //         default:
-    //
-    //     }
-    // }
-
     callController(actionModel){
         //call to controller
         return new Promise((resolve, reject) => {
-            var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getAreaId()
+            var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
             log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER', description: 'Calling action controller: ' + path})
-            this.request.get(path)
+            this.request
+                .get(path)
                 .then((controllerResponse) => {
                     resolve([actionModel, controllerResponse])
                 })
@@ -78,7 +66,7 @@ class ActionHandler {
         log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action at ' + nextRunTime})
         actionModel.setNextRunTime(nextRunTime)
         // DISABLED if the
-        actionModel.setStatus(this.getNextStatus(actionModel, controllerResponse))
+        actionModel.setStatus(this.getNextStatus(actionModel.getSchedule(), controllerResponse))
         actionModel.update()
         .then((result) => {
             // console.log('update result ', result);
@@ -105,7 +93,6 @@ class ActionHandler {
     }
 
     getNextStatus(schedule, controllerResponse){
-        // todo -> decide on status based on schedule (disable if the schedule is fixed) and controller response (set to error maybe...)
         switch (schedule.type) {
             case 'cyclic':
                 return 'ACTIVE'
