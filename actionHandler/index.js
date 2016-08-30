@@ -5,6 +5,9 @@ var Connection      = require('../util/connection');
 var LogModel        = require('../db_models/LogModel.js')
 var ActionHandler   = require('./ActionHandler.js')
 
+process.title = "piGarden-AH"
+
+
 try {
     Connection.init();
     var logModel = new LogModel()
