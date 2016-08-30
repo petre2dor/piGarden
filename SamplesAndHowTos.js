@@ -27,3 +27,16 @@ VALUES (5, 'WASH', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read
 
 INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
 VALUES (6, 'REPEAT', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read humidity from Area 2', 0, 'ACTIVE');
+
+
+
+var Duration        = require('js-joda').Duration
+var LocalDateTime   = require('js-joda').LocalDateTime
+
+// obtain a Duration of 10 hours
+// console.log(Duration.parse("PT10H")) // "PT10H"
+
+
+var dt = LocalDateTime.parse('2012-12-24T12:00')
+
+console.log(dt.dayOfWeek().toString())

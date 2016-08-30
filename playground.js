@@ -1,23 +1,13 @@
 // in this file I play with code snippets and ideas
 
 'use strict'
+var Duration        = require('js-joda').Duration
+var LocalDateTime   = require('js-joda').LocalDateTime
 
-var promise = new Promise(function(resolve, reject) {
-    setTimeout(() => {
-        resolve('time ran out!')
-    }, 700)
-})
+// obtain a Duration of 10 hours
+// console.log(Duration.parse("PT10H")) // "PT10H"
 
-promise
-    .then( (value) => {
-        console.log('then 1', value)
-        return new Promise(function(resolve, reject) {
-            setTimeout(() => {
-                reject('rejected!')
-            }, 700)
-        })
-    })
-    .catch((reason) => { console.log('catch 1', reason) })
-    .then((value) => {console.log('then 2', value)})
-    .catch((reason) => { console.log('catch 2', reason) })
-    .then((value) => {console.log('then 3', value)})
+
+// var dt = LocalDateTime.parse('2012-12-24T12:00')
+
+console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S').toString())

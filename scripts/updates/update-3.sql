@@ -28,9 +28,10 @@ CREATE TABLE IF NOT EXISTS `areas_devices` (
 DROP TABLE IF EXISTS `logs`;
 CREATE TABLE IF NOT EXISTS `logs` (
     `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `action_id`     int(11) UNSIGNED,
     `area_id`       int(11),
     `device_id`     int(11),
     `type`          char(25) COMMENT 'save a code like CREATE_AREA, READ_TEMPERATURE...',
     `description`   text NOT NULL,
-    `date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `date`          TIMESTAMP(4) DEFAULT CURRENT_TIMESTAMP
 );

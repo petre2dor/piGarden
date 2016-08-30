@@ -72,6 +72,13 @@ class ActionModel extends PrimaryModel {
         return this.fields.status
     }
 
+    getReadStmt(){
+        return `SELECT id, area_id, verb, object, options, last_run_time,
+                    next_run_time, schedule, description, is_running, status
+                FROM actions
+                WHERE id = :id`
+    }
+
     getInsertStmt(){
         return `INSERT INTO actions (area_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status)
@@ -97,7 +104,7 @@ class ActionModel extends PrimaryModel {
                     next_run_time, schedule, description, is_running, status
                     FROM actions
                     WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
-                        OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR') AND next_run_time < NOW() - INTERVAL 5 minute)
+                        OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
 
@@ -109,6 +116,24 @@ class ActionModel extends PrimaryModel {
                         resolve(this)
                     }else{
                         reject('There is no next action available')
+                    }
+                })})
+    }
+
+
+    getReadByAreaObjectVerb(){
+        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+                        next_run_time, schedule, description, is_running, status
+                    FROM actions
+                    WHERE area_id = :area_id AND object = :object AND verb = :verb;`
+        return new Promise((resolve, reject) => {
+            this.query(sql)
+                .then((result) => {
+                    if(result.length > 0){
+                        this.fields = result[0]
+                        resolve(this)
+                    }else{
+                        reject('There is no action available')
                     }
                 })})
     }

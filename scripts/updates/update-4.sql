@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
     `schedule`      text NOT NULL COMMENT 'json {start: {every: 60}/{at:[7:10:11, 13:01:00]}, CHECK_PROGRESS: {every: 60}}',
     `description`   text NOT NULL,
     `is_running`    boolean,
-    `status`        char(25) COMMENT 'ACTIVE, WARNING, ERROR, INACTIVE, DELETED'
+    `status`        char(25) COMMENT 'ACTIVE, COMPLETED, WARNING, ERROR, INACTIVE, DELETED'
 );
 
 
