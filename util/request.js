@@ -28,7 +28,9 @@ class Request {
                     body += chunk
                 })
                 res.on('end', function (){
-                    resolve(JSON.parse(body))
+                    var response = false
+                    try { response = JSON.parse(body) } catch (e) { }
+                    resolve(response)
                 })
             })
             req.on('error', (e) => {
