@@ -32,12 +32,20 @@ class ActionHandler {
                 var controllerResponse = result[1]
                 this.reschedule(actionModel, controllerResponse)
             })
+        .then((result) => {
+                log.create({
+                    action_id: this.actionModel.getId(),
+                    area_id: this.actionModel.getAreaId(),
+                    device_id: 0,
+                    type: 'AH_RUN_ERR',
+                    description: 'Done running action '+this.actionModel.getVerb()+' '+this.actionModel.getObject()})
+            })
         .catch((reason) => {
-            log.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_RUN', description: reason + '. Sleep 5s'})
-            setTimeout(() => {
-                this.run()
-            }, 5000)
-        })
+                log.create({action_id: this.actionModel.getId(), area_id: this.actionModel.getAreaId(), device_id: 0, type: 'AH_RUN', description: reason + '. Sleep 5s'})
+                setTimeout(() => {
+                    this.run()
+                }, 5000)
+            })
     }
 
     callController(actionModel){
@@ -67,16 +75,7 @@ class ActionHandler {
         actionModel.setNextRunTime(nextRunTime)
         // DISABLED if the
         actionModel.setStatus(this.getNextStatus(actionModel.getSchedule(), controllerResponse))
-        actionModel.update()
-        .then((result) => {
-            // console.log('update result ', result);
-            return true
-        })
-        .catch((reason) => {
-            log.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE_ERR', description: 'Rescheduling action errror ' + reason})
-            throw err
-            // console.log('update err ', err);
-        })
+        return actionModel.update()
     }
 
     getNextRunTime(schedule){
