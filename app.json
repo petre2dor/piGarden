@@ -5,7 +5,8 @@
             "script"        : "index.js",
             "watch"         : true,
             "watch_options" : {
-                "usePolling"        : true
+                "usePolling"        : true,
+                "useFsEvents"       : true
             },
             "cwd"           : "/piGarden/actionHandler"
         },
@@ -14,7 +15,8 @@
             "script"        : "index.js",
             "watch"         : true,
             "watch_options" : {
-                "usePolling"        : true
+                "usePolling"        : true,
+                "useFsEvents"       : true
             },
             "cwd"           : "/piGarden/actionController"
         },
@@ -23,7 +25,8 @@
             "script"        : "index.js",
             "watch"         : true,
             "watch_options" : {
-                "usePolling"        : true
+                "usePolling"        : true,
+                "useFsEvents"       : true
             },
             "cwd"           : "/piGarden/devices"
         }

@@ -64,7 +64,5 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", inline: <<-SHELL
-    locale-gen en_GB.UTF-8
-  SHELL
+  config.vm.provision "shell", :inline => "locale-gen en_GB.UTF-8; pm2 restart all", :run => 'always'
 end
