@@ -7,15 +7,13 @@ var ActionHandler   = require('./ActionHandler.js')
 
 try {
     Connection.init();
-    var logModel = new LogModel()
-    logModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_START', description: 'Start ActionHandler'})
 
+    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_START', description: 'Start ActionHandler'})
     var actionHandler = new ActionHandler();
     actionHandler.run()
 
-    var logModel = new LogModel()
-    logModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_END', description: 'End ActionHandler'})
+    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_END', description: 'End ActionHandler'})
 } catch (e) {
     throw e
-    // logModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
+    // LogModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
 }

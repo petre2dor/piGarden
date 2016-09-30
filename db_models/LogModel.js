@@ -30,5 +30,5 @@ class LogModel extends PrimaryModel {
         super.create(fields)
     }
 }
-
-module.exports = LogModel
+var log = new LogModel()
+module.exports = log
