@@ -26,7 +26,7 @@ class LogModel extends PrimaryModel {
                 VALUES (:action_id, :area_id, :device_id, :type, :description)`
     }
     create(fields){
-        console.log('Log: ' + fields.description + '; type: ' + fields.type);
+        console.log(fields.type+': ' + fields.description);
         super.create(fields)
     }
 }

@@ -2,14 +2,29 @@
 var LocalDateTime   = require('js-joda').LocalDateTime
 var ActionModel     = require('../db_models/ActionModel')
 var LogModel        = require('../db_models/LogModel')
+var ConfigModel     = require('../db_models/ConfigModel')
 var Request         = require('../util/request')
 var Duration        = require('js-joda').Duration
 
 class ActionHandler {
-    constructor() {
+    initAndRun() {
         this.actionModel    = new ActionModel()
         this.request        = new Request('localhost', 3000)
-        LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: 'ActionHandler initialized'})
+
+        ConfigModel.setName('AH_RETRIES_NO')
+        ConfigModel
+            .readByName()
+            .then((config) => {
+                    this.retries_no = config.getValue()
+                    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: 'ActionHandler initialized'})
+
+                    //RUN FOREST, RUN!!!!!!
+                    this.run()
+                })
+            .catch((reason) => {
+                    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: reason})
+                    this.retries_no = 2
+                })
     }
 
     run() {
@@ -34,7 +49,7 @@ class ActionHandler {
                     action_id: this.actionModel.getId(),
                     area_id: this.actionModel.getAreaId(),
                     device_id: 0,
-                    type: 'AH_RUN_ERR',
+                    type: 'AH_RUN',
                     description: 'Done running action '+this.actionModel.getVerb()+' '+this.actionModel.getObject()})
             })
         .catch((reason) => {
@@ -49,18 +64,18 @@ class ActionHandler {
         //call to controller
         return new Promise((resolve, reject) => {
             var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
-            LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER', description: 'Calling action controller: ' + path})
+            LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC', description: 'Calling AC: ' + path})
             this.request
                 .get(path)
                 .then((controllerResponse) => {
                     resolve([actionModel, controllerResponse])
                 })
                 .catch((reason) => {
-                    LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER_ERR', description: 'Calling action controller error: ' + reason})
+                    LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC_ERR', description: 'Calling AC error: ' + reason})
                     // set action in error state
                     actionModel.setStatus('ERROR')
                     actionModel.update().then(() => {
-                        LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_CONTROLLER', description: 'Action set to status ERROR'})
+                        LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC', description: 'Action set to status ERROR'})
                     })
                 })
         })
@@ -70,7 +85,6 @@ class ActionHandler {
         var nextRunTime = this.getNextRunTime(actionModel.getSchedule())
         LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action at ' + nextRunTime})
         actionModel.setNextRunTime(nextRunTime)
-        // DISABLED if the
         actionModel.setStatus(this.getNextStatus(actionModel.getSchedule(), controllerResponse))
         return actionModel.update()
     }
