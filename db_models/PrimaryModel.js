@@ -67,7 +67,12 @@ class PrimaryModel {
                         if (!err) {
                             resolve(result)
                         } else {
-                            throw err
+                            reject({
+                                httpCode: 403,
+                                type: 'ERROR',
+                                message: 'Could not run query. Message: ' + JSON.stringify(err),
+                                data: err
+                            })
                         }
                     }
                 )

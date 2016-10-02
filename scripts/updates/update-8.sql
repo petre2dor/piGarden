@@ -9,3 +9,5 @@ CREATE TABLE `configs`(
 
 INSERT INTO `configs` (name, value, description)
 VALUES ('AH_RETRIES_NO', '3', 'How many times will AH retry an action until it will set it to ERROR');
+
+ALTER TABLE actions ADD COLUMN retries SMALLINT DEFAULT 0; 

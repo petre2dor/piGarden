@@ -16,13 +16,13 @@ class ActionHandler {
             .readByName()
             .then((config) => {
                     this.retries_no = config.getValue()
-                    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: 'ActionHandler initialized'})
+                    LogModel.create({type: 'AH_INIT', description: 'ActionHandler initialized', action_id: 0, area_id: 0, device_id: 0})
 
                     //RUN FOREST, RUN!!!!!!
-                    this.run()
+                    return this.run()
                 })
             .catch((reason) => {
-                    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_INIT', description: reason})
+                    LogModel.create({type: 'AH_INIT', description: reason, action_id: 0, area_id: 0, device_id: 0})
                     this.retries_no = 2
                 })
     }
@@ -30,33 +30,44 @@ class ActionHandler {
     run() {
         this.actionModel.readNextAction()
         .then((actionModel) => {
-                LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RUN', description: 'Setting action status to RUNNING'})
+                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
                 actionModel.setStatus('RUNNING')
-                actionModel.update().then(() => {
-                    setTimeout(() => {
-                        this.run()
-                    }, 2000)
-                })
+                actionModel.update()
+
                 return this.callController(actionModel)
             })
-        .then((result) => {
-                var actionModel = result[0]
-                var controllerResponse = result[1]
-                this.reschedule(actionModel, controllerResponse)
+        .then((actionModelAndACResponse) => {
+                var actionModel = actionModelAndACResponse[0]
+                var ACResponse = actionModelAndACResponse[1]
+
+                return this.reschedule(actionModel, ACResponse)
             })
         .then((result) => {
                 LogModel.create({
+                    type: 'AH_RUN',
+                    description: 'Done running action '+this.actionModel.getVerb()+' '+this.actionModel.getObject(),
                     action_id: this.actionModel.getId(),
                     area_id: this.actionModel.getAreaId(),
                     device_id: 0,
-                    type: 'AH_RUN',
-                    description: 'Done running action '+this.actionModel.getVerb()+' '+this.actionModel.getObject()})
+                })
+                setTimeout(() => {
+                    console.log('run again');
+                    this.run()
+                }, 900)
             })
-        .catch((reason) => {
-                LogModel.create({action_id: this.actionModel.getId(), area_id: this.actionModel.getAreaId(), device_id: 0, type: 'AH_RUN', description: reason + '. Sleep 5s'})
+        .catch((actionModelAndReason) => {
+                var actionModel = actionModelAndReason[0]
+                var reason = actionModelAndReason[1]
+
+                if(reason.message == 'There is no next action available'){
+                    LogModel.create({type: 'AH_RUN', action_id: 0, area_id: 0, device_id: 0, description: reason.message})
+                }else{
+                    LogModel.create({type: 'AH_RUN_ERR', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, description: reason.message})
+                    this.reschedule(actionModel, reason)
+                }
                 setTimeout(() => {
                     this.run()
-                }, 5000)
+                }, 1000)
             })
     }
 
@@ -64,32 +75,54 @@ class ActionHandler {
         //call to controller
         return new Promise((resolve, reject) => {
             var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
-            LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC', description: 'Calling AC: ' + path})
+            LogModel.create({type: 'AH_CALL_AC', description: 'Calling AC: ' + path, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
             this.request
                 .get(path)
-                .then((controllerResponse) => {
-                    resolve([actionModel, controllerResponse])
+                .then((ACResponse) => {
+                    if(ACResponse.httpCode >= 400){
+                        reject([actionModel, ACResponse])
+                    }else{
+                        resolve([actionModel, ACResponse])
+                    }
                 })
                 .catch((reason) => {
-                    LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC_ERR', description: 'Calling AC error: ' + reason})
-                    // set action in error state
-                    actionModel.setStatus('ERROR')
-                    actionModel.update().then(() => {
-                        LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_CALL_AC', description: 'Action set to status ERROR'})
-                    })
+                    LogModel.create({type: 'AH_CALL_AC_ERR', description: 'Calling AC error: ' + JSON.stringify(reason.data), action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+                    reject([actionModel, reason])
                 })
         })
     }
 
-    reschedule(actionModel, controllerResponse){
-        var nextRunTime = this.getNextRunTime(actionModel.getSchedule())
-        LogModel.create({action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, type: 'AH_RESCHEDULE', description: 'Rescheduling action at ' + nextRunTime})
+    reschedule(actionModel, response){
+        var nextRunTime = this.getNextRunTime(actionModel.getSchedule(), response)
+        var nextStatus = this.getNextStatus(actionModel.getSchedule(), actionModel.getRetries(), response)
+        var retries = this.getRetriesNo(actionModel.getRetries(), nextStatus)
+        LogModel.create({
+                type: 'AH_RESCHEDULE',
+                description: 'nextRunTime: ' + nextRunTime + ', status: ' + nextStatus,
+                action_id: actionModel.getId(),
+                area_id: actionModel.getAreaId(),
+                device_id: 0
+            })
         actionModel.setNextRunTime(nextRunTime)
-        actionModel.setStatus(this.getNextStatus(actionModel.getSchedule(), controllerResponse))
-        return actionModel.update()
+        actionModel.setRetries(retries)
+        actionModel.setStatus(nextStatus)
+        // need to return promise that, in case of err, rejects with [actionModel, reason]
+        return new Promise((resolve, reject) => {
+            actionModel
+                .update()
+                .then((result) => {
+                    resolve(actionModel, result)
+                })
+                .catch((reason) => {
+                    reject(actionModel, reason)
+                })
+        })
     }
 
-    getNextRunTime(schedule){
+    getNextRunTime(schedule, response){
+        if(response.httpCode >= 400){
+            return LocalDateTime.now().plus(Duration.parse('PT2S')).toString()
+        }
         switch (schedule.type) {
             case 'cyclic':
                 return LocalDateTime.now().plus(Duration.parse(schedule.every)).toString()
@@ -102,7 +135,13 @@ class ActionHandler {
         }
     }
 
-    getNextStatus(schedule, controllerResponse){
+    getNextStatus(schedule, retries, response){
+        if(response.httpCode >= 400){
+            if(retries < this.retries_no){
+                return 'WARNING'
+            }
+            return 'ERROR'
+        }
         switch (schedule.type) {
             case 'cyclic':
                 return 'ACTIVE'
@@ -111,10 +150,23 @@ class ActionHandler {
                 return 'COMPLETED'
                 break
             default:
-                return 'ERROR'
+                return 'WARNING'
         }
+        return 'ERROR'
+    }
 
-        return 'ACTIVE'
+    getRetriesNo(oldRetriesNo, nextStatus){
+        switch (nextStatus) {
+            case 'WARNING':
+                return oldRetriesNo + 1
+                break
+            case 'ERROR':
+                return 0
+                break
+            default:
+                return oldRetriesNo + 1
+                break
+        }
     }
 }
 
