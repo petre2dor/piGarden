@@ -60,7 +60,7 @@ class ActionHandler {
                 var reason = actionModelAndReason[1]
 
                 if(reason.message == 'There is no next action available'){
-                    LogModel.create({type: 'AH_RUN', action_id: 0, area_id: 0, device_id: 0, description: reason.message})
+                    LogModel.create({type: 'AH_RUN', action_id: 0, area_id: 0, device_id: 0, description: '---'})
                 }else{
                     LogModel.create({type: 'AH_RUN_ERR', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0, description: reason.message})
                     this.reschedule(actionModel, reason)
