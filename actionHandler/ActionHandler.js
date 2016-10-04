@@ -161,6 +161,8 @@ class ActionHandler {
                 return oldRetriesNo + 1
                 break
             case 'ERROR':
+            case 'ACTIVE':
+            case 'INACTIVE':
                 return 0
                 break
             default:
