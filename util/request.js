@@ -30,7 +30,11 @@ class Request {
                 res.on('end', function (){
                     var response = false
                     try { response = JSON.parse(body) } catch (e) {}
-                    resolve(response)
+                    if(response.httpCode < 400){
+                        resolve(response)
+                    }else{
+                        reject(response)
+                    }
                 })
             })
             req.on('error', (e) => {

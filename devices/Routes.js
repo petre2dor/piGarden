@@ -8,7 +8,7 @@ var fs          = require('fs')
 
 module.exports = {
     configure: function(app) {
-        app.get('/temperature/:areaId', Temperature.get)
-        app.get('/humidity/:areaId', Humidity.get)
+        app.get('/temperature/:deviceId', Temperature.get)
+        app.get('/humidity/:deviceId', Humidity.get)
     }
 }
