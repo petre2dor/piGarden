@@ -36,6 +36,9 @@ class ActionModel extends PrimaryModel {
     setStatus(val){
         this.fields.status = val
     }
+    setRetries(val){
+        this.fields.retries = val
+    }
 
     //getters
     getId(){
@@ -71,10 +74,13 @@ class ActionModel extends PrimaryModel {
     getStatus(){
         return this.fields.status
     }
+    getRetries(){
+        return this.fields.retries
+    }
 
     getReadStmt(){
         return `SELECT id, area_id, verb, object, options, last_run_time,
-                    next_run_time, schedule, description, is_running, status
+                    next_run_time, schedule, description, is_running, status, retries
                 FROM actions
                 WHERE id = :id`
     }
@@ -95,13 +101,13 @@ class ActionModel extends PrimaryModel {
                     object = :object, options = :options,
                     last_run_time = :last_run_time, next_run_time = :next_run_time,
                     schedule = :schedule, description = :description,
-                    is_running = :is_running, status = :status
+                    is_running = :is_running, status = :status, retries = :retries
                 WHERE id = :id`
     }
 
     readNextAction(){
         var sql = `SELECT id, area_id, verb, object, options, last_run_time,
-                    next_run_time, schedule, description, is_running, status
+                    next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
                         OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
@@ -115,7 +121,12 @@ class ActionModel extends PrimaryModel {
                         this.fields = result[0]
                         resolve(this)
                     }else{
-                        reject('There is no next action available')
+                        reject([{}, {
+                            httpCode: 200,
+                            type: 'WARNING',
+                            message: 'There is no next action available',
+                            data: []
+                        }])
                     }
                 })})
     }
@@ -123,7 +134,7 @@ class ActionModel extends PrimaryModel {
 
     getReadByAreaObjectVerb(){
         var sql = `SELECT id, area_id, verb, object, options, last_run_time,
-                        next_run_time, schedule, description, is_running, status
+                        next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE area_id = :area_id AND object = :object AND verb = :verb;`
         return new Promise((resolve, reject) => {

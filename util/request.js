@@ -34,7 +34,12 @@ class Request {
                 })
             })
             req.on('error', (e) => {
-                reject(`problem with request: ${e.message}`)
+                reject({
+                        httpCode: 400,
+                        type: 'ERROR',
+                        message: 'Problem with request. Err msg: '+e.message + '. Options:' + JSON.stringify(this.options),
+                        data: e
+                    })
             })
             req.end()
         })
