@@ -34,4 +34,5 @@ class StatsModel extends PrimaryModel {
     }
 }
 
-module.exports = StatsModel
+var stats = new StatsModel()
+module.exports = stats
