@@ -1,7 +1,7 @@
 {
     "name": "pi_garden",
-    "version": "1.0.0",
-    "description": "watter garden with raspberry pi",
+    "version": "0.0.1",
+    "description": "Manage your garden with raspberry pi",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,17 +10,18 @@
         "type": "git",
         "url": "git+https://github.com/petre2dor/piGarden.git"
     },
-    "author": "DorkFarm",
+    "author": "petre2dor and rcursaru",
     "license": "AGPL-3.0",
     "bugs": {
         "url": "https://github.com/petre2dor/piGarden/issues"
     },
     "homepage": "https://github.com/petre2dor/piGarden#readme",
     "dependencies": {
-        "body-parser": "^1.15.2",
-        "express": "^4.14.0",
-        "js-joda": "^1.1.8",
-        "mysql": "^2.11.1"
+        "body-parser":  "^1.15.2",
+        "express":      "^4.14.0",
+        "js-joda":      "^1.1.8",
+        "mysql":        "^2.11.1",
+        "python-shell": "^0.4.0"
     },
     "devDependencies": {
         "jasmine": "^2.4.1"

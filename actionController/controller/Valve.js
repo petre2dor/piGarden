@@ -1,15 +1,19 @@
-var LogModel    = require('../../db_models/LogModel.js')
-var ActionModel = require('../../db_models/ActionModel')
-var Request     = require('../../util/request')
+var LogModel        = require('../../db_models/LogModel.js')
+var ActionModel     = require('../../db_models/ActionModel')
+var Request         = require('../../util/request')
 var LocalDateTime   = require('js-joda').LocalDateTime
 var Duration        = require('js-joda').Duration
+var PythonShell     = require('python-shell')
+
+PythonShell.defaultOptions = { scriptPath: '../scripts/valve' }
 
 exports.open = function(req, res) {
+    var openValvePy = new PythonShell('open.py');
     var action = new ActionModel()
     action.setId(req.params.actionId);
     action.read()
         .then( () => {
-            // schedule a close valve actionModel
+            // read Close Valve actionModel
             var closeAction = new ActionModel()
             closeAction.setAreaId(action.getAreaId())
             closeAction.setObject('VALVE')
@@ -17,7 +21,6 @@ exports.open = function(req, res) {
             return closeAction.getReadByAreaObjectVerb()
         })
         .then(closeAction => {
-            console.log('-- action.getOptions().DURATION', action.getOptions().DURATION)
             var now = LocalDateTime.now()
             var openValveDuration = Duration.parse(action.getOptions().DURATION) //get from open action
 
@@ -34,13 +37,12 @@ exports.open = function(req, res) {
                     message: 'Valve opened successfully.'
                 })
         })
-        .catch((reason) => {
-            console.log('failed! reason ', reason)
+        .catch(reason => {
             res.send({
                     httpCode: 400,
                     type: 'ERROR',
                     message: reason,
-                    data: 'there was an error'
+                    data: {}
                 })
         })
 }
@@ -53,5 +55,6 @@ exports.close = function(req, res) {
         httpCode: 200,
         type: 'SUCCESS',
         message: 'Valve closed successfully.'
+        data: {}
     })
 }
