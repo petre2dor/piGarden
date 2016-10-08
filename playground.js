@@ -13,4 +13,13 @@
 // console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S').toString())
 
 
-var PythonShell = require('python-shell');
+var PythonShell = require('python-shell')
+
+PythonShell.run('devices/scripts/valve/open.py', function (err, results) {
+    if (err) throw err
+    if(results.indexOf('true') === 0) {
+        console.log('true results ', results)
+    } else {
+        console.log('not true results ', results)
+    }
+})

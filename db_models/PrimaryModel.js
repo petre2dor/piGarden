@@ -29,7 +29,12 @@ class PrimaryModel {
                         this.fields = result[0]
                         resolve(this)
                     }else{
-                        reject('There is no result available')
+                        reject({
+                            httpCode: 404,
+                            type: 'NOT_FOUND',
+                            message: 'There is no result available',
+                            data: err
+                        })
                     }
                 })})
     }
