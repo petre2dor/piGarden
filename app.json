@@ -1,34 +1,34 @@
 {
     "apps" : [
         {
-            "name"          : "ActionHandler",
-            "script"        : "index.js",
-            "watch"         : true,
+            "name"              : "ActionHandler",
+            "script"            : "index.js",
+            "watch"             : true,
             "watch_options" : {
-                "usePolling"        : true,
-                "useFsEvents"       : true
+                "usePolling"    : true,
+                "useFsEvents"   : true
             },
-            "cwd"           : "/piGarden/actionHandler"
+            "cwd"               : "/piGarden/actionHandler"
         },
         {
-            "name"            : "ActionController",
-            "script"        : "index.js",
-            "watch"         : true,
+            "name"              : "ActionController",
+            "script"            : "index.js",
+            "watch"             : true,
             "watch_options" : {
-                "usePolling"        : true,
-                "useFsEvents"       : true
+                "usePolling"    : true,
+                "useFsEvents"   : true
             },
-            "cwd"           : "/piGarden/actionController"
+            "cwd"               : "/piGarden/actionController"
         },
         {
-            "name"            : "Devices",
-            "script"        : "index.js",
-            "watch"         : true,
+            "name"              : "Devices",
+            "script"            : "index.js",
+            "watch"             : true,
             "watch_options" : {
-                "usePolling"        : true,
-                "useFsEvents"       : true
+                "usePolling"    : true,
+                "useFsEvents"   : true
             },
-            "cwd"           : "/piGarden/devices"
+            "cwd"               : "/piGarden/devices"
         }
     ]
 }

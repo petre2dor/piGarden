@@ -3,13 +3,9 @@ var ActionModel     = require('../../db_models/ActionModel')
 var Request         = require('../../util/request')
 var LocalDateTime   = require('js-joda').LocalDateTime
 var Duration        = require('js-joda').Duration
-var PythonShell     = require('python-shell')
-
-PythonShell.defaultOptions = { scriptPath: '../scripts/valve' }
 
 exports.open = function(req, res)
 {
-    var openValvePy = new PythonShell('open.py');
     var action = new ActionModel()
     action.setId(req.params.actionId);
     action.read()
@@ -33,7 +29,7 @@ exports.open = function(req, res)
             return closeAction.update()
         })
         .then(() => {
-            LogModel.create({description: 'Closing action updated. Calling open.py script.', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
+            LogModel.create({description: 'Closing action updated. Calling /device endpoint.', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
             var request = new Request('localhost', 3001)
             return request.get('/valve/open/2')
         })
@@ -42,7 +38,7 @@ exports.open = function(req, res)
             res.send(result)
         })
         .catch(reason => {
-            LogModel.create({description: JSON.stringify(reason), type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
+            LogModel.create({description: JSON.stringify(reason), type: 'AC_OPEN_VALVE_ERR', action_id: action.id, area_id: 0, device_id: 0})
             res.send(reason)
         })
 }
@@ -50,12 +46,20 @@ exports.open = function(req, res)
 
 exports.close = function(req, res)
 {
-    LogModel.create({action_id: req.params.actionId, area_id: 0, device_id: 0, type: 'CLOSE_VALVE', description: 'Closing valve'})
-
-    res.send({
-        httpCode: 200,
-        type: 'SUCCESS',
-        message: 'Valve closed successfully.',
-        data: {}
-    })
+    var action = new ActionModel()
+    action.setId(req.params.actionId);
+    action.read()
+        .then(action => {
+            LogModel.create({description: 'Read action. Calling /device endpoint.', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
+            var request = new Request('localhost', 3001)
+            return request.get('/valve/close/2')
+        })
+        .then(result => {
+            LogModel.create({description: 'All done.', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
+            res.send(result)
+        })
+        .catch(reason => {
+            LogModel.create({description: JSON.stringify(reason), type: 'AC_OPEN_VALVE_ERR', action_id: action.id, area_id: 0, device_id: 0})
+            res.send(reason)
+        })
 }
