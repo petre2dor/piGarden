@@ -13,28 +13,13 @@
 // console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S').toString())
 
 
+var PythonShell = require('python-shell')
 
-testPromise0 = function(){
-    return new Promise((resolve, reject) => {
-        resolve('p0', 'p1')
-    })
-}
-
-testPromise1 = function(){
-    return new Promise((resolve, reject) => {
-        resolve('resolve1')
-    })
-}
-
-
-testPromise0()
-    .then((p0, p1) => {
-        console.log('response ' + p0 + ' ' + p1);
-        return testPromise1()
-    })
-    .then((response1) => {
-        console.log('response1 ' + response1);
-    })
-    .catch((reason) => {
-        console.log('reason ', reason);
-    })
+PythonShell.run('devices/scripts/valve/open.py', function (err, results) {
+    if (err) throw err
+    if(results.indexOf('true') === 0) {
+        console.log('true results ', results)
+    } else {
+        console.log('not true results ', results)
+    }
+})
