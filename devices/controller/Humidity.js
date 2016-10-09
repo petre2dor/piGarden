@@ -11,6 +11,9 @@ exports.get = function(req, res) {
     })
 
     var deviceModel = new DeviceModel()
+    getWithDeviceModel(deviceModel, req, res)
+}
+getWithDeviceModel = function(deviceModel, req, res) {
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
         .then(() => {
