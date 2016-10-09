@@ -6,6 +6,8 @@ var Connection      = require('../util/connection');
 var Routes          = require('./Routes')
 var LogModel        = require('../db_models/LogModel.js')
 
+process.title = "piGarden-AC"
+
 
 var app = express()
 app.use(bodyParser.urlencoded({extended:true}))
