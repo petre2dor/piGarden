@@ -1,7 +1,7 @@
 {
     "apps" : [
         {
-            "name"              : "ActionHandler",
+            "name"              : "AH",
             "script"            : "index.js",
             "watch"             : true,
             "watch_options" : {
@@ -11,7 +11,7 @@
             "cwd"               : "/piGarden/actionHandler"
         },
         {
-            "name"              : "ActionController",
+            "name"              : "AC",
             "script"            : "index.js",
             "watch"             : true,
             "watch_options" : {
@@ -21,7 +21,7 @@
             "cwd"               : "/piGarden/actionController"
         },
         {
-            "name"              : "Devices",
+            "name"              : "D",
             "script"            : "index.js",
             "watch"             : true,
             "watch_options" : {
