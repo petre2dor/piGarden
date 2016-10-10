@@ -121,12 +121,12 @@ class ActionModel extends PrimaryModel {
                         this.fields = result[0]
                         resolve(this)
                     }else{
-                        reject([{}, {
+                        reject({
                             httpCode: 200,
                             type: 'WARNING',
                             message: 'There is no next action available',
                             data: []
-                        }])
+                        })
                     }
                 })})
     }
