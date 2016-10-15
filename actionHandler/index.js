@@ -7,17 +7,12 @@ var ActionHandler   = require('./ActionHandler')
 
 process.title = "piGarden-AH"
 
-
 try {
     Connection.init();
 
-    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_START', description: 'Start ActionHandler'})
+    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_START', description: 'Start ActionHandler'})
     ActionHandler.run()
-    // var actionHandler = new ActionHandler()
-    // actionHandler.initAndRun()
-
-    LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'ACTION_HANDLER_END', description: 'End ActionHandler'})
 } catch (e) {
+    LogModel.create({area_id: 0, device_id: 0, type: 'AH_ERR', description: e})
     throw e
-    // LogModel.create({area_id: 0, device_id: 0, type: 'ACTION_RUNNER_ERR', description: e})
 }
