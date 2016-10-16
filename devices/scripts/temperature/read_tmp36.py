@@ -46,9 +46,9 @@ def ConvertTemp(data,places):
 # light_channel = 0
 temp_channel  = 1
 
- # Read the temperature sensor data
- temp_level = ReadChannel(temp_channel)
- temp_volts = ConvertVolts(temp_level,2)
- temp       = ConvertTemp(temp_level,2)
+# Read the temperature sensor data
+temp_level = ReadChannel(temp_channel)
+temp_volts = ConvertVolts(temp_level,2)
+temp       = ConvertTemp(temp_level,2)
 
- print temp
+print temp

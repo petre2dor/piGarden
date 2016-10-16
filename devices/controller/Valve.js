@@ -2,7 +2,7 @@ var LogModel    = require('../../db_models/LogModel')
 var DeviceModel = require('../../db_models/DeviceModel')
 var PythonShell = require('python-shell')
 
-PythonShell.defaultOptions = { scriptPath: 'scripts/valve' }
+// PythonShell.defaultOptions = { scriptPath: 'scripts/valve' }
 
 exports.open = function(req, res)
 {
@@ -17,7 +17,7 @@ exports.open = function(req, res)
         .then(device => {
             // now open the valve
             LogModel.create({description: 'Read device. Calling open.py.', type: 'D_OPEN_VALVE', action_id: 0, area_id: 0, device_id: device.id})
-            return callPyScript('open.py')
+            return callValvePyScript('scripts/valve/open.py')
         })
         .then(result => {
             LogModel.create({description: 'Valve opened successfully', type: 'D_OPEN_VALVE', action_id: 0, area_id: 0, device_id: req.params.deviceId})
@@ -42,7 +42,7 @@ exports.close = function(req, res)
         .then(device => {
             // now open the valve
             LogModel.create({description: 'Read device. Calling close.py.', type: 'D_CLOSE_VALVE', action_id: 0, area_id: 0, device_id: device.id})
-            return callPyScript('close.py')
+            return callValvePyScript('scripts/valve/close.py')
         })
         .then(result => {
             LogModel.create({description: 'Valve closed successfully', type: 'D_CLOSE_VALVE', action_id: 0, area_id: 0, device_id: req.params.deviceId})
@@ -54,7 +54,7 @@ exports.close = function(req, res)
         })
 }
 
-callPyScript = function(scriptPath)
+callValvePyScript = function(scriptPath)
 {
     // now open the valve
     return new Promise((resolve, reject) => {
