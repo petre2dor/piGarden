@@ -46,24 +46,9 @@ def ConvertTemp(data,places):
 # light_channel = 0
 temp_channel  = 1
 
-# Define delay between readings
-delay = 5
+ # Read the temperature sensor data
+ temp_level = ReadChannel(temp_channel)
+ temp_volts = ConvertVolts(temp_level,2)
+ temp       = ConvertTemp(temp_level,2)
 
-while True:
-
-  # Read the light sensor data
-  # light_level = ReadChannel(light_channel)
-  # light_volts = ConvertVolts(light_level,2)
-
-  # Read the temperature sensor data
-  temp_level = ReadChannel(temp_channel)
-  temp_volts = ConvertVolts(temp_level,2)
-  temp       = ConvertTemp(temp_level,2)
-
-  # Print out results
-  print "--------------------------------------------"
-  # print("Light: {} ({}V)".format(light_level,light_volts))
-  print("Temp : {} ({}V) {} deg C".format(temp_level,temp_volts,temp))
-
-  # Wait before repeating loop
-  time.sleep(delay)
+ print temp
