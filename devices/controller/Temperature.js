@@ -1,5 +1,6 @@
 var LogModel    = require('../../db_models/LogModel.js')
 var DeviceModel = require('../../db_models/DeviceModel')
+// "mcp-spi-adc":  "^0.3.1",
 var Mcpadc      = require('mcp-spi-adc')
 
 // PythonShell.defaultOptions = { scriptPath: '' }
