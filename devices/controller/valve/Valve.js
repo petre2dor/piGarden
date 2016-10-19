@@ -1,6 +1,7 @@
-var LogModel    = require('../../db_models/LogModel')
-var DeviceModel = require('../../db_models/DeviceModel')
+var LogModel    = require('../../../db_models/LogModel')
+var DeviceModel = require('../../../db_models/DeviceModel')
 var PythonShell = require('python-shell')
+var config      = require('../../../config.json')[process.env.PI_GARDEN_ENV]
 
 // PythonShell.defaultOptions = { scriptPath: 'scripts/valve' }
 
@@ -16,8 +17,8 @@ exports.open = function(req, res)
     deviceModel.read()
         .then(device => {
             // now open the valve
-            LogModel.create({description: 'Read device. Calling open.py.', type: 'D_OPEN_VALVE', action_id: 0, area_id: 0, device_id: device.id})
-            return callValvePyScript('scripts/valve/open.py')
+            LogModel.create({description: 'Read device. Calling open'+config.sufix+'.py.', type: 'D_OPEN_VALVE', action_id: 0, area_id: 0, device_id: device.id})
+            return callValvePyScript('controller/valve/open'+config.sufix+'.py')
         })
         .then(result => {
             LogModel.create({description: 'Valve opened successfully', type: 'D_OPEN_VALVE', action_id: 0, area_id: 0, device_id: req.params.deviceId})
@@ -41,8 +42,8 @@ exports.close = function(req, res)
     deviceModel.read()
         .then(device => {
             // now open the valve
-            LogModel.create({description: 'Read device. Calling close.py.', type: 'D_CLOSE_VALVE', action_id: 0, area_id: 0, device_id: device.id})
-            return callValvePyScript('scripts/valve/close.py')
+            LogModel.create({description: 'Read device. Calling close'+config.sufix+'.py.', type: 'D_CLOSE_VALVE', action_id: 0, area_id: 0, device_id: device.id})
+            return callValvePyScript('controller/valve/close'+config.sufix+'.py')
         })
         .then(result => {
             LogModel.create({description: 'Valve closed successfully', type: 'D_CLOSE_VALVE', action_id: 0, area_id: 0, device_id: req.params.deviceId})

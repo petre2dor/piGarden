@@ -21,8 +21,7 @@ exports.read = function(req, res) {
             })
     })
     .catch(err => {
-        console.log(err)
-        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_TEMPERATURE_ERR', description: err})
+        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_TEMPERATURE_ERR', description: err.message})
         res.send({
                 httpCode: 400,
                 type: 'ERROR',
