@@ -26,7 +26,7 @@ exports.get = function(req, res) {
 
 readTemperature = () => {
     return new Promise((resolve, reject) => {
-        var tempSensor = mcpadc.open(0, {speedHz: 20000}, err => {
+        var tempSensor = Mcpadc.open(1, {speedHz: 20000}, err => {
             if (err) reject({ type: 'ERROR', message: 'Could not open mcpadc.', httpCode: 400, data: err })
 
             tempSensor.read((err, reading) => {
