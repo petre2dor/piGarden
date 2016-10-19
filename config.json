@@ -1,0 +1,14 @@
+{
+   "DEV":
+   {
+        "sufix": "_dev"
+   },
+   "DEVPI":
+   {
+        "sufix": ""
+   },
+   "PRODUCTION":
+   {
+        "sufix": ""
+   }
+}

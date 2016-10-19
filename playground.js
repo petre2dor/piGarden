@@ -24,21 +24,22 @@
 //     }
 // })
 
-var v1 =  new Promise((resolve, reject) => {
-    resolve('v1')
-})
-
-var v2 =  new Promise((resolve, reject) => {
-    resolve('v2')
-})
-
-var x;
-v1.then(str => {
-    console.log(str)
-    x = 11
-    console.log(x);
-    return v2
-})
-.then(x => {
-    console.log(x)
-})
+// var v1 =  new Promise((resolve, reject) => {
+//     resolve('v1')
+// })
+//
+// var v2 =  new Promise((resolve, reject) => {
+//     resolve('v2')
+// })
+//
+// var x;
+// v1.then(str => {
+//     console.log(str)
+//     x = 11
+//     console.log(x);
+//     return v2
+// })
+// .then(x => {
+//     console.log(x)
+// })
+console.log(process.env.NODE_ENV);

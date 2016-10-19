@@ -1,6 +1,8 @@
-var LogModel    = require('../../db_models/LogModel.js')
-var DeviceModel = require('../../db_models/DeviceModel')
+var LogModel    = require('../../../db_models/LogModel.js')
+var DeviceModel = require('../../../db_models/DeviceModel')
 var PythonShell = require('python-shell')
+var config      = require('../../../config.json')[process.env.PI_GARDEN_ENV]
+
 // "mcp-spi-adc":  "^0.3.1",
 // var Mcpadc      = require('mcp-spi-adc')
 
@@ -11,7 +13,7 @@ exports.get = function(req, res) {
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
         .then(() => {
-            return callReadTempPyScript('scripts/temperature/read_tmp36.py')
+            return callReadTempPyScript('controller/temperature/read_tmp36'+config.sufix+'.py')
         })
         .then(result => {
             res.status(200).json(result)
@@ -35,6 +37,7 @@ callReadTempPyScript = function(scriptPath)
     return new Promise((resolve, reject) => {
         PythonShell.run(scriptPath, function (err, results) {
             if (err) {
+                console.log(err);
                 reject({ httpCode: 403, type: 'ERROR', message: err.message, data: err })
             } else {
                 if(isNaN(parseFloat(results))) {
