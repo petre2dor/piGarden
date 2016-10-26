@@ -25,6 +25,6 @@
         "python-shell": "^0.4.0"
     },
     "devDependencies": {
-        "jasmine": "^2.4.1"
+        "jasmine": "^2.5.2"
     }
 }

@@ -5,7 +5,7 @@ var ConfigModel     = require('../db_models/ConfigModel')
 var Request         = require('../util/request')
 var Duration        = require('js-joda').Duration
 
-var retries_no
+var max_retries
 var actionModel = new ActionModel()
 var ACRequest   = new Request('localhost', 3000)
 
@@ -14,36 +14,36 @@ exports.run = function myself ()
 {
     ConfigModel.setName('AH_RETRIES_NO')
     ConfigModel.readByName()
-        .then(config => {
-                retries_no = config.getValue()
-                return actionModel.readNextAction()
-            })
-        .then(actionModel => {
-                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                actionModel.setStatus('RUNNING')
-                actionModel.update()
+    .then(config => {
+        max_retries = config.getValue()
+        return actionModel.readNextAction()
+    })
+    .then(actionModel => {
+        LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+        actionModel.setStatus('RUNNING')
+        actionModel.update()
 
-                return callController(actionModel)
-            })
-        .then(ACResponse => {
-                LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                if(ACResponse.httpCode >= 400){
-                    return new Promise.reject(ACResponse)
-                }
-                return reschedule(actionModel, ACResponse.httpCode)
-            })
-        .then(result => {
-                setTimeout(myself, 500)
-            })
-        .catch(reason => {
-                if(reason.message == 'There is no next action available'){
-                    LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
-                }else{
-                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                    reschedule(actionModel, reason.httpCode)
-                }
-                setTimeout(myself, 500)
-            })
+        return callController(actionModel)
+    })
+    .then(ACResponse => {
+        LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+        if(ACResponse.httpCode >= 400){
+            return new Promise.reject(ACResponse)
+        }
+        return reschedule(actionModel, ACResponse.httpCode)
+    })
+    .then(result => {
+        setTimeout(myself, 500)
+    })
+    .catch(reason => {
+        if(reason.message == 'There is no next action available'){
+            LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
+        }else{
+            LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+            reschedule(actionModel, reason.httpCode)
+        }
+        setTimeout(myself, 500)
+    })
 }
 
 var callController = function(actionModel)
@@ -56,15 +56,15 @@ var callController = function(actionModel)
 var reschedule = function(actionModel, httpCode)
 {
     var nextRunTime = getNextRunTime(actionModel.getSchedule(), httpCode)
-    var nextStatus = getNextStatus(actionModel.getSchedule(), actionModel.getRetries(), httpCode)
+    var nextStatus = getNextStatus(actionModel.getSchedule(), httpCode, actionModel.getRetries(), max_retries)
     var retries = getRetriesNo(actionModel.getRetries(), nextStatus)
     LogModel.create({
-            type: 'AH_RESCHEDULE',
-            description: 'nextRunTime: ' + nextRunTime + ', status: ' + nextStatus,
-            action_id: actionModel.getId(),
-            area_id: actionModel.getAreaId(),
-            device_id: 0
-        })
+        type: 'AH_RESCHEDULE',
+        description: 'nextRunTime: ' + nextRunTime + ', status: ' + nextStatus,
+        action_id: actionModel.getId(),
+        area_id: actionModel.getAreaId(),
+        device_id: 0
+    })
     actionModel.setNextRunTime(nextRunTime)
     actionModel.setRetries(retries)
     actionModel.setStatus(nextStatus)
@@ -89,9 +89,9 @@ var getNextRunTime = function(schedule, httpCode){
     }
 }
 
-var getNextStatus = function(schedule, retries, httpCode){
+var getNextStatus = function(schedule, httpCode, retries, max_retries){
     if(httpCode >= 400){
-        if(retries < retries_no){
+        if(retries < max_retries){
             return 'WARNING'
         }
         return 'ERROR'
@@ -112,15 +112,20 @@ var getNextStatus = function(schedule, retries, httpCode){
 var getRetriesNo = function(oldRetriesNo, nextStatus){
     switch (nextStatus) {
         case 'WARNING':
-            return oldRetriesNo + 1
-            break
+        return oldRetriesNo + 1
+        break
         case 'ERROR':
         case 'ACTIVE':
         case 'INACTIVE':
-            return 0
-            break
+        return 0
+        break
         default:
-            return oldRetriesNo + 1
-            break
+        return oldRetriesNo + 1
+        break
     }
+}
+
+if (['DEV', 'DEVPI'].indexOf(process.env.PI_GARDEN_ENV) > -1) {
+    exports.getNextStatus = getNextStatus;
+    exports.getRetriesNo = getRetriesNo;
 }
