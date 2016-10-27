@@ -7,32 +7,28 @@ describe("AH", function () {
     const ChronoUnit    = require('js-joda').ChronoUnit
 
     // reschedule
-    // it(`expects reschedule() to update action`,
-    //     () => {
-    //         console.log(AH)
-    //         spyOn(AH, 'getNextRunTime').and.returnValue('2016-10-19 21:30:27')
-    //         spyOn(AH, 'getNextStatus').and.returnValue('ACTIVE')
-    //         spyOn(AH, 'getRetriesNo').and.returnValue(0)
-    //
-    //         var actionModel = new ActionModel()
-    //         spyOn(actionModel, 'getSchedule').and.returnValue({})
-    //         spyOn(actionModel, 'getRetries').and.returnValue(0)
-    //
-    //         spyOn(actionModel, 'setNextRunTime')
-    //         spyOn(actionModel, 'setRetries')
-    //         spyOn(actionModel, 'setStatus')
-    //
-    //         spyOn(LogModel, 'create').and.returnValue(true)
-    //
-    //         AH.reschedule(actionModel, httpCode = 200)
-    //
-    //         expect(AH.getNextRunTime).toHaveBeenCalled()
-    //
-    //         // expect(actionModel.setNextRunTime).toHaveBeenCalledWith('2016-10-19 21:30:27')
-    //         // expect(actionModel.setRetries).toHaveBeenCalledWith(0)
-    //         // expect(actionModel.setStatus).toHaveBeenCalledWith('ACTIVE')
-    //         // expect(actionModel.update).toHaveBeenCalled()
-    //     })
+    it(`expects reschedule() to update action`,
+        () => {
+            spyOn(AH, 'getNextRunTime').and.returnValue('2016-10-19 21:30:27')
+            spyOn(AH, 'getNextStatus').and.returnValue('ACTIVE')
+            spyOn(AH, 'getRetriesNo').and.returnValue(0)
+
+            var actionModel = new ActionModel()
+            spyOn(actionModel, 'getSchedule').and.returnValue({})
+            spyOn(actionModel, 'getRetries').and.returnValue(0)
+            spyOn(actionModel, 'setNextRunTime')
+            spyOn(actionModel, 'setRetries')
+            spyOn(actionModel, 'setStatus')
+            spyOn(actionModel, 'update')
+
+            spyOn(LogModel, 'create').and.returnValue(true)
+
+            AH.reschedule(actionModel, httpCode = 200)
+            expect(actionModel.setNextRunTime).toHaveBeenCalledWith('2016-10-19 21:30:27')
+            expect(actionModel.setRetries).toHaveBeenCalledWith(0)
+            expect(actionModel.setStatus).toHaveBeenCalledWith('ACTIVE')
+            expect(actionModel.update).toHaveBeenCalled()
+        })
 
     // getNextRunTime
     it(`expects getNextRunTime() to return after 2sec in case of ERROR`,
@@ -78,6 +74,9 @@ describe("AH", function () {
             const status = AH.getNextStatus(schedule, httpCode = 400, retries = 0, max_retries = 10)
             expect(status).toBe('WARNING')
         })
+
+
+
     it(`expects getNextStatus() to return ERROR in case of ERROR
         and retries are maxed out`,
         () => {
