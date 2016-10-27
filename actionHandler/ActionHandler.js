@@ -73,7 +73,7 @@ var reschedule = function(actionModel, httpCode)
 }
 
 var getNextRunTime = function(schedule, httpCode){
-    var LocalDateTime   = require('js-joda').LocalDateTime
+    var LocalDateTime = require('js-joda').LocalDateTime
     if(httpCode >= 400){
         return LocalDateTime.now().plus(Duration.parse('PT2S')).toString()
     }
@@ -112,20 +112,22 @@ var getNextStatus = function(schedule, httpCode, retries, max_retries){
 var getRetriesNo = function(oldRetriesNo, nextStatus){
     switch (nextStatus) {
         case 'WARNING':
-        return oldRetriesNo + 1
-        break
+            return oldRetriesNo + 1
+            break
         case 'ERROR':
         case 'ACTIVE':
         case 'INACTIVE':
-        return 0
-        break
+            return 0
+            break
         default:
-        return oldRetriesNo + 1
-        break
+            return oldRetriesNo + 1
+            break
     }
 }
 
 if (['DEV', 'DEVPI'].indexOf(process.env.PI_GARDEN_ENV) > -1) {
-    exports.getNextStatus = getNextStatus;
-    exports.getRetriesNo = getRetriesNo;
+    exports.reschedule      = reschedule;
+    exports.getNextRunTime  = getNextRunTime;
+    exports.getNextStatus   = getNextStatus;
+    exports.getRetriesNo    = getRetriesNo;
 }
