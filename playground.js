@@ -42,4 +42,48 @@
 // .then(x => {
 //     console.log(x)
 // })
-console.log(process.env.NODE_ENV);
+// console.log(process.env.NODE_ENV);
+
+
+
+
+
+var test = function(){
+    return new Promise( (resolve, reject) => {
+        new Promise( (r, rj) => {
+            setTimeout(r, 500)
+        })
+        .then(() => {
+            return new Promise( (r, rj) => {
+                setTimeout(r, 500)
+            })
+        })
+        .then(() => {
+            new Promise( (r, rj) => {
+                setTimeout(r, 500)
+            })
+            .then(() => {
+                resolve('saasa');
+            })
+        })
+    })
+}
+
+var run = function myself () {
+    test()
+    .then(response => {
+        console.log('--response: ', response)
+        myself()
+    })
+    .catch(reason => {
+        console.log('--reason: ', reason)
+        myself()
+    })
+}
+
+
+try {
+    run()
+} catch (e) {
+    throw e
+}

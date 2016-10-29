@@ -5,64 +5,67 @@ var ConfigModel     = require('../db_models/ConfigModel')
 var Request         = require('../util/request')
 var Duration        = require('js-joda').Duration
 
-
+const actionModel = new ActionModel()
 class ActionHandler {
     constructor(){
-        this.max_retries = 30
+        this.maxRetries = 30
+        this.actionId = 0
+        this.areaId = 0
     }
 
     // main method
     run()
     {
-        ConfigModel.setName('AH_RETRIES_NO')
-        ConfigModel.readByName()
-        .then(config => {
-            this.max_retries = config.getValue()
+        return new Promise( (resolve, reject) => {
+            ConfigModel.setName('AH_RETRIES_NO')
+            ConfigModel.readByName()
+            .then(config => {
+                this.maxRetries = config.getValue()
+                return actionModel.readNextAction()
+            })
+            .then(actionModel => {
+                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+                actionModel.setStatus('RUNNING')
+                actionModel.update()
 
-            let actionModel = new ActionModel()
-            return actionModel.readNextAction()
-        })
-        .then(actionModel => {
-            LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-            actionModel.setStatus('RUNNING')
-            actionModel.update()
-
-            return this.callController(actionModel)
-        })
-        .then(ACResponse => {
-            LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-            if(ACResponse.httpCode >= 400){
-                return new Promise.reject(ACResponse)
-            }
-            return this.reschedule(actionModel, ACResponse.httpCode)
-        })
-        .then(result => {
-            setTimeout(this.run, 500)
-        })
-        .catch(reason => {
-            if(reason.message == 'There is no next action available'){
-                LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
-            }else{
-                LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                reschedule(actionModel, reason.httpCode)
-            }
-            setTimeout(this.run, 500)
+                let ACRequest = new Request('localhost', 3000)
+                return this.callController(ACRequest, actionModel)
+            })
+            .then(ACResponse => {
+                LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+                if(ACResponse.httpCode >= 400){
+                    reject(ACResponse)
+                }
+                this.reschedule(actionModel, ACResponse.httpCode)
+                    .then(() => {
+                        resolve({message: 'Action done and rescheduled.', httpCode: 200, type: 'SUCCESS'})
+                    })
+            })
+            .catch(reason => {
+                if(reason.message == 'There is no next action available'){
+                    resolve({message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'})
+                }else{
+                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+                    this.reschedule(actionModel, reason.httpCode)
+                    .then(() => {
+                        reject(reason)
+                    })
+                }
+            })
         })
     }
 
-    callController(actionModel)
+    callController(ACRequest, actionModel)
     {
-        var path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
+        let path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
         LogModel.create({type: 'AH_CALL_AC', description: 'Calling AC: ' + path, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-
-        let ACRequest   = new Request('localhost', 3000)
         return ACRequest.get(path)
     }
 
     reschedule(actionModel, httpCode)
     {
         var nextRunTime = this.getNextRunTime(actionModel.getSchedule(), httpCode)
-        var nextStatus = this.getNextStatus(actionModel.getSchedule(), httpCode, actionModel.getRetries(), this.max_retries)
+        var nextStatus = this.getNextStatus(actionModel.getSchedule(), httpCode, actionModel.getRetries(), this.maxRetries)
         var retries = this.getRetriesNo(actionModel.getRetries(), nextStatus)
         LogModel.create({
             type: 'AH_RESCHEDULE',
@@ -74,7 +77,7 @@ class ActionHandler {
         actionModel.setNextRunTime(nextRunTime)
         actionModel.setRetries(retries)
         actionModel.setStatus(nextStatus)
-        // need to return promise that, in case of err, rejects with [actionModel, reason]
+
         return  actionModel.update()
     }
 
@@ -95,10 +98,10 @@ class ActionHandler {
         }
     }
 
-    getNextStatus(schedule, httpCode, retries, max_retries)
+    getNextStatus(schedule, httpCode, retries, maxRetries)
     {
         if(httpCode >= 400){
-            if(retries < max_retries){
+            if(retries < maxRetries){
                 return 'WARNING'
             }
             return 'ERROR'
