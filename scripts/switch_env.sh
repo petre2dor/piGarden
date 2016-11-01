@@ -10,7 +10,4 @@ fi
 echo -e "\n"
 echo "Setting PI_GARDEN_ENV to $1"
 echo -e "\n"
-
-sed -i '/PI_GARDEN_ENV/d' /etc/environment;
-echo PI_GARDEN_ENV="$1" >> /etc/environment;
-source /etc/environment;
+pm2 restart app.json --env $1

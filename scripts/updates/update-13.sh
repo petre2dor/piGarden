@@ -1,8 +1,7 @@
 #! /bin/bash
 
 # source /etc/environment;
-sed -i '/NODE_PATH/d' /etc/environment;
-NEWPATH="NODE_PATH=$(dirname $(dirname $(dirname $(readlink -f $0))))"
-# echo $NEWPATH
-# echo $NODE_PATH
-echo "$NEWPATH" >> /etc/environment;
+sed -i '/NODE_PATH/d' /etc/environment
+sed -i '/PI_GARDEN_ENV/d' /etc/environment
+pm2 kill
+pm2 start /piGarden/app.json
