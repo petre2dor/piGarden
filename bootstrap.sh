@@ -10,7 +10,7 @@ if [ ! -d /piGarden ]; then
     /piGarden/script/createUser.sh
     /piGarden/script/patch.sh
 
-    echo -e "run \nsu gradinar\n to switch the the owner account"
+    echo -e "Bootstrap complete! Run \n           su gradinar\nto switch the the owner account and do your stuff"
 else
-    echo -e "/piGarden exists, maybe you should try running \nsu gradinar && cd /piGarden && git pull\n to update it"
+    echo -e "/piGarden exists, maybe you should try running \n           su gradinar && cd /piGarden && git pull\n to update it"
 fi
