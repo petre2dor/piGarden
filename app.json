@@ -10,7 +10,8 @@
             },
             "cwd"               : "/piGarden/actionHandler",
             "env" : {
-                "NODE_PATH"     : "piGarden"
+                "NODE_PATH"     : "piGarden",
+                "PI_GARDEN_DEV" : "DEV"
             },
             "env_dev" : {
                 "PI_GARDEN_DEV" : "DEV"
@@ -32,7 +33,8 @@
             },
             "cwd"               : "/piGarden/actionController",
             "env" : {
-                "NODE_PATH"     : "piGarden"
+                "NODE_PATH"     : "piGarden",
+                "PI_GARDEN_DEV" : "DEV"
             },
             "env_dev" : {
                 "PI_GARDEN_DEV" : "DEV"
@@ -54,7 +56,8 @@
             },
             "cwd"               : "/piGarden/devices",
             "env" : {
-                "NODE_PATH"     : "piGarden"
+                "NODE_PATH"     : "piGarden",
+                "PI_GARDEN_DEV" : "DEV"
             },
             "env_dev" : {
                 "PI_GARDEN_DEV" : "DEV"
