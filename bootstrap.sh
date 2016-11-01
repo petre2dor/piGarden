@@ -5,6 +5,7 @@
 
 if [ ! -d /piGarden ]; then
     mkdir /piGarden
+    apt -y install git
     git clone https://github.com/petre2dor/piGarden.git /piGarden
     /piGarden/script/createUser.sh
     /piGarden/script/patch.sh
