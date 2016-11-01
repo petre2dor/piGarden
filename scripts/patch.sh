@@ -2,8 +2,16 @@
 #
 # this file is run by cronjob
 #
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   echo "please run: sudo $(readlink -f $0)"
+   exit 1
+fi
 
-cd "/piGarden/scripts"
+. /etc/environment
+. "$PI_GARDEN_ROOT/scripts/localConfig.sh"
+
+cd "$PI_GARDEN_ROOT/scripts"
 
 # local versions are stored here
 VERSION_CURRENT_FILE="./patch.version"
@@ -43,7 +51,7 @@ do
 	echo "VERSION_CURRENT=$VERSION_CURRENT" > $VERSION_CURRENT_FILE
 done
 
-cd "/piGarden"
+cd "$PI_GARDEN_ROOT"
 npm install
 
 echo "DONE"

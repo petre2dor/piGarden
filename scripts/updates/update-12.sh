@@ -1,3 +1,3 @@
 #! /bin/bash
 
-sudo apt-get install build-essential g++
+apt -y install build-essential g++
