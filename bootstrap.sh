@@ -8,9 +8,9 @@ if [ ! -d /piGarden ]; then
     apt -y install git
     git clone https://github.com/petre2dor/piGarden.git /piGarden
     sleep 1
-    /piGarden/scripts/createUser.sh
-    /piGarden/scripts/patch.sh
-    echo -e "Bootstrap complete! Run \n           su gradinar\nto switch the the owner account and do your stuff"
+    echo -e "Bootstrap complete! Running initial setup now."
+    /piGarden/scripts/initialSetup.sh
+    echo -e "Initial setup complete! Run \n           su gradinar\nto switch the the owner account and do your stuff"
 else
-    echo -e "/piGarden exists, maybe you should try running \n           su gradinar && cd /piGarden && git pull\n to update it"
+    echo -e "/piGarden exists, maybe you should try running \n           su gradinar; cd /piGarden; git pull\n to update it"
 fi
