@@ -5,7 +5,6 @@ var bodyParser = require('body-parser')
 var Connection      = require('util/connection');
 var Routes          = require('devices/Routes')
 var LogModel        = require('db_models/LogModel.js')
-console.log("NODE_PATH: "+process.env.NODE_PATH);
 
 process.title = "piGarden-AC"
 
