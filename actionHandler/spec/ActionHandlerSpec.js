@@ -1,7 +1,7 @@
 describe("AH", function () {
-    const AH            = require('../ActionHandler')
-    const ActionModel   = require('../../db_models/ActionModel')
-    const LogModel      = require('../../db_models/LogModel')
+    const AH            = require('actionHandler/ActionHandler')
+    const ActionModel   = require('db_models/ActionModel')
+    const LogModel      = require('db_models/LogModel')
     const Duration      = require('js-joda').Duration
     const LocalDateTime = require('js-joda').LocalDateTime
     const ChronoUnit    = require('js-joda').ChronoUnit

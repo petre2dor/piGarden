@@ -1,7 +1,7 @@
-var LogModel    = require('../../db_models/LogModel.js')
-var ActionModel = require('../../db_models/ActionModel')
-var Request     = require('../../util/request')
-var StatsModel  = require('../../db_models/StatsModel')
+var LogModel    = require('db_models/LogModel.js')
+var ActionModel = require('db_models/ActionModel')
+var Request     = require('util/request')
+var StatsModel  = require('db_models/StatsModel')
 
 exports.read = function(req, res) {
     var action = new ActionModel()

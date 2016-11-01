@@ -1,6 +1,6 @@
 'use strict'
-var Utilities   = require('../util/utilities.js')
-var Connection  = require('../util/connection.js')
+var Utilities   = require('util/utilities.js')
+var Connection  = require('util/connection.js')
 
 class PrimaryModel {
     constructor(){

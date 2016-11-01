@@ -1,6 +1,6 @@
-var LogModel    = require('../../../db_models/LogModel')
-var DeviceModel = require('../../../db_models/DeviceModel')
-var config      = require('../../../config.json')[process.env.PI_GARDEN_ENV]
+var LogModel    = require('db_models/LogModel')
+var DeviceModel = require('db_models/DeviceModel')
+var config      = require('config.json')[process.env.PI_GARDEN_ENV]
 
 exports.get = function(req, res) {
     LogModel.create({

@@ -2,9 +2,9 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 
-var Connection      = require('../util/connection');
-var Routes          = require('./Routes')
-var LogModel        = require('../db_models/LogModel.js')
+var Connection      = require('util/connection');
+var Routes          = require('devices/Routes')
+var LogModel        = require('db_models/LogModel.js')
 
 process.title = "piGarden-AC"
 
