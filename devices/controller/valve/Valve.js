@@ -1,7 +1,7 @@
-var LogModel    = require('../../../db_models/LogModel')
-var DeviceModel = require('../../../db_models/DeviceModel')
+var LogModel    = require('db_models/LogModel')
+var DeviceModel = require('db_models/DeviceModel')
 var PythonShell = require('python-shell')
-var config      = require('../../../config.json')[process.env.PI_GARDEN_ENV]
+var config      = require('config.json')[process.env.PI_GARDEN_ENV]
 
 // PythonShell.defaultOptions = { scriptPath: 'scripts/valve' }
 

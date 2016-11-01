@@ -1,5 +1,5 @@
 'use strict'
-var PrimaryModel = require('./PrimaryModel.js')
+var PrimaryModel = require('db_models/PrimaryModel.js')
 
 class ActionModel extends PrimaryModel {
     //setters

@@ -1,8 +1,8 @@
 'use strict'
-var ActionModel     = require('../db_models/ActionModel')
-var LogModel        = require('../db_models/LogModel')
-var ConfigModel     = require('../db_models/ConfigModel')
-var Request         = require('../util/request')
+var ActionModel     = require('db_models/ActionModel')
+var LogModel        = require('db_models/LogModel')
+var ConfigModel     = require('db_models/ConfigModel')
+var Request         = require('util/request')
 var Duration        = require('js-joda').Duration
 
 const actionModel = new ActionModel()

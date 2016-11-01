@@ -1,8 +1,8 @@
-var Connection  = require('../util/connection')
-var LogModel    = require('../db_models/LogModel')
-var Temperature = require('./controller/temperature/Temperature')
-var Humidity    = require('./controller/humidity/Humidity')
-var Valve       = require('./controller/valve/Valve')
+var Connection  = require('util/connection')
+var LogModel    = require('db_models/LogModel')
+var Temperature = require('devices/controller/temperature/Temperature')
+var Humidity    = require('devices/controller/humidity/Humidity')
+var Valve       = require('devices/controller/valve/Valve')
 var fs          = require('fs')
 
 // var log = new LogModel()
