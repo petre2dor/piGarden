@@ -14,3 +14,5 @@ sudo make check
 sudo make install
 cd ..
 rm -rf bcm2835-1.50
+
+usermod -aG 997 $PI_GARDEN_USER_NAME
