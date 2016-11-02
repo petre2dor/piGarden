@@ -1,10 +1,10 @@
 var LogModel    = require('db_models/LogModel.js')
 var DeviceModel = require('db_models/DeviceModel')
 var PythonShell = require('python-shell')
-if (process.env.PI_GARDEN_ENV=="DEVPI" || process.env.PI_GARDEN_ENV=="PRODUCTION") {
-    var Mcpadc  = require('mcp-spi-adc')
-    var DHT     = require('node-dht-sensor')
-}
+// if (process.env.PI_GARDEN_ENV=="DEVPI" || process.env.PI_GARDEN_ENV=="PRODUCTION") {
+var Mcpadc      = require('mcp-spi-adc')
+var DHTSensor   = require('node-dht-sensor')
+// }
 var config      = require('config.json')[process.env.PI_GARDEN_ENV]
 var tmp36       = require('devices/controller/temperature/read_tmp36'+config.sufix+'.js')
 var dht22       = require('devices/controller/temperature/read_dht22'+config.sufix+'.js')
