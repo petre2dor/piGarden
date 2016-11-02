@@ -5,7 +5,7 @@ exports.readTemperature = () => {
         DHT.read(22,27,(err, temperature, humidity) => {
                 if (err) reject({ type: 'ERROR', message: 'Could not read DHT.', httpCode: 400, data: err })
 
-                resolve({ message: 'Here is the temperature.', type: 'SUCCESS', httpCode: 200, data: {temperature: temperature, humidity: humidity} })
+                resolve({ message: 'Here is the temperature.', type: 'SUCCESS', httpCode: 200, data: {temperature: temperature} })
             )
         })
     })
