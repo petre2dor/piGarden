@@ -39,3 +39,4 @@ jspm_packages
 
 .vagrant
 scripts/patch.version
+scripts/installers/bcm2835/INSTALLED
