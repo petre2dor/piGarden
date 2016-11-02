@@ -8,7 +8,20 @@
                 "usePolling"    : true,
                 "useFsEvents"   : true
             },
-            "cwd"               : "/piGarden/actionHandler"
+            "cwd"               : "/piGarden/actionHandler",
+            "env" : {
+                "NODE_PATH"     : "/piGarden",
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_dev" : {
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_devpi" : {
+                "PI_GARDEN_DEV" : "DEVPI"
+            },
+            "env_production" : {
+                "PI_GARDEN_DEV" : "PRODUCTION"
+            }
         },
         {
             "name"              : "AC",
@@ -18,7 +31,20 @@
                 "usePolling"    : true,
                 "useFsEvents"   : true
             },
-            "cwd"               : "/piGarden/actionController"
+            "cwd"               : "/piGarden/actionController",
+            "env" : {
+                "NODE_PATH"     : "/piGarden",
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_dev" : {
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_devpi" : {
+                "PI_GARDEN_DEV" : "DEVPI"
+            },
+            "env_production" : {
+                "PI_GARDEN_DEV" : "PRODUCTION"
+            }
         },
         {
             "name"              : "D",
@@ -28,7 +54,20 @@
                 "usePolling"    : true,
                 "useFsEvents"   : true
             },
-            "cwd"               : "/piGarden/devices"
+            "cwd"               : "/piGarden/devices",
+            "env" : {
+                "NODE_PATH"     : "/piGarden",
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_dev" : {
+                "PI_GARDEN_DEV" : "DEV"
+            },
+            "env_devpi" : {
+                "PI_GARDEN_DEV" : "DEVPI"
+            },
+            "env_production" : {
+                "PI_GARDEN_DEV" : "PRODUCTION"
+            }
         }
     ]
 }

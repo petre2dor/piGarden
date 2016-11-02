@@ -2,7 +2,7 @@
 
 // 'use strict'
 // var Duration        = require('js-joda').Duration
-// var LocalDateTime   = require('js-joda').LocalDateTime
+var LocalDateTime   = require('js-joda').LocalDateTime
 
 // obtain a Duration of 10 hours
 // console.log(Duration.parse("PT10H")) // "PT10H"
@@ -10,7 +10,7 @@
 
 // var dt = LocalDateTime.parse('2012-12-24T12:00')
 
-// console.log(LocalDateTime.now().plus(Duration.parse('PT' + '30S').toString())
+console.log(LocalDateTime.now().toString())
 
 
 // var PythonShell = require('python-shell')
@@ -42,48 +42,50 @@
 // .then(x => {
 //     console.log(x)
 // })
-// console.log(process.env.NODE_ENV);
+// while (true) {
+    console.log("ENV: "+process.env.PI_GARDEN_ENV);
+    console.log("NODE_PATH: "+process.env.NODE_PATH);
+    var Connection      = require('util/connection');
 
+// }
 
-
-
-
-var test = function(){
-    return new Promise( (resolve, reject) => {
-        new Promise( (r, rj) => {
-            setTimeout(r, 500)
-        })
-        .then(() => {
-            return new Promise( (r, rj) => {
-                setTimeout(r, 500)
-            })
-        })
-        .then(() => {
-            new Promise( (r, rj) => {
-                setTimeout(r, 500)
-            })
-            .then(() => {
-                resolve('saasa');
-            })
-        })
-    })
-}
-
-var run = function myself () {
-    test()
-    .then(response => {
-        console.log('--response: ', response)
-        myself()
-    })
-    .catch(reason => {
-        console.log('--reason: ', reason)
-        myself()
-    })
-}
-
-
-try {
-    run()
-} catch (e) {
-    throw e
-}
+//
+// var test = function(){
+//     return new Promise( (resolve, reject) => {
+//         new Promise( (r, rj) => {
+//             setTimeout(r, 500)
+//         })
+//         .then(() => {
+//             return new Promise( (r, rj) => {
+//                 setTimeout(r, 500)
+//             })
+//         })
+//         .then(() => {
+//             new Promise( (r, rj) => {
+//                 setTimeout(r, 500)
+//             })
+//             .then(() => {
+//                 resolve('saasa');
+//             })
+//         })
+//     })
+// }
+//
+// var run = function myself () {
+//     test()
+//     .then(response => {
+//         console.log('--response: ', response)
+//         myself()
+//     })
+//     .catch(reason => {
+//         console.log('--reason: ', reason)
+//         myself()
+//     })
+// }
+//
+//
+// try {
+//     run()
+// } catch (e) {
+//     throw e
+// }

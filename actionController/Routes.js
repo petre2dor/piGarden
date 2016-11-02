@@ -1,6 +1,6 @@
-var Temperature     = require('./controller/Temperature')
-var Humidity        = require('./controller/Humidity')
-var Valve        = require('./controller/Valve')
+var Temperature     = require('actionController/controller/Temperature')
+var Humidity        = require('actionController/controller/Humidity')
+var Valve        = require('actionController/controller/Valve')
 var LocalDateTime   = require('js-joda').LocalDateTime
 var Duration        = require('js-joda').Duration
 

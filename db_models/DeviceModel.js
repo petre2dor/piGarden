@@ -1,5 +1,5 @@
 'use strict'
-var PrimaryModel = require('./PrimaryModel.js')
+var PrimaryModel = require('db_models/PrimaryModel.js')
 
 class DeviceModel extends PrimaryModel {
     //setters

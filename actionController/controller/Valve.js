@@ -1,6 +1,6 @@
-var LogModel        = require('../../db_models/LogModel.js')
-var ActionModel     = require('../../db_models/ActionModel')
-var Request         = require('../../util/request')
+var LogModel        = require('db_models/LogModel.js')
+var ActionModel     = require('db_models/ActionModel')
+var Request         = require('util/request')
 var LocalDateTime   = require('js-joda').LocalDateTime
 var Duration        = require('js-joda').Duration
 
