@@ -11,16 +11,16 @@
             "cwd"               : "/piGarden/actionHandler",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_dev" : {
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_devpi" : {
-                "PI_GARDEN_DEV" : "DEVPI"
+                "PI_GARDEN_ENV" : "DEVPI"
             },
             "env_production" : {
-                "PI_GARDEN_DEV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "PRODUCTION"
             }
         },
         {
@@ -34,16 +34,16 @@
             "cwd"               : "/piGarden/actionController",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_dev" : {
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_devpi" : {
-                "PI_GARDEN_DEV" : "DEVPI"
+                "PI_GARDEN_ENV" : "DEVPI"
             },
             "env_production" : {
-                "PI_GARDEN_DEV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "PRODUCTION"
             }
         },
         {
@@ -57,16 +57,16 @@
             "cwd"               : "/piGarden/devices",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_dev" : {
-                "PI_GARDEN_DEV" : "DEV"
+                "PI_GARDEN_ENV" : "DEV"
             },
             "env_devpi" : {
-                "PI_GARDEN_DEV" : "DEVPI"
+                "PI_GARDEN_ENV" : "DEVPI"
             },
             "env_production" : {
-                "PI_GARDEN_DEV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "PRODUCTION"
             }
         }
     ]

@@ -1,5 +1,5 @@
 'use strict'
-// const MODEL_PATH = 'db_models/'
+
 var Request         = require('util/request.js')
 var Connection      = require('util/connection');
 var LogModel        = require('db_models/LogModel')
