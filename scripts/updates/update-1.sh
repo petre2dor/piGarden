@@ -2,6 +2,8 @@
 # This will turn off "frontend" (prompts) during installations
 export DEBIAN_FRONTEND=noninteractive
 
+locale-gen en_GB.UTF-8
+
 . /etc/environment
 . "$PI_GARDEN_ROOT/scripts/localConfig.sh"
 

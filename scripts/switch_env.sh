@@ -2,9 +2,9 @@
 
 
 
-allowed_envs="DEV DEVPI PRODUCTION"
+allowed_envs="dev devpi production"
 if [[ -z ${1+x} || ! $allowed_envs =~ $1 ]]
-then echo -e "\n Please provide environment: DEV | DEVPI | PRODUCTION \n"; exit 2
+then echo -e "\n Please provide environment: dev | devpi | production \n"; exit 2
 fi
 
 echo -e "\n"
