@@ -1,4 +1,4 @@
-
+const Mcpadc = require('mcp-spi-adc')
 
 exports.readTemperature = () => {
     return new Promise((resolve, reject) => {
