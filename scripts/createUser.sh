@@ -19,6 +19,9 @@ else
     usermod -aG $PI_GARDEN_USER_NAME `logname`
     chown -R $PI_GARDEN_USER_NAME:$PI_GARDEN_USER_NAME $PI_GARDEN_ROOT
 
+    # add PI_GARDEN_USER_NAME to spi group
+    usermod -a -G spi $PI_GARDEN_USER_NAME
+
     sed -i '/PI_GARDEN_USER_NAME/d' /etc/environment
     echo "PI_GARDEN_USER_NAME=$PI_GARDEN_USER_NAME" >> /etc/environment
     . /etc/environment
