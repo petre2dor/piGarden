@@ -2,7 +2,7 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 
-var Connection      = require('util/connection');
+var Connection      = require('util/connection')
 var Routes          = require('actionController/Routes')
 var LogModel        = require('db_models/LogModel.js')
 

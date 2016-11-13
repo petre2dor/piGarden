@@ -24,24 +24,24 @@
 //     }
 // })
 
-var v1 =  new Promise((resolve, reject) => {
-    resolve('v1')
-})
-
-var v2 =  new Promise((resolve, reject) => {
-    resolve('v2')
-})
-
-var x;
-v1.then(str => {
-    console.log(str)
-    x = 11
-    console.log(x);
-    return v2
-})
-.then(x1 => {
-    console.log(x)
-})
+// var v1 =  new Promise((resolve, reject) => {
+//     resolve('v1')
+// })
+//
+// var v2 =  new Promise((resolve, reject) => {
+//     resolve('v2')
+// })
+//
+// var x;
+// v1.then(str => {
+//     console.log(str)
+//     x = 11
+//     console.log(x);
+//     return v2
+// })
+// .then(x1 => {
+//     console.log(x)
+// })
 //  while (true) {
 //     console.log("ENV: "+process.env.PI_GARDEN_ENV);
 //     console.log("NODE_PATH: "+process.env.NODE_PATH);
@@ -89,3 +89,26 @@ v1.then(str => {
 // } catch (e) {
 //     throw e
 // }
+
+
+
+var Connection      = require('./util/connection')
+Connection.init()
+
+
+let AreaDeviceModel = require('./db_models/AreaDeviceModel.js')
+areaDevice = new AreaDeviceModel()
+areaDevice.setAreaId(1)
+areaDevice.readAllByAreaId()
+.then(areaDevice => {
+    var i = 0;
+    while (areaDevice.getDeviceId() && i < 15) {
+        i++
+        console.log('result ', areaDevice.getDeviceId())
+        areaDevice = areaDevice.getNextResult()
+        console.log(areaDevice.getDeviceId());
+    }
+})
+.catch(reason => {
+    console.log('reason ', reason)
+})

@@ -1,7 +1,7 @@
 'use strict'
-var PrimaryModel = require('db_models/PrimaryModel.js')
+var PrimaryModel = require('./PrimaryModel.js')
 
-class DeviceModel extends PrimaryModel {
+class AreaDeviceModel extends PrimaryModel {
     //setters
     setAreaId(val){
         this.fields.area_id = val
@@ -35,19 +35,19 @@ class DeviceModel extends PrimaryModel {
                 VALUES(:area_id, :device_id, :status, :options)`
     }
 
-    getReadByAreaId(){
+    readAllByAreaId(){
         let sql = `SELECT area_id, device_id, status, options
                         FROM areas_devices
                         WHERE area_id = :area_id`
-        return this.fetch(sql)
+        return this.fetchAll(sql)
     }
 
-    getReadByDeviceIdStmt(){
+    readAllByDeviceId(){
         return `SELECT area_id, device_id, status, options
                 FROM areas_devices
                 WHERE device_id = :device_id`
-        return this.fetch(sql)
+        return this.fetchAll(sql)
     }
 }
 
-module.exports = DeviceModel
+module.exports = AreaDeviceModel

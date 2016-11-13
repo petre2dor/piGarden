@@ -4,8 +4,13 @@ var Connection  = require('util/connection.js')
 
 class PrimaryModel {
     constructor(){
+        this.reset()
+    }
+
+    reset(){
         this.fields     = {}
         this.rowData    = []
+        this.results    = []
         this.rowIndex   = 0
     }
 
@@ -93,28 +98,41 @@ class PrimaryModel {
             })
     }
 
-// todo
-    // fetchAll(statement, onError = {}){
-    //     return new Promise((resolve, reject) => {
-    //         this.query(statement)
-    //             .then(result => {
-    //                 if(result.length > 0){
-    //                     this.fields = result[0]
-    //                     resolve(this)
-    //                 }else{
-    //                     reject({
-    //                         httpCode: onError.httpCode || 404,
-    //                         type: onError.type || 'NOT_FOUND',
-    //                         message: onError.message || 'There is no result available',
-    //                         data: {}
-    //                     })
-    //                 }
-    //             })
-    //             .catch(reason => {
-    //                 reject(reason)
-    //             })
-    //         })
-    // }
+    fetchAll(statement, onError = {}){
+        return new Promise((resolve, reject) => {
+            this.query(statement)
+                .then(results => {
+                    console.log(results) //
+                    if(results.length > 0){
+                        this.results = results
+                        this.fields = results[0]
+                        this.rowIndex = 0
+
+                        resolve(this)
+                    }else{
+                        reject({
+                            httpCode: onError.httpCode || 404,
+                            type: onError.type || 'NOT_FOUND',
+                            message: onError.message || 'There is no result available',
+                            data: {}
+                        })
+                    }
+                })
+                .catch(reason => {
+                    reject(reason)
+                })
+            })
+    }
+
+    getNextResult(){
+        this.rowIndex++
+        if(this.results[this.rowIndex]){
+            this.fields = this.results[this.rowIndex]
+            return this
+        }
+        this.reset()
+        return this
+    }
 
     getSetterFunction(field){
         var functionName = 'set';
@@ -124,10 +142,6 @@ class PrimaryModel {
             functionName += Utilities.capitalize(arr[i]);
         }
         return functionName
-    }
-
-    reset(){
-        this.fields = {}
     }
 }
 
