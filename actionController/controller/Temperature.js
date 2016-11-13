@@ -13,7 +13,7 @@ exports.read = function(req, res) {
     })
     .then(response => {
         LogModel.create({type: 'READ_TEMPERATURE', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(response)})
-        StatsModel.create({type: 'TEMPERATURE', value: response.data.temperature})
+        StatsModel.create({area_id: 0,  device_id: req.params.deviceId, type: 'TEMPERATURE', value: response.data.temperature})
         res.send({
                 httpCode: 200,
                 type: 'SUCCESS',

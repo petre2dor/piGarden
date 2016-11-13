@@ -14,7 +14,7 @@ exports.read = function(req, res) {
     })
     .then(response => {
         LogModel.create({type: 'READ_HUMIDITY', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(response)})
-        StatsModel.create({type: 'HUMIDITY', value: response.data.humidity})
+        StatsModel.create({area_id: 0,  device_id: req.params.deviceId, type: 'HUMIDITY', value: response.data.humidity})
         res.send({
                 httpCode: 200,
                 type: 'SUCCESS',

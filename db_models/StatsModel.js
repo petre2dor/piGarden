@@ -2,6 +2,12 @@
 var PrimaryModel = require('db_models/PrimaryModel.js')
 
 class StatsModel extends PrimaryModel {
+    setAreaId(val){
+        this.fields.area_id = val
+    }
+    setDeviceId(val){
+        this.fields.device_id = val
+    }
     setType(val){
         this.fields.type = val
     }
@@ -15,6 +21,12 @@ class StatsModel extends PrimaryModel {
         this.fields.status = val
     }
 
+    getAreaId(){
+        return this.fields.area_id
+    }
+    getDeviceId(){
+        return this.fields.device_id
+    }
     getType(){
         return this.fields.type
     }
@@ -29,8 +41,8 @@ class StatsModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return `INSERT INTO stats(type, value, status)
-                VALUES (:type, :value, 'ACTIVE')`
+        return `INSERT INTO stats(area_id, device_id, type, value, status)
+                VALUES (:area_id, :device_id, :type, :value, 'ACTIVE')`
     }
 }
 
