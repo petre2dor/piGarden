@@ -2,7 +2,7 @@
 
 // 'use strict'
 // var Duration        = require('js-joda').Duration
-var LocalDateTime   = require('js-joda').LocalDateTime
+// var LocalDateTime   = require('js-joda').LocalDateTime
 
 // obtain a Duration of 10 hours
 // console.log(Duration.parse("PT10H")) // "PT10H"
@@ -10,7 +10,7 @@ var LocalDateTime   = require('js-joda').LocalDateTime
 
 // var dt = LocalDateTime.parse('2012-12-24T12:00')
 
-console.log(LocalDateTime.now().toString())
+// console.log(LocalDateTime.now().toString())
 
 
 // var PythonShell = require('python-shell')
@@ -42,11 +42,11 @@ console.log(LocalDateTime.now().toString())
 // .then(x => {
 //     console.log(x)
 // })
-// while (true) {
-    console.log("ENV: "+process.env.PI_GARDEN_ENV);
-    console.log("NODE_PATH: "+process.env.NODE_PATH);
-    var Connection      = require('util/connection');
-
+//  while (true) {
+//     console.log("ENV: "+process.env.PI_GARDEN_ENV);
+//     console.log("NODE_PATH: "+process.env.NODE_PATH);
+//     var Connection      = require('util/connection');
+//
 // }
 
 //
