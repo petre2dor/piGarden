@@ -6,9 +6,9 @@ class Utilities {
         return str && str[0].toUpperCase() + str.slice(1);
     }
 
-    static map_range(value, low1, high1, low2, high2)
+    static map_range(value, in_low, in_high, out_low, out_high)
     {
-        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+        return out_low + (out_high - out_low) * (value - in_low) / (in_high - in_low);
     }
 }
 

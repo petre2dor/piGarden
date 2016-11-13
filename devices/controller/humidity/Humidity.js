@@ -1,33 +1,24 @@
 var LogModel    = require('db_models/LogModel')
 var DeviceModel = require('db_models/DeviceModel')
 var config      = require('config.json')[process.env.PI_GARDEN_ENV]
+var fw1s        = require('devices/controller/humidity/read_fw1s'+config.sufix+'.js')
 
 exports.get = function(req, res) {
-    LogModel.create({
-        action_id: 0,
-        area_id: 0,
-        device_id: req.params.deviceId,
-        type: 'D_GET_HUMIDITY',
-        description: 'Get mock humidity from device'
-    })
-
     var deviceModel = new DeviceModel()
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
-        .then(() => {
-            res.status(200).json({
-                httpCode: 200,
-                type: 'SUCCESS',
-                message: 'Here is the humidity',
-                data: {humidity: Math.floor(Math.random() * (77 - 65) + 65)}
-            })
+    .then(() => {
+        return fw1s.readHumidity()
+    })
+    .then(result => {
+        res.status(200).json(result)
+    })
+    .catch(e => {
+        res.status(404).json({
+            httpCode: 404,
+            type: 'ERROR',
+            message: e.message,
+            data: e
         })
-        .catch(() => {
-            res.status(404).json({
-                httpCode: 404,
-                type: 'ERROR',
-                message: 'Device ' + req.params.deviceId + ' not found.',
-                data: {}
-            })
-        })
+    })
 }
