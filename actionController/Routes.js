@@ -6,12 +6,12 @@ var Duration        = require('js-joda').Duration
 
 module.exports = {
     configure: function(app) {
-        app.get('/read/temperature/:actionId', Temperature.read)
-        app.get('/read/humidity/:actionId', Humidity.read)
+        app.get('/read/temperature/:deviceId', Temperature.read)
+        app.get('/read/humidity/:deviceId', Humidity.read)
 
-        app.get('/open/valve/:actionId', Valve.open)
+        app.get('/open/valve/:deviceId', Valve.open)
 
-        app.get('/close/valve/:actionId', Valve.close)
+        app.get('/close/valve/:deviceId', Valve.close)
 
     }
 }

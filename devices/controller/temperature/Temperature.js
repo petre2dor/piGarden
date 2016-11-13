@@ -1,14 +1,15 @@
-var LogModel    = require('db_models/LogModel.js')
-var DeviceModel = require('db_models/DeviceModel')
-var config      = require('config.json')[process.env.PI_GARDEN_ENV]
-var tmp36       = require('devices/controller/temperature/read_tmp36'+config.sufix+'.js')
+const LogModel    = require('db_models/LogModel.js')
+const DeviceModel = require('db_models/DeviceModel')
+const config      = require('config.json')[process.env.PI_GARDEN_ENV]
+
 
 exports.get = function(req, res) {
     let deviceModel = new DeviceModel()
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
-    .then(() => {
-        return tmp36.readTemperature()
+    .then(device => {
+        let source = require('./'+device.getOptions().js_file+config.sufix+'.js')
+        return source.readTemperature()
     })
     .then(result => {
         res.status(200).json(result)

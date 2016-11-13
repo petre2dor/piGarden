@@ -1,18 +1,18 @@
 var LogModel    = require('db_models/LogModel.js')
-var ActionModel = require('db_models/ActionModel')
+var DeviceModel = require('db_models/DeviceModel')
 var Request     = require('util/request')
 var StatsModel  = require('db_models/StatsModel')
 
 exports.read = function(req, res) {
-    var action = new ActionModel()
-    action.setId(req.params.actionId);
-    action.read()
-    .then(() => {
+    let device = new DeviceModel()
+    device.setId(req.params.deviceId);
+    device.read()
+    .then(device => {
         let request = new Request('localhost', 3001)
-        return request.get('/temperature/1')
+        return request.get('/temperature/'+device.getId())
     })
     .then(response => {
-        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
+        LogModel.create({type: 'READ_TEMPERATURE', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(response)})
         StatsModel.create({type: 'TEMPERATURE', value: response.data.temperature})
         res.send({
                 httpCode: 200,
@@ -21,7 +21,7 @@ exports.read = function(req, res) {
             })
     })
     .catch(err => {
-        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_TEMPERATURE_ERR', description: err.message})
+        LogModel.create({type: 'READ_TEMPERATURE_ERR', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: err.message})
         res.send({
                 httpCode: 400,
                 type: 'ERROR',
@@ -29,8 +29,4 @@ exports.read = function(req, res) {
                 data: err
             })
     })
-}
-
-getRandomTemperature = function(){
-    return Math.floor(Math.random() * (35 - 15) + 15)
 }

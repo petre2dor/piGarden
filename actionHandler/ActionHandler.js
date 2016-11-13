@@ -58,7 +58,7 @@ class ActionHandler {
 
     callController(ACRequest, actionModel)
     {
-        let path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
+        let path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getDeviceId()
         LogModel.create({type: 'AH_CALL_AC', description: 'Calling AC: ' + path, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
         return ACRequest.get(path)
     }

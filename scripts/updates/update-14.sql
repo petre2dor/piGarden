@@ -24,7 +24,7 @@ TRUNCATE TABLE devices;
 INSERT INTO devices
 (id, name, type, description, status, options)
 VALUES
-(1, 'TMP36', 'ANALOG', 'TMP36 analog temperature sensor', 'ACTIVE', '{}');
+(1, 'TMP36', 'ANALOG', 'TMP36 analog temperature sensor', 'ACTIVE', '{"js_file":"read_tmp36"}');
 
 -- set this device in area 1
 INSERT INTO areas_devices
@@ -47,7 +47,7 @@ WHERE verb = 'READ' AND object = 'TEMPERATURE';
 INSERT INTO devices
 (id, name, type, description, status, options)
 VALUES
-(2, 'FW1S', 'ANALOG', 'FW1S analog humidity sensor', 'ACTIVE', '{}');
+(2, 'FW1S', 'ANALOG', 'FW1S analog humidity sensor', 'ACTIVE', '{"js_file":"read_fw1s"}');
 
 -- set this device in area 1
 INSERT INTO areas_devices
@@ -71,7 +71,7 @@ WHERE verb = 'READ' AND object = 'HUMIDITY';
 INSERT INTO devices
 (id, name, type, description, status, options)
 VALUES
-(3, 'DS18B20', 'DIGITAL', 'DS18B20 digital humidity sensor', 'ACTIVE', '{}');
+(3, 'DS18B20', 'DIGITAL', 'DS18B20 digital humidity sensor', 'ACTIVE', '{"js_file":"read_ds18b20"}');
 
 -- set this device in area 1
 INSERT INTO areas_devices
