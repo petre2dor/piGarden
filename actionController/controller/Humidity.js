@@ -5,15 +5,15 @@ var StatsModel  = require('db_models/StatsModel')
 
 
 exports.read = function(req, res) {
-    var action = new ActionModel()
+    let action = new ActionModel()
     action.setId(req.params.actionId);
     action.read()
     .then( () => {
-        var request = new Request('localhost', 3001)
+        let request = new Request('localhost', 3001)
         return request.get('/humidity/2')
     })
     .then(response => {
-        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_HUMIDITY', description: JSON.stringify(response)})
+        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_HUMIDITY', description: JSON.stringify(response)})
         StatsModel.create({type: 'HUMIDITY', value: response.data.humidity})
         res.send({
                 httpCode: 200,
@@ -22,7 +22,7 @@ exports.read = function(req, res) {
             })
     })
     .catch(err => {
-        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_HUMIDITY_ERR', description: err})
+        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_HUMIDITY_ERR', description: err})
         res.send({
                 httpCode: 400,
                 type: 'ERROR',

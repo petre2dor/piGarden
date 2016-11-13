@@ -13,10 +13,10 @@ exports.open = function(req, res)
             LogModel.create({description: 'Read action. Reading closing action.', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})
             // read Close Valve actionModel
             var closeAction = new ActionModel()
-            closeAction.setAreaId(action.getAreaId())
+            closeAction.setAreaId(action.getDeviceId())
             closeAction.setObject('VALVE')
             closeAction.setVerb('CLOSE')
-            return closeAction.getReadByAreaObjectVerb()
+            return closeAction.getReadByDeviceObjectVerb()
         })
         .then(closeAction => {
             LogModel.create({description: 'Read closing action. Setting it to ACTIVE', type: 'AC_OPEN_VALVE', action_id: action.id, area_id: 0, device_id: 0})

@@ -4,7 +4,7 @@ var config      = require('config.json')[process.env.PI_GARDEN_ENV]
 var tmp36       = require('devices/controller/temperature/read_tmp36'+config.sufix+'.js')
 
 exports.get = function(req, res) {
-    var deviceModel = new DeviceModel()
+    let deviceModel = new DeviceModel()
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
     .then(() => {

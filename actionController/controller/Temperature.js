@@ -7,12 +7,12 @@ exports.read = function(req, res) {
     var action = new ActionModel()
     action.setId(req.params.actionId);
     action.read()
-    .then( () => {
-        var request = new Request('localhost', 3001)
+    .then(() => {
+        let request = new Request('localhost', 3001)
         return request.get('/temperature/1')
     })
     .then(response => {
-        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
+        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_TEMPERATURE', description: JSON.stringify(response)})
         StatsModel.create({type: 'TEMPERATURE', value: response.data.temperature})
         res.send({
                 httpCode: 200,
@@ -21,7 +21,7 @@ exports.read = function(req, res) {
             })
     })
     .catch(err => {
-        LogModel.create({action_id: 0, area_id: action.getAreaId(), device_id: 0, type: 'READ_TEMPERATURE_ERR', description: err.message})
+        LogModel.create({action_id: 0, device_id: action.getDeviceId(), area_id: 0, type: 'READ_TEMPERATURE_ERR', description: err.message})
         res.send({
                 httpCode: 400,
                 type: 'ERROR',

@@ -1,5 +1,4 @@
-
-
+// mock temperature for dev env with a random value
 exports.readTemperature = () => {
     return new Promise((resolve, reject) => {
         resolve({

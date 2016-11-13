@@ -6,8 +6,8 @@ class ActionModel extends PrimaryModel {
     setId(val){
         this.fields.id = val
     }
-    setAreaId(val){
-        this.fields.area_id = val
+    setDeviceId(val){
+        this.fields.device_id = val
     }
     setVerb(val){
         this.fields.verb = val
@@ -44,8 +44,8 @@ class ActionModel extends PrimaryModel {
     getId(){
         return this.fields.id
     }
-    getAreaId(){
-        return this.fields.area_id
+    getDeviceId(){
+        return this.fields.device_id
     }
     getVerb(){
         return this.fields.verb
@@ -79,16 +79,16 @@ class ActionModel extends PrimaryModel {
     }
 
     getReadStmt(){
-        return `SELECT id, area_id, verb, object, options, last_run_time,
+        return `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                 FROM actions
                 WHERE id = :id`
     }
 
     getInsertStmt(){
-        return `INSERT INTO actions (area_id, verb, object, options, last_run_time,
+        return `INSERT INTO actions (device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status)
-                VALUES(area_id = :area_id, verb = :verb, object = :object,
+                VALUES(device_id = :device_id, verb = :verb, object = :object,
                     options = :options, last_run_time = :last_run_time,
                     next_run_time = :next_run_time, schedule = :schedule,
                     description = :description, is_running = :is_running,
@@ -97,7 +97,7 @@ class ActionModel extends PrimaryModel {
 
     getUpdateStmt(){
         return `UPDATE actions
-                SET area_id = :area_id, verb = :verb,
+                SET device_id = :device_id, verb = :verb,
                     object = :object, options = :options,
                     last_run_time = :last_run_time, next_run_time = :next_run_time,
                     schedule = :schedule, description = :description,
@@ -106,7 +106,7 @@ class ActionModel extends PrimaryModel {
     }
 
     readNextAction(){
-        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+        var sql = `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
@@ -132,11 +132,11 @@ class ActionModel extends PrimaryModel {
     }
 
 
-    getReadByAreaObjectVerb(){
-        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+    getReadByDeviceObjectVerb(){
+        var sql = `SELECT id, device_id, verb, object, options, last_run_time,
                         next_run_time, schedule, description, is_running, status, retries
                     FROM actions
-                    WHERE area_id = :area_id AND object = :object AND verb = :verb;`
+                    WHERE device_id = :device_id AND object = :object AND verb = :verb;`
         return new Promise((resolve, reject) => {
             this.query(sql)
                 .then((result) => {
