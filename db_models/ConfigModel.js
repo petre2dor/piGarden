@@ -36,16 +36,7 @@ class ConfigModel extends PrimaryModel {
     readByName(){
         var sql = `SELECT name, value, description, description
                     FROM configs WHERE name = :name`
-        return new Promise((resolve, reject) => {
-            this.query(sql)
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject('There is no config with name: '+this.getName())
-                    }
-                })})
+        return this.fetch(sql, {message: 'There is no config with name: '+this.getName()})
     }
 }
 var config = new ConfigModel()

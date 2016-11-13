@@ -22,21 +22,7 @@ class PrimaryModel {
     }
 
     read(){
-        return new Promise((resolve, reject) => {
-            this.query(this.getReadStmt())
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: 404,
-                            type: 'NOT_FOUND',
-                            message: 'There is no result available',
-                            data: err
-                        })
-                    }
-                })})
+        return this.fetch(this.getReadStmt())
     }
 
     insert(){
@@ -85,6 +71,50 @@ class PrimaryModel {
         })
     }
 
+    fetch(statement, onError = {}){
+        return new Promise((resolve, reject) => {
+            this.query(statement)
+                .then(result => {
+                    if(result.length > 0){
+                        this.fields = result[0]
+                        resolve(this)
+                    }else{
+                        reject({
+                            httpCode: onError.httpCode || 404,
+                            type: onError.type || 'NOT_FOUND',
+                            message: onError.message || 'There is no result available',
+                            data: {}
+                        })
+                    }
+                })
+                .catch(reason => {
+                    reject(reason)
+                })
+            })
+    }
+
+// todo
+    // fetchAll(statement, onError = {}){
+    //     return new Promise((resolve, reject) => {
+    //         this.query(statement)
+    //             .then(result => {
+    //                 if(result.length > 0){
+    //                     this.fields = result[0]
+    //                     resolve(this)
+    //                 }else{
+    //                     reject({
+    //                         httpCode: onError.httpCode || 404,
+    //                         type: onError.type || 'NOT_FOUND',
+    //                         message: onError.message || 'There is no result available',
+    //                         data: {}
+    //                     })
+    //                 }
+    //             })
+    //             .catch(reason => {
+    //                 reject(reason)
+    //             })
+    //         })
+    // }
 
     getSetterFunction(field){
         var functionName = 'set';

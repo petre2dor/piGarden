@@ -106,47 +106,23 @@ class ActionModel extends PrimaryModel {
     }
 
     readNextAction(){
-        var sql = `SELECT id, device_id, verb, object, options, last_run_time,
+        let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
                         OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
-
-        return new Promise((resolve, reject) => {
-            this.query(sql)
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: 200,
-                            type: 'WARNING',
-                            message: 'There is no next action available',
-                            data: []
-                        })
-                    }
-                })})
+        return this.fetch(sql, {httpCode: 200, type: 'WARNING', message: 'There is no next action available'})
     }
 
 
     getReadByDeviceObjectVerb(){
-        var sql = `SELECT id, device_id, verb, object, options, last_run_time,
+        let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                         next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE device_id = :device_id AND object = :object AND verb = :verb;`
-        return new Promise((resolve, reject) => {
-            this.query(sql)
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject('There is no action available')
-                    }
-                })})
+        return this.fetch(sql)
     }
 }
 

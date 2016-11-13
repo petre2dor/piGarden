@@ -5,16 +5,18 @@ var StatsModel  = require('db_models/StatsModel')
 
 
 exports.read = function(req, res) {
+    var deviceModel
     let device = new DeviceModel()
     device.setId(req.params.deviceId);
     device.read()
     .then(device => {
+        deviceModel = device
         let request = new Request('localhost', 3001)
-        return request.get('/humidity/'+device.getId())
+        return request.get('/humidity/'+deviceModel.getId())
     })
     .then(response => {
-        LogModel.create({type: 'READ_HUMIDITY', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(response)})
-        StatsModel.create({area_id: 0,  device_id: req.params.deviceId, type: 'HUMIDITY', value: response.data.humidity})
+        LogModel.create({type: 'READ_HUMIDITY', action_id: 0, device_id: deviceModel.getId(), area_id: 0, description: JSON.stringify(response)})
+        StatsModel.create({area_id: 0,  device_id: deviceModel.getId(), type: 'HUMIDITY', value: response.data.humidity})
         res.send({
                 httpCode: 200,
                 type: 'SUCCESS',
