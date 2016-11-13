@@ -8,7 +8,7 @@ exports.readHumidity = () => {
 
     return new Promise((resolve, reject) => {
         resolve({
-            message: 'Here is the humidity.',
+            message: 'Here is the mock humidity.',
             type: 'SUCCESS',
             httpCode: 200,
             data: {humidity: humidity}
