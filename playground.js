@@ -90,6 +90,14 @@
 //     throw e
 // }
 
+// group by hour and minute
+// SELECT date_format(date, "%H %i") AS `Day of the week`, AVG(value) FROM stats  WHERE type = 'TEMPERATURE' AND device_id = 1 AND date >= now() - INTERVAL 3 HOUR GROUP BY `Day of the week` ORDER BY date_format(date, "%H %i");
+
+
+// group by HOUR
+// SELECT date_format(date, "%H") AS `Day of the week`, AVG(value) FROM stats  WHERE type = 'TEMPERATURE' AND device_id = 2 AND date >= now() - INTERVAL 12 HOUR GROUP BY `Day of the week` ORDER BY date_format(date, "%H");
+
+
 
 
 var Connection      = require('./util/connection')

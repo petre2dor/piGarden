@@ -8,6 +8,9 @@ class StatsModel extends PrimaryModel {
     setDeviceId(val){
         this.fields.device_id = val
     }
+    setDate(val){
+        this.fields.date = val
+    }
     setType(val){
         this.fields.type = val
     }
@@ -27,6 +30,9 @@ class StatsModel extends PrimaryModel {
     getDeviceId(){
         return this.fields.device_id
     }
+    getDate(){
+        return this.fields.date
+    }
     getType(){
         return this.fields.type
     }
@@ -43,6 +49,17 @@ class StatsModel extends PrimaryModel {
     getInsertStmt(){
         return `INSERT INTO stats(area_id, device_id, type, value, status)
                 VALUES (:area_id, :device_id, :type, :value, 'ACTIVE')`
+    }
+
+    get(since, until){
+        let sql = `SELECT area_id, device_id, date, type, value, status
+                FROM stats
+                WHERE status = 'ACTIVE'
+                    AND device_id = :device_id
+                    AND date >= now() - INTERVAL 4 HOUR
+                ORDER BY date ASC;`
+        console.log(sql);
+        return this.fetchAll(sql)
     }
 }
 

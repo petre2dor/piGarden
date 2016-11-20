@@ -113,7 +113,7 @@ class ActionModel extends PrimaryModel {
                         OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
-        return this.fetch(sql, {httpCode: 200, type: 'WARNING', message: 'There is no next action available'})
+        return this.fetch(sql)
     }
 
 
