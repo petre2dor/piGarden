@@ -56,10 +56,10 @@ class StatsModel extends PrimaryModel {
                 FROM stats
                 WHERE status = 'ACTIVE'
                     AND device_id = :device_id
-                    AND date >= now() - INTERVAL 4 HOUR
+                    AND date >= :since
+                    AND date <= :until
                 ORDER BY date ASC;`
-        console.log(sql);
-        return this.fetchAll(sql)
+        return this.fetchAll(sql, {since: since, until: until, device_id: this.getDeviceId()})
     }
 }
 
