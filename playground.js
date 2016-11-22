@@ -98,6 +98,17 @@
 // SELECT date_format(date, "%H") AS `Day of the week`, AVG(value) FROM stats  WHERE type = 'TEMPERATURE' AND device_id = 2 AND date >= now() - INTERVAL 12 HOUR GROUP BY `Day of the week` ORDER BY date_format(date, "%H");
 
 
+SELECT
+  DATE_FORMAT(
+    MIN(date),
+    '%d/%m/%Y %H:%i:00'
+  ) AS tmstamp,
+  AVG(value) AS value
+FROM
+  stats
+WHERE device_id = 1 AND date > '2016-11-22T09:07:26'
+GROUP BY ROUND(UNIX_TIMESTAMP(date) / 300)
+
 
 
 var Connection      = require('./util/connection')

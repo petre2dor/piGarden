@@ -52,13 +52,14 @@ class StatsModel extends PrimaryModel {
     }
 
     get(since, until){
-        let sql = `SELECT area_id, device_id, date, type, value, status
+        let sql = `SELECT MIN(date) AS date,
+                    AVG(value) AS value, area_id
                 FROM stats
                 WHERE status = 'ACTIVE'
                     AND device_id = :device_id
                     AND date >= :since
                     AND date <= :until
-                ORDER BY date ASC;`
+                GROUP BY ROUND(UNIX_TIMESTAMP(date) / (60*5));` // group by 5 min interval
         return this.fetchAll(sql, {since: since, until: until, device_id: this.getDeviceId()})
     }
 }
