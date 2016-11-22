@@ -3,6 +3,7 @@ var ActionModel     = require('db_models/ActionModel')
 var LogModel        = require('db_models/LogModel')
 var ConfigModel     = require('db_models/ConfigModel')
 var Request         = require('util/request')
+var Utilities       = require('util/utilities.js')
 var Duration        = require('js-joda').Duration
 
 const actionModel = new ActionModel()
@@ -15,13 +16,13 @@ class ActionHandler {
     run()
     {
         return new Promise( (resolve, reject) => {
-            ConfigModel.setName('AH_RETRIES_NO')
-            ConfigModel.readByName()
-            .then(config => {
-                this.maxRetries = config.getValue()
-                return actionModel.readNextAction()
-            })
+            actionModel.reset()
+            actionModel.readNextAction()
             .then(actionModel => {
+                // if no next action, get out
+                if(Utilities.isEmpty(actionModel.fields)) throw 404
+
+                // else
                 LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
                 actionModel.setStatus('RUNNING')
                 actionModel.update()
@@ -43,7 +44,7 @@ class ActionHandler {
                     })
             })
             .catch(reason => {
-                if(reason.message == 'There is no next action available'){
+                if(reason === 404){
                     resolve({message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'})
                 }else{
                     LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})

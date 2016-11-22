@@ -52,12 +52,12 @@ class PrimaryModel {
         return this.query(this.getUpdateStmt())
     }
 
-    query (statement){
-        var fields = this.fields
+    query (statement, params = false){
+        let paramss = params || this.fields;
         return new Promise((resolve, reject) => {
             Connection.acquire(function(err, conn) {
                 if(err) throw err
-                var query = conn.query(statement, fields, (err, result) => {
+                var query = conn.query(statement, paramss, (err, result) => {
                         conn.release()
                         // if (err) throw err
                         if (!err) {
@@ -76,21 +76,14 @@ class PrimaryModel {
         })
     }
 
-    fetch(statement, onError = {}){
+    fetch(statement, params = false){
         return new Promise((resolve, reject) => {
-            this.query(statement)
+            this.query(statement, params)
                 .then(result => {
                     if(result.length > 0){
                         this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: onError.httpCode || 404,
-                            type: onError.type || 'NOT_FOUND',
-                            message: onError.message || 'There is no result available',
-                            data: {}
-                        })
                     }
+                    resolve(this)
                 })
                 .catch(reason => {
                     reject(reason)
@@ -98,25 +91,16 @@ class PrimaryModel {
             })
     }
 
-    fetchAll(statement, onError = {}){
+    fetchAll(statement, params = false, msgOnNoResults = {}){
         return new Promise((resolve, reject) => {
-            this.query(statement)
+            this.query(statement, params)
                 .then(results => {
-                    console.log(results) //
                     if(results.length > 0){
                         this.results = results
                         this.fields = results[0]
                         this.rowIndex = 0
-
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: onError.httpCode || 404,
-                            type: onError.type || 'NOT_FOUND',
-                            message: onError.message || 'There is no result available',
-                            data: {}
-                        })
                     }
+                    resolve(this)
                 })
                 .catch(reason => {
                     reject(reason)

@@ -17,7 +17,7 @@ try {
     Connection.init()
     Routes.configure(app)
 
-    var server = app.listen(3000, function(){
+    var server = app.listen(3000, '0.0.0.0', function(){
         console.log('Server listening on port ' + server.address().port)
         LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AC_START', description: 'AC Server listening on port ' + server.address().port})
     })
