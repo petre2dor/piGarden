@@ -38,14 +38,14 @@ class AreaDeviceModel extends PrimaryModel {
     readAllByAreaId(){
         let sql = `SELECT area_id, device_id, status, options
                         FROM areas_devices
-                        WHERE area_id = :area_id`
+                        WHERE area_id = :area_id AND status = 'ACTIVE'`
         return this.fetchAll(sql)
     }
 
     readAllByDeviceId(){
-        return `SELECT area_id, device_id, status, options
-                FROM areas_devices
-                WHERE device_id = :device_id`
+        let sql = `SELECT area_id, device_id, status, options
+                        FROM areas_devices
+                        WHERE device_id = :device_id`
         return this.fetchAll(sql)
     }
 }

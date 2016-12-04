@@ -1,5 +1,6 @@
 const LogModel        = require('db_models/LogModel')
 const StatsModel      = require('db_models/StatsModel')
+const AreaDeviceModel = require('db_models/AreaDeviceModel')
 const LocalDateTime   = require('js-joda').LocalDateTime
 const ChronoUnit      = require('js-joda').ChronoUnit
 
@@ -12,7 +13,7 @@ exports.get = function(req, res) {
     .get(req.params.since, until, groupByInterval)
     .then(stats => {
         LogModel.create({
-                    description: 'Stats since: '+since+', until: '+until+' returned'+' grouped per '+groupByInterval/60+' min interval', 
+                    description: 'Stats since: '+since+', until: '+until+' returned'+' grouped per '+groupByInterval/60+' min interval',
                     device_id: req.params.deviceId,
                     type: 'GET_STATS',
                     action_id: 0,
@@ -35,6 +36,25 @@ exports.get = function(req, res) {
             })
     })
 }
+
+
+exports.persistDeviceRead = function(deviceId, type, value) {
+    LogModel.create({type: 'PERSIST_DEVICE_READ', action_id: 0, device_id: deviceId, area_id: 0, description: 'saving '+type+' device read'})
+
+    areaDevice = new AreaDeviceModel()
+    areaDevice.setDeviceId(deviceId)
+    areaDevice.readAllByDeviceId()
+    .then(areaDevice => {
+        while (areaDevice.getAreaId()) {
+            StatsModel.create({area_id: areaDevice.getAreaId(), device_id: deviceId, type: type, value: value})
+            areaDevice = areaDevice.getNextResult()
+        }
+    })
+    .catch(reason => {
+        LogModel.create({type: 'PERSIST_DEVICE_READ_ERR', action_id: 0, device_id: deviceId, area_id: 0, description: reason})
+    })
+}
+
 
 getGroupByInterval = function(since, until){
     since = LocalDateTime.parse(since)

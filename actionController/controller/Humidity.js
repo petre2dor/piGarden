@@ -2,6 +2,7 @@ var LogModel    = require('db_models/LogModel')
 var DeviceModel = require('db_models/DeviceModel')
 var Request     = require('util/request')
 var StatsModel  = require('db_models/StatsModel')
+var StatsController = require('./Stats')
 
 
 exports.read = function(req, res) {
@@ -16,7 +17,9 @@ exports.read = function(req, res) {
     })
     .then(response => {
         LogModel.create({type: 'READ_HUMIDITY', action_id: 0, device_id: deviceModel.getId(), area_id: 0, description: JSON.stringify(response)})
-        StatsModel.create({area_id: 0,  device_id: deviceModel.getId(), type: 'HUMIDITY', value: response.data.humidity})
+
+        StatsController.persistDeviceRead(deviceModel.getId(), 'HUMIDITY', response.data.humidity)
+
         res.send({
                 httpCode: 200,
                 type: 'SUCCESS',
