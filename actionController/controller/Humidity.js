@@ -1,7 +1,7 @@
-var LogModel    = require('db_models/LogModel')
-var DeviceModel = require('db_models/DeviceModel')
-var Request     = require('util/request')
-var StatsModel  = require('db_models/StatsModel')
+var LogModel        = require('db_models/LogModel')
+var DeviceModel     = require('db_models/DeviceModel')
+var Request         = require('util/request')
+var StatsModel      = require('db_models/StatsModel')
 var StatsController = require('./Stats')
 
 
