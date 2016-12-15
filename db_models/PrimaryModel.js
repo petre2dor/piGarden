@@ -26,6 +26,10 @@ class PrimaryModel {
         throw 'No Read Statement defined'
     }
 
+    getFields(){
+        return this.fields
+    }
+
     read(){
         return this.fetch(this.getReadStmt())
     }
@@ -59,7 +63,6 @@ class PrimaryModel {
                 if(err) throw err
                 var query = conn.query(statement, paramss, (err, result) => {
                         conn.release()
-                        // if (err) throw err
                         if (!err) {
                             resolve(result)
                         } else {
@@ -77,6 +80,9 @@ class PrimaryModel {
     }
 
     fetch(statement, params = false){
+        if (!params){
+            params = this.fields
+        }
         return new Promise((resolve, reject) => {
             this.query(statement, params)
                 .then(result => {
@@ -92,6 +98,9 @@ class PrimaryModel {
     }
 
     fetchAll(statement, params = false, msgOnNoResults = {}){
+        if (!params){
+            params = this.fields
+        }
         return new Promise((resolve, reject) => {
             this.query(statement, params)
                 .then(results => {

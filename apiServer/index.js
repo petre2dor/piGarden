@@ -3,6 +3,7 @@ let graphqlHTTP = require('express-graphql')
 let Schema = require('./schema')
 let Root = require('./root')
 
+
 let app = express()
 app.use('/graphql', graphqlHTTP({
     schema: Schema,

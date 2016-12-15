@@ -16,15 +16,31 @@ class ActionModel extends PrimaryModel {
         this.fields.object = val
     }
     setOptions(val){
+        // todo create validateException and throw it here incase of parse error
+        try {
+            val = JSON.parse(val)
+        } catch (e) {
+            val = {}
+        }
         this.fields.options = JSON.stringify(val)
     }
     setLastRunTime(val){
         this.fields.last_run_time = val
     }
     setNextRunTime(val){
+        if(!val){
+            let LocalDateTime = require('js-joda').LocalDateTime
+            val = LocalDateTime.now().toString()
+        }
         this.fields.next_run_time = val
     }
     setSchedule(val){
+        // todo create validateException and throw it here incase of parse error
+        try {
+            val = JSON.parse(val)
+        } catch (e) {
+            val = {}
+        }
         this.fields.schedule = JSON.stringify(val)
     }
     setDescription(val){
@@ -86,13 +102,10 @@ class ActionModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return `INSERT INTO actions (device_id, verb, object, options, last_run_time,
-                    next_run_time, schedule, description, is_running, status)
-                VALUES(device_id = :device_id, verb = :verb, object = :object,
-                    options = :options, last_run_time = :last_run_time,
-                    next_run_time = :next_run_time, schedule = :schedule,
-                    description = :description, is_running = :is_running,
-                    status = :status)`
+        return `INSERT INTO actions (device_id, verb, object, options,
+                    next_run_time, schedule, description, status)
+                VALUES(:device_id, :verb, :object, :options,
+                    :next_run_time, :schedule, :description, :status)`
     }
 
     getUpdateStmt(){
