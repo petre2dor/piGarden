@@ -110,7 +110,6 @@ let getStats = function(params){
         return StatsModel
             .get(since, until, groupByInterval)
             .then(stats => {
-                console.log(stats.results);
                 return stats.results
             })
 }
