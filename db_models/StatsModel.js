@@ -57,10 +57,15 @@ class StatsModel extends PrimaryModel {
                 FROM stats
                 WHERE status = 'ACTIVE'
                     AND device_id = :device_id
-                    AND date BETWEEN :since AND :until 
+                    AND area_id = :area_id
+                    AND type = :type
+                    AND date BETWEEN :since AND :until
                 GROUP BY ROUND(UNIX_TIMESTAMP(date) / :seconds);`
+        console.log(sql);
         let params = {
                         device_id:  this.getDeviceId(),
+                        area_id:    this.getAreaId(),
+                        type:       this.getType(),
                         until:      until,
                         since:      since,
                         seconds:    groupByInterval

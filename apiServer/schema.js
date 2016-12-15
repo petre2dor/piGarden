@@ -2,8 +2,10 @@ let graphql = require('graphql');
 
 let GraphQLObjectType   = graphql.GraphQLObjectType
 let GraphQLInt          = graphql.GraphQLInt
+let GraphQLFloat        = graphql.GraphQLFloat
 let GraphQLString       = graphql.GraphQLString
 let GraphQLNonNull      = graphql.GraphQLNonNull
+let GraphQLList         = graphql.GraphQLList
 let GraphQLSchema       = graphql.GraphQLSchema
 
 const Action = new GraphQLObjectType({
@@ -25,6 +27,19 @@ const Action = new GraphQLObjectType({
     })
 });
 
+const Stat = new GraphQLObjectType({
+    name: 'Stat',
+    description: 'This describes a PiGarden Action.',
+    fields: () => ({
+        device_id:  {type: new GraphQLNonNull(GraphQLInt), description: 'ID of physical device'},
+        area_id:    {type: new GraphQLNonNull(GraphQLInt), description: ''},
+        type:       {type: new GraphQLNonNull(GraphQLString), description: ''},
+        date:       {type: new GraphQLNonNull(GraphQLString), description: ''},
+        value:      {type: new GraphQLNonNull(GraphQLFloat), description: ''}
+    })
+});
+
+
 const Query = new GraphQLObjectType({
     name: 'PiGarden',
     description: "Root of the PiGarden Query Schema",
@@ -34,6 +49,17 @@ const Query = new GraphQLObjectType({
             description: 'Get a PiGarden Action',
             args: {
                 id: {type: new GraphQLNonNull(GraphQLInt)}
+            }
+        },
+        stats: {
+            type: new GraphQLList(Stat),
+            description: 'Get stats for devices',
+            args: {
+                device_id:  {type: new GraphQLNonNull(GraphQLInt)},
+                area_id:    {type: new GraphQLNonNull(GraphQLInt)},
+                type:       {type: new GraphQLNonNull(GraphQLString)},
+                since:      {type: new GraphQLNonNull(GraphQLString)},
+                until:      {type: GraphQLString}
             }
         }
     })
