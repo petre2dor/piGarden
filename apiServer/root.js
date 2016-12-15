@@ -40,14 +40,41 @@ let createAction = function(params){
             .then(action => resolve(action.getFields()))
             .catch(reason => reject(reason))
     })
+}
 
+let updateAction = function(params){
+    let action = new ActionModel()
+    action.setId(params.id)
+    return new Promise((resolve, reject) => {
+        action
+            .read()
+            .then(action => {
+                if(params.device_id) action.setDeviceId(params.device_id)
+                if(params.verb) action.setVerb(params.verb)
+                if(params.object) action.setObject(params.object)
+                if(params.options) action.setOptions(params.options)
+                if(params.next_run_time) action.setNextRunTime(params.next_run_time)
+                if(params.schedule) action.setSchedule(params.schedule)
+                if(params.description) action.setDescription(params.description)
+                if(params.status) action.setStatus(params.status)
+                action.setRetries(0)
 
-    return {id: 11, device_id: 2, object: '42', verb: "2", status: 'bla'}
+                return action.update()
+            })
+            .then(result => {
+                action.reset()
+                action.setId(params.id)
+                return action.read()
+            })
+            .then(result => resolve(action.getFields()))
+            .catch(reason => reject(reason))
+    })
 }
 
 
 let Root = {
     action: params => getAction(params.id),
-    createAction: params => createAction(params)
+    createAction: params => createAction(params),
+    updateAction: params => updateAction(params)
 }
 module.exports = Root

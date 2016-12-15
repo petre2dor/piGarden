@@ -57,6 +57,20 @@ const Mutation = new GraphQLObjectType({
                 description:    {type: GraphQLString, description: 'Action\'s description'},
                 status:         {type: GraphQLString, description: 'Default INACTIVE'}
             }
+        },
+        updateAction: {
+            type: Action,
+            args: {
+                id:             {type: new GraphQLNonNull(GraphQLInt)},
+                device_id:      {type: GraphQLInt, description: 'ID of physical device'},
+                verb:           {type: GraphQLString, description: ''},
+                object:         {type: GraphQLString, description: ''},
+                options:        {type: GraphQLString, description: 'JSON object'},
+                next_run_time:  {type: GraphQLString, description: 'Timestamp of next scheduled run. Default NOW'},
+                schedule:       {type: GraphQLString, description: 'JSON describing the schedule'},
+                description:    {type: GraphQLString, description: 'Action\'s description'},
+                status:         {type: GraphQLString, description: 'Default INACTIVE'}
+            }
         }
     })
 })
