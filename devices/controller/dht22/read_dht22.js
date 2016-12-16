@@ -1,7 +1,4 @@
-var LogModel    = require('db_models/LogModel')
-var DeviceModel = require('db_models/DeviceModel')
 var PythonShell = require('python-shell')
-var config      = require('config.json')[process.env.PI_GARDEN_ENV]
 
 exports.read = deviceOptions => {
     return new Promise((resolve, reject) => {
@@ -9,10 +6,12 @@ exports.read = deviceOptions => {
             if (err) {
                 reject({ httpCode: 403, type: 'ERROR', message: err.message, data: err })
             } else {
-                if(results.indexOf('true') !== 0) {
-                    reject({ httpCode: 403, type: 'ERROR', message: 'Valve '+scriptPath+' script failed', data: results })
+                let result = JSON.parse(results[0])
+
+                if(result.httpCode >= '400') {
+                    reject({ httpCode: 403, type: 'ERROR', message: 'Read dht22 script failed', data: result.message })
                 } else {
-                    resolve({ httpCode: 200, type: 'SUCCESS', message: 'Valve '+scriptPath+' was successfull.' })
+                    resolve(result)
                 }
             }
         })
