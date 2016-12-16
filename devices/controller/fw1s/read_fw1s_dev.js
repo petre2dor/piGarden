@@ -1,7 +1,7 @@
 const Mcpadc    = require('mcp-spi-adc')
 const Util      = require('util/utilities')
 
-exports.readHumidity = () => {
+exports.read = deviceOptions => {
     let readValue = Math.random()
     readValue = (readValue < 0.3) ? 0.3 : readValue
     let humidity = Util.map_range(readValue, 1, 0.3, 0, 100)
@@ -11,7 +11,7 @@ exports.readHumidity = () => {
             message: 'Here is the mock humidity.',
             type: 'SUCCESS',
             httpCode: 200,
-            data: {humidity: humidity}
+            data: [{"type": "HUMIDITY", "value": humidity}]
         })
     })
 }
