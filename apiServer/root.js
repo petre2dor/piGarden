@@ -103,15 +103,17 @@ getGroupByInterval = function(since, until){
 let getStats = function(params){
     let until = params.until ? params.until : LocalDateTime.now().toString()
     let since = params.since
-    let groupByInterval = getGroupByInterval(since, until)
+    // console.log('since', since);
+    // let groupByInterval = getGroupByInterval(since, until)
+    // console.log('groupByInterval', groupByInterval);
     StatsModel.setDeviceId(params.device_id)
     StatsModel.setAreaId(params.area_id)
     StatsModel.setType(params.type)
-        return StatsModel
-            .get(since, until, groupByInterval)
-            .then(stats => {
-                return stats.results
-            })
+    return StatsModel
+        .get(since, until)
+        .then(stats => {
+            return stats.results
+        })
 }
 
 
