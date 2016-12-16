@@ -46,6 +46,6 @@ humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 # If this happens try again!
 if humidity is not None and temperature is not None:
     # print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
-    print '{"httpCode": "200", "type": "SUCCESS", "message": "All good.", "data": [{"type": "TEMPERATURE", "value": "'+temperature+'"}, {"type": "HUMIDITY", "value": "'+humidity+'"}]}'
+    print '{"httpCode": "200", "type": "SUCCESS", "message": "All good.", "data": [{"type": "TEMPERATURE", "value": "'+str(temperature)+'"}, {"type": "HUMIDITY", "value": "'+str(humidity)+'"}]}'
 else:
-    print '{"httpCode": "400", "type": "ERROR", "message": "Something hit the fan in read_dht22.py.", "data": [{"type": "TEMPERATURE", "value": "'+temperature+'"}, {"type": "HUMIDITY", "value": "'+humidity+'"}]}'
+    print '{"httpCode": "400", "type": "ERROR", "message": "Something hit the fan in read_dht22.py.", "data": [{"type": "TEMPERATURE", "value": "'+str(temperature)+'"}, {"type": "HUMIDITY", "value": "'+str(humidity)+'"}]}'

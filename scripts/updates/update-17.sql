@@ -1,10 +1,10 @@
 
 --
--- insert DHT22 analog temperature sensor
+-- insert DHT22 analog temperature and humidity sensor
 INSERT INTO devices
 (id, name, type, description, status, options)
 VALUES
-(6, 'DHT22', 'DIGITAL', 'DHT22 digital temperature/humidity sensor', 'ACTIVE', '{"js_file":"read_dht22"}');
+(6, 'DHT22', 'DIGITAL', 'DHT22 digital temperature/humidity sensor', 'ACTIVE', '{"js_file":"dht22/read_dht22","GPIOpin":"22"}');
 
 -- set this device in area 1
 INSERT INTO areas_devices
