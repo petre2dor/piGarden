@@ -93,10 +93,14 @@ getGroupByInterval = function(since, until){
     }else if(diffInMin > 12 * 60){
         // then group stats per 30 min interval, in sec
         return 30 * 60
-    // if diff between dates is less than 12 hours
-    }else{
+    // if diff between dates is bigger than 1 hour
+    }else if(diffInMin > 60){
         // then group stats per 15 min interval, in sec
         return 15 * 60
+    // if diff between dates is less than 12 hours
+    }else{
+        // then group stats per 3 min interval, in sec
+        return 3 * 60
     }
 }
 
