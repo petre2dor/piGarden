@@ -51,15 +51,33 @@ class StatsModel extends PrimaryModel {
                 VALUES (:area_id, :device_id, :type, :value, 'ACTIVE')`
     }
 
+    getLatestRead(){
+        let sql = `SELECT date, value, area_id, device_id, type, ext_data
+                    FROM stats
+                    WHERE status = 'ACTIVE'
+                        AND device_id = :device_id
+                        AND area_id = :area_id
+                        AND type = :type
+                    ORDER BY date DESC
+                    LIMIT 1;`
+        let params = {
+                        device_id:  this.getDeviceId(),
+                        area_id:    this.getAreaId(),
+                        type:       this.getType()
+                     }
+        return this.fetch(sql, params)
+    }
+
     get(since, until, groupByInterval){
-        let sql = `SELECT MIN(date) AS date, AVG(value) AS value, area_id, device_id, ext_data
+        let sql = `SELECT MIN(date) AS date, AVG(value) AS value, area_id, device_id, type, ext_data
                     FROM stats
                     WHERE status = 'ACTIVE'
                         AND device_id = :device_id
                         AND area_id = :area_id
                         AND type = :type
                         AND date BETWEEN :since AND :until
-                    GROUP BY UNIX_TIMESTAMP(date) DIV :divider;`
+                    GROUP BY UNIX_TIMESTAMP(date) DIV :divider
+                    ORDER BY date DESC;`
         let params = {
                         device_id:  this.getDeviceId(),
                         area_id:    this.getAreaId(),
@@ -68,7 +86,6 @@ class StatsModel extends PrimaryModel {
                         since:      since,
                         divider:    groupByInterval
                      }
-        console.log(params);
         return this.fetchAll(sql, params)
     }
 }

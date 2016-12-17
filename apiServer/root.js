@@ -14,12 +14,9 @@ let getAction = function(id){
     let action = new ActionModel()
     action.setId(id)
 
-    return new Promise((resolve, reject) => {
-        action
+    return action
             .read()
-            .then(action  => resolve(action.getFields()))
-            .catch(reason => reject(reason))
-    })
+            .then(action  => {return action.getFields()})
 }
 
 let createAction = function(params){
@@ -33,24 +30,20 @@ let createAction = function(params){
     action.setSchedule(params.schedule || '{"type": "fixed"}')
     action.setDescription(params.description || '')
     action.setStatus(params.status || 'INACTIVE')
-    return new Promise((resolve, reject) => {
-        action
+    return action
             .insert()
             .then(result => {
                 action.reset()
                 action.setId(result.insertId)
                 return action.read()
             })
-            .then(action => resolve(action.getFields()))
-            .catch(reason => reject(reason))
-    })
+            .then(action => {return action.getFields()})
 }
 
 let updateAction = function(params){
     let action = new ActionModel()
     action.setId(params.id)
-    return new Promise((resolve, reject) => {
-        action
+    return action
             .read()
             .then(action => {
                 if(params.device_id) action.setDeviceId(params.device_id)
@@ -70,11 +63,19 @@ let updateAction = function(params){
                 action.setId(params.id)
                 return action.read()
             })
-            .then(result => resolve(action.getFields()))
-            .catch(reason => reject(reason))
-    })
+            .then(action => {return action.getFields()})
 }
 
+let getLatestStat = params => {
+    StatsModel.reset()
+    StatsModel.setDeviceId(params.device_id)
+    StatsModel.setAreaId(params.area_id)
+    StatsModel.setType(params.type)
+    return StatsModel
+        .getLatestRead()
+        .then(stats => { console.log(stats.getFields()); return stats.getFields() })
+
+}
 
 getGroupByInterval = function(since, until){
     since = LocalDateTime.parse(since)
@@ -108,15 +109,12 @@ let getStats = function(params){
     let until = params.until ? params.until : LocalDateTime.now().toString()
     let since = params.since
     let groupByInterval = getGroupByInterval(since, until)
-    console.log('groupByInterval', groupByInterval);
     StatsModel.setDeviceId(params.device_id)
     StatsModel.setAreaId(params.area_id)
     StatsModel.setType(params.type)
     return StatsModel
         .get(since, until, groupByInterval)
-        .then(stats => {
-            return stats.results
-        })
+        .then(stats => { return stats.results })
 }
 
 
@@ -124,6 +122,7 @@ let Root = {
     action: params => getAction(params.id),
     createAction: params => createAction(params),
     updateAction: params => updateAction(params),
+    latestStat: params => getLatestStat(params),
     stats: params => getStats(params)
 }
 module.exports = Root

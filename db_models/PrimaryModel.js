@@ -27,7 +27,8 @@ class PrimaryModel {
     }
 
     getFields(){
-        return this.fields
+        console.log(Utilities.isEmpty(this.fields));
+        return !Utilities.isEmpty(this.fields) ? this.fields : null
     }
 
     read(){
@@ -83,36 +84,33 @@ class PrimaryModel {
         if (!params){
             params = this.fields
         }
-        return new Promise((resolve, reject) => {
-            this.query(statement, params)
+
+        return this
+                .query(statement, params)
                 .then(result => {
+                    this.fields = {}
                     if(result.length > 0){
                         this.fields = result[0]
                     }
-                    resolve(this)
+                    return this
                 })
-                .catch(reason => {
-                    reject(reason)
-                })
-            })
     }
 
     fetchAll(statement, params = false, msgOnNoResults = {}){
         if (!params){
             params = this.fields
         }
-        return new Promise((resolve, reject) => {
-            this.query(statement, params)
+        return this
+                .query(statement, params)
                 .then(results => {
+                    this.results = []
+                    this.fields = {}
+                    this.rowIndex = 0
                     if(results.length > 0){
                         this.results = results
                         this.fields = results[0]
-                        this.rowIndex = 0
                     }
-                    resolve(this)
-                })
-                .catch(reason => {
-                    reject(reason)
+                    return this
                 })
             })
     }
