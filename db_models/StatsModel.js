@@ -52,7 +52,7 @@ class StatsModel extends PrimaryModel {
     }
 
     get(since, until, groupByInterval){
-        let sql = `SELECT MIN(date) AS date, AVG(value) AS value, area_id, device_id, ext_data
+        let sql = `SELECT MIN(date) AS date, AVG(value) AS value, area_id, device_id, type, ext_data
                     FROM stats
                     WHERE status = 'ACTIVE'
                         AND device_id = :device_id
