@@ -27,7 +27,6 @@ class PrimaryModel {
     }
 
     getFields(){
-        console.log(Utilities.isEmpty(this.fields));
         return !Utilities.isEmpty(this.fields) ? this.fields : null
     }
 
@@ -112,7 +111,6 @@ class PrimaryModel {
                     }
                     return this
                 })
-            })
     }
 
     getNextResult(){

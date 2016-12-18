@@ -6,7 +6,6 @@ var Request         = require('util/request')
 var Utilities       = require('util/utilities.js')
 var Duration        = require('js-joda').Duration
 
-const actionModel = new ActionModel()
 class ActionHandler {
     constructor(){
         this.maxRetries = 30
@@ -15,12 +14,14 @@ class ActionHandler {
     // main method
     run()
     {
-        return new Promise( (resolve, reject) => {
-            actionModel.reset()
-            actionModel.readNextAction()
-            .then(actionModel => {
+        var actionModel = new ActionModel()
+        return actionModel
+            .readNextAction()
+            .then(action => {
+                actionModel = action
+
                 // if no next action, get out
-                if(Utilities.isEmpty(actionModel.fields)) throw 404
+                if(!actionModel.getFields()) throw 404
 
                 // else
                 LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
@@ -32,29 +33,18 @@ class ActionHandler {
             })
             .then(ACResponse => {
                 LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                if(ACResponse.httpCode >= 400){
-                    reject(ACResponse)
-                }
-                this.reschedule(actionModel, ACResponse.httpCode)
-                    .then(() => {
-                        resolve({message: 'Action done and rescheduled.', httpCode: 200, type: 'SUCCESS'})
-                    })
-                    .catch(reason => {
-                        resolve({message: 'Reschedule action failed', httpCode: 400, type: 'ERROR'})
-                    })
+                if(ACResponse.httpCode >= 400) throw ACResponse
+
+                return this.reschedule(actionModel, ACResponse.httpCode)
             })
             .catch(reason => {
                 if(reason === 404){
-                    resolve({message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'})
+                    return {message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'}
                 }else{
                     LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                    this.reschedule(actionModel, reason.httpCode)
-                    .then(() => {
-                        reject(reason)
-                    })
+                    return this.reschedule(actionModel, reason.httpCode)
                 }
             })
-        })
     }
 
     callController(ACRequest, actionModel)
