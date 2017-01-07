@@ -68,6 +68,19 @@
             "env_production" : {
                 "PI_GARDEN_ENV" : "PRODUCTION"
             }
+        },
+        {
+            "name"              : "API",
+            "script"            : "index.js",
+            "watch"             : true,
+            "watch_options" : {
+                "usePolling"    : true,
+                "useFsEvents"   : true
+            },
+            "cwd"               : "/piGarden/apiServer",
+            "env" : {
+                "NODE_PATH"     : "/piGarden"
+            }
         }
     ]
 }

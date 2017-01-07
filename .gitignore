@@ -39,3 +39,5 @@ jspm_packages
 
 .vagrant
 scripts/patch.version
+
+.idea

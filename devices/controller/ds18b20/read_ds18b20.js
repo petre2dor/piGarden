@@ -1,12 +1,13 @@
+const sensor = require('ds18b20-raspi')
 
-
-exports.readTemperature = () => {
+exports.read = deviceOptions => {
     return new Promise((resolve, reject) => {
+        let temperature = sensor.readSimpleC()
         resolve({
             message: 'Here is the temperature.',
             type: 'SUCCESS',
             httpCode: 200,
-            data: {temperature: Math.floor(Math.random() * (35 - 0) + 0)}
+            data: [{"type": "TEMPERATURE", "value": temperature}]
         })
     })
 }

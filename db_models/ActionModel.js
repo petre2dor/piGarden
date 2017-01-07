@@ -6,8 +6,8 @@ class ActionModel extends PrimaryModel {
     setId(val){
         this.fields.id = val
     }
-    setAreaId(val){
-        this.fields.area_id = val
+    setDeviceId(val){
+        this.fields.device_id = val
     }
     setVerb(val){
         this.fields.verb = val
@@ -16,15 +16,31 @@ class ActionModel extends PrimaryModel {
         this.fields.object = val
     }
     setOptions(val){
+        // todo create validateException and throw it here incase of parse error
+        try {
+            val = JSON.parse(val)
+        } catch (e) {
+            val = {}
+        }
         this.fields.options = JSON.stringify(val)
     }
     setLastRunTime(val){
         this.fields.last_run_time = val
     }
     setNextRunTime(val){
+        if(!val){
+            let LocalDateTime = require('js-joda').LocalDateTime
+            val = LocalDateTime.now().toString()
+        }
         this.fields.next_run_time = val
     }
     setSchedule(val){
+        // todo create validateException and throw it here incase of parse error
+        try {
+            val = JSON.parse(val)
+        } catch (e) {
+            val = {}
+        }
         this.fields.schedule = JSON.stringify(val)
     }
     setDescription(val){
@@ -44,8 +60,8 @@ class ActionModel extends PrimaryModel {
     getId(){
         return this.fields.id
     }
-    getAreaId(){
-        return this.fields.area_id
+    getDeviceId(){
+        return this.fields.device_id
     }
     getVerb(){
         return this.fields.verb
@@ -79,25 +95,22 @@ class ActionModel extends PrimaryModel {
     }
 
     getReadStmt(){
-        return `SELECT id, area_id, verb, object, options, last_run_time,
+        return `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                 FROM actions
                 WHERE id = :id`
     }
 
     getInsertStmt(){
-        return `INSERT INTO actions (area_id, verb, object, options, last_run_time,
-                    next_run_time, schedule, description, is_running, status)
-                VALUES(area_id = :area_id, verb = :verb, object = :object,
-                    options = :options, last_run_time = :last_run_time,
-                    next_run_time = :next_run_time, schedule = :schedule,
-                    description = :description, is_running = :is_running,
-                    status = :status)`
+        return `INSERT INTO actions (device_id, verb, object, options,
+                    next_run_time, schedule, description, status)
+                VALUES(:device_id, :verb, :object, :options,
+                    :next_run_time, :schedule, :description, :status)`
     }
 
     getUpdateStmt(){
         return `UPDATE actions
-                SET area_id = :area_id, verb = :verb,
+                SET device_id = :device_id, verb = :verb,
                     object = :object, options = :options,
                     last_run_time = :last_run_time, next_run_time = :next_run_time,
                     schedule = :schedule, description = :description,
@@ -106,47 +119,23 @@ class ActionModel extends PrimaryModel {
     }
 
     readNextAction(){
-        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+        let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                     FROM actions
                     WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
                         OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
-
-        return new Promise((resolve, reject) => {
-            this.query(sql)
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: 200,
-                            type: 'WARNING',
-                            message: 'There is no next action available',
-                            data: []
-                        })
-                    }
-                })})
+        return this.fetch(sql)
     }
 
 
-    getReadByAreaObjectVerb(){
-        var sql = `SELECT id, area_id, verb, object, options, last_run_time,
+    getReadByDeviceObjectVerb(){
+        let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                         next_run_time, schedule, description, is_running, status, retries
                     FROM actions
-                    WHERE area_id = :area_id AND object = :object AND verb = :verb;`
-        return new Promise((resolve, reject) => {
-            this.query(sql)
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject('There is no action available')
-                    }
-                })})
+                    WHERE device_id = :device_id AND object = :object AND verb = :verb;`
+        return this.fetch(sql)
     }
 }
 

@@ -1,30 +1,33 @@
 {
-    "name": "pi_garden",
-    "version": "0.0.1",
-    "description": "Manage your garden with raspberry pi",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/petre2dor/piGarden.git"
-    },
-    "author": "petre2dor and rcursaru",
-    "license": "AGPL-3.0",
-    "bugs": {
-        "url": "https://github.com/petre2dor/piGarden/issues"
-    },
-    "homepage": "https://github.com/petre2dor/piGarden#readme",
-    "dependencies": {
-        "body-parser":  "^1.15.2",
-        "express":      "^4.14.0",
-        "js-joda":      "^1.1.8",
-        "mysql":        "^2.11.1",
-        "mcp-spi-adc":  "^0.3.1",
-        "python-shell": "^0.4.0"
-    },
-    "devDependencies": {
-        "jasmine": "^2.5.2"
-    }
+  "name": "pi_garden",
+  "version": "0.0.1",
+  "description": "Manage your garden with raspberry pi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petre2dor/piGarden.git"
+  },
+  "author": "petre2dor and rcursaru",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/petre2dor/piGarden/issues"
+  },
+  "homepage": "https://github.com/petre2dor/piGarden#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "ds18b20-raspi": "^0.2.4",
+    "express": "^4.14.0",
+    "express-graphql": "^0.6.1",
+    "graphql": "^0.8.2",
+    "js-joda": "^1.1.8",
+    "mcp-spi-adc": "^0.3.1",
+    "mysql": "^2.11.1",
+    "python-shell": "^0.4.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.2"
+  }
 }

@@ -2,7 +2,7 @@
 
 // 'use strict'
 // var Duration        = require('js-joda').Duration
-var LocalDateTime   = require('js-joda').LocalDateTime
+// var LocalDateTime   = require('js-joda').LocalDateTime
 
 // obtain a Duration of 10 hours
 // console.log(Duration.parse("PT10H")) // "PT10H"
@@ -10,7 +10,7 @@ var LocalDateTime   = require('js-joda').LocalDateTime
 
 // var dt = LocalDateTime.parse('2012-12-24T12:00')
 
-console.log(LocalDateTime.now().toString())
+// console.log(LocalDateTime.now().toString())
 
 
 // var PythonShell = require('python-shell')
@@ -39,14 +39,14 @@ console.log(LocalDateTime.now().toString())
 //     console.log(x);
 //     return v2
 // })
-// .then(x => {
+// .then(x1 => {
 //     console.log(x)
 // })
-// while (true) {
-    console.log("ENV: "+process.env.PI_GARDEN_ENV);
-    console.log("NODE_PATH: "+process.env.NODE_PATH);
-    var Connection      = require('util/connection');
-
+//  while (true) {
+//     console.log("ENV: "+process.env.PI_GARDEN_ENV);
+//     console.log("NODE_PATH: "+process.env.NODE_PATH);
+//     var Connection      = require('util/connection');
+//
 // }
 
 //
@@ -89,3 +89,45 @@ console.log(LocalDateTime.now().toString())
 // } catch (e) {
 //     throw e
 // }
+
+// group by hour and minute
+// SELECT date_format(date, "%H %i") AS `Day of the week`, AVG(value) FROM stats  WHERE type = 'TEMPERATURE' AND device_id = 1 AND date >= now() - INTERVAL 3 HOUR GROUP BY `Day of the week` ORDER BY date_format(date, "%H %i");
+
+
+// group by HOUR
+// SELECT date_format(date, "%H") AS `Day of the week`, AVG(value) FROM stats  WHERE type = 'TEMPERATURE' AND device_id = 2 AND date >= now() - INTERVAL 12 HOUR GROUP BY `Day of the week` ORDER BY date_format(date, "%H");
+
+
+SELECT
+  DATE_FORMAT(
+    MIN(date),
+    '%d/%m/%Y %H:%i:00'
+  ) AS tmstamp,
+  AVG(value) AS value
+FROM
+  stats
+WHERE device_id = 1 AND date > '2016-11-22T09:07:26'
+GROUP BY ROUND(UNIX_TIMESTAMP(date) / 300)
+
+
+
+var Connection      = require('./util/connection')
+Connection.init()
+
+
+let AreaDeviceModel = require('./db_models/AreaDeviceModel.js')
+areaDevice = new AreaDeviceModel()
+areaDevice.setAreaId(1)
+areaDevice.readAllByAreaId()
+.then(areaDevice => {
+    var i = 0;
+    while (areaDevice.getDeviceId() && i < 15) {
+        i++
+        console.log('result ', areaDevice.getDeviceId())
+        areaDevice = areaDevice.getNextResult()
+        console.log(areaDevice.getDeviceId());
+    }
+})
+.catch(reason => {
+    console.log('reason ', reason)
+})

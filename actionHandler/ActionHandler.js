@@ -3,28 +3,28 @@ var ActionModel     = require('db_models/ActionModel')
 var LogModel        = require('db_models/LogModel')
 var ConfigModel     = require('db_models/ConfigModel')
 var Request         = require('util/request')
+var Utilities       = require('util/utilities.js')
 var Duration        = require('js-joda').Duration
 
-const actionModel = new ActionModel()
 class ActionHandler {
     constructor(){
         this.maxRetries = 30
-        this.actionId = 0
-        this.areaId = 0
     }
 
     // main method
     run()
     {
-        return new Promise( (resolve, reject) => {
-            ConfigModel.setName('AH_RETRIES_NO')
-            ConfigModel.readByName()
-            .then(config => {
-                this.maxRetries = config.getValue()
-                return actionModel.readNextAction()
-            })
-            .then(actionModel => {
-                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+        var actionModel = new ActionModel()
+        return actionModel
+            .readNextAction()
+            .then(action => {
+                actionModel = action
+
+                // if no next action, get out
+                if(!actionModel.getFields()) throw 404
+
+                // else
+                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
                 actionModel.setStatus('RUNNING')
                 actionModel.update()
 
@@ -32,33 +32,25 @@ class ActionHandler {
                 return this.callController(ACRequest, actionModel)
             })
             .then(ACResponse => {
-                LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                if(ACResponse.httpCode >= 400){
-                    reject(ACResponse)
-                }
-                this.reschedule(actionModel, ACResponse.httpCode)
-                    .then(() => {
-                        resolve({message: 'Action done and rescheduled.', httpCode: 200, type: 'SUCCESS'})
-                    })
+                LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
+                if(ACResponse.httpCode >= 400) throw ACResponse
+
+                return this.reschedule(actionModel, ACResponse.httpCode)
             })
             .catch(reason => {
-                if(reason.message == 'There is no next action available'){
-                    resolve({message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'})
+                if(reason === 404){
+                    return {message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'}
                 }else{
-                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
-                    this.reschedule(actionModel, reason.httpCode)
-                    .then(() => {
-                        reject(reason)
-                    })
+                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
+                    return this.reschedule(actionModel, reason.httpCode)
                 }
             })
-        })
     }
 
     callController(ACRequest, actionModel)
     {
-        let path = '/'+actionModel.getVerb()+'/'+actionModel.getObject()+'/'+actionModel.getId()
-        LogModel.create({type: 'AH_CALL_AC', description: 'Calling AC: ' + path, action_id: actionModel.getId(), area_id: actionModel.getAreaId(), device_id: 0})
+        let path = '/'+actionModel.getVerb()+'/'+actionModel.getDeviceId()
+        LogModel.create({type: 'AH_CALL_AC', description: 'Calling AC: ' + path, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
         return ACRequest.get(path)
     }
 
@@ -71,8 +63,8 @@ class ActionHandler {
             type: 'AH_RESCHEDULE',
             description: 'nextRunTime: ' + nextRunTime + ', status: ' + nextStatus,
             action_id: actionModel.getId(),
-            area_id: actionModel.getAreaId(),
-            device_id: 0
+            device_id: actionModel.getDeviceId(),
+            area_id: 0
         })
         actionModel.setNextRunTime(nextRunTime)
         actionModel.setRetries(retries)

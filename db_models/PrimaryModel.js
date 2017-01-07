@@ -4,8 +4,13 @@ var Connection  = require('util/connection.js')
 
 class PrimaryModel {
     constructor(){
+        this.reset()
+    }
+
+    reset(){
         this.fields     = {}
         this.rowData    = []
+        this.results    = []
         this.rowIndex   = 0
     }
 
@@ -21,22 +26,12 @@ class PrimaryModel {
         throw 'No Read Statement defined'
     }
 
+    getFields(){
+        return !Utilities.isEmpty(this.fields) ? this.fields : null
+    }
+
     read(){
-        return new Promise((resolve, reject) => {
-            this.query(this.getReadStmt())
-                .then((result) => {
-                    if(result.length > 0){
-                        this.fields = result[0]
-                        resolve(this)
-                    }else{
-                        reject({
-                            httpCode: 404,
-                            type: 'NOT_FOUND',
-                            message: 'There is no result available',
-                            data: err
-                        })
-                    }
-                })})
+        return this.fetch(this.getReadStmt())
     }
 
     insert(){
@@ -61,14 +56,13 @@ class PrimaryModel {
         return this.query(this.getUpdateStmt())
     }
 
-    query (statement){
-        var fields = this.fields
+    query (statement, params = false){
+        let paramss = params || this.fields;
         return new Promise((resolve, reject) => {
             Connection.acquire(function(err, conn) {
                 if(err) throw err
-                var query = conn.query(statement, fields, (err, result) => {
+                var query = conn.query(statement, paramss, (err, result) => {
                         conn.release()
-                        // if (err) throw err
                         if (!err) {
                             resolve(result)
                         } else {
@@ -85,6 +79,49 @@ class PrimaryModel {
         })
     }
 
+    fetch(statement, params = false){
+        if (!params){
+            params = this.fields
+        }
+
+        return this
+                .query(statement, params)
+                .then(result => {
+                    this.fields = {}
+                    if(result.length > 0){
+                        this.fields = result[0]
+                    }
+                    return this
+                })
+    }
+
+    fetchAll(statement, params = false, msgOnNoResults = {}){
+        if (!params){
+            params = this.fields
+        }
+        return this
+                .query(statement, params)
+                .then(results => {
+                    this.results = []
+                    this.fields = {}
+                    this.rowIndex = 0
+                    if(results.length > 0){
+                        this.results = results
+                        this.fields = results[0]
+                    }
+                    return this
+                })
+    }
+
+    getNextResult(){
+        this.rowIndex++
+        if(this.results[this.rowIndex]){
+            this.fields = this.results[this.rowIndex]
+            return this
+        }
+        this.reset()
+        return this
+    }
 
     getSetterFunction(field){
         var functionName = 'set';
@@ -94,10 +131,6 @@ class PrimaryModel {
             functionName += Utilities.capitalize(arr[i]);
         }
         return functionName
-    }
-
-    reset(){
-        this.fields = {}
     }
 }
 
