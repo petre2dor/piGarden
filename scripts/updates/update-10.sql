@@ -1,1 +1,0 @@
-ALTER TABLE stats MODIFY `value` DECIMAL(7,3) NOT NULL;
