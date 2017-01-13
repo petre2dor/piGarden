@@ -29,7 +29,6 @@ cd /piGarden
 sudo su $PI_GARDEN_USER_NAME -c "pm2 start $PI_GARDEN_ROOT/app.json"
 sudo su $PI_GARDEN_USER_NAME -c 'pm2 save'
 
-
 # update 13
 . /etc/environment;
 sed -i '/NODE_PATH/d' /etc/environment
