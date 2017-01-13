@@ -12,7 +12,7 @@ curl -s https://raw.githubusercontent.com/petre2dor/piGarden/40-oneLineInstaller
 
 ## development enviroment install
 
-- install vagrant on your machine
+- install [vagrant](https://www.vagrantup.com/) on your machine
 - clone this project: `git clone https://github.com/petre2dor/piGarden/`
 - enter folder and start the vagrant vm: `cd piGarden && vagrant up --provider=virtualbox`
 - ssh into vm: `vagrant ssh`
