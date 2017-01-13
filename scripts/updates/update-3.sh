@@ -38,10 +38,3 @@ sed -i '/PI_GARDEN_ENV/d' /etc/environment
 sudo su $PI_GARDEN_USER_NAME -c 'pm2 kill'
 sudo su $PI_GARDEN_USER_NAME -c "pm2 start $PI_GARDEN_ROOT/app.json"
 sudo su $PI_GARDEN_USER_NAME -c 'pm2 save'
-
-
-# update 18
-egrep -i "^gpio" /etc/group;
-if [ $? -eq 0 ]; then
-    usermod -a -G gpio gradinar
-fi
