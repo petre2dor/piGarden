@@ -16,7 +16,7 @@ curl -s https://raw.githubusercontent.com/petre2dor/piGarden/40-oneLineInstaller
 - clone this project: `git clone https://github.com/petre2dor/piGarden/`
 - enter folder and start the vagrant vm: `cd piGarden && vagrant up --provider=virtualbox`
 - ssh into vm: `vagrant ssh`
-- sudo ./piGarden/scripts/initialSetup.sh
+- `cd /piGarden/scripts && sudo ./initialSetup.sh`
 - watch the magic happen (and enjoy some music https://www.youtube.com/watch?v=qtZJiQSmJ9g)
 - swich user: `sudo su` and `su gradinar`
 - see actions running by watching the logs: `pm2 logs`
