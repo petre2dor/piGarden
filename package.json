@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/petre2dor/piGarden.git"
   },
-  "author": "petre2dor and rcursaru",
+  "author": "@petre2dor and @rcursaru",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/petre2dor/piGarden/issues"
@@ -25,7 +25,14 @@
     "js-joda": "^1.1.8",
     "mcp-spi-adc": "^0.3.1",
     "mysql": "^2.11.1",
-    "python-shell": "^0.4.0"
+    "python-shell": "^0.4.0",
+    "chart.js": "^2.3.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "helmet": "^3.1.0",
+    "jade": "~1.11.0",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "jasmine": "^2.5.2"

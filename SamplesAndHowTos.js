@@ -59,3 +59,13 @@ var LocalDateTime   = require('js-joda').LocalDateTime
 var dt = LocalDateTime.parse('2012-12-24T12:00')
 
 console.log(dt.dayOfWeek().toString())
+
+
+// add a new device
+INSERT INTO actions (id, device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+VALUES (4, 4, 'READ', 'TEMPERATURE', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT20S"}', 'Read inside temperature', 0, 'INACTIVE');
+
+INSERT INTO devices  (id, name, type, description, status, options)
+VALUES (4, 'Inside DS18B20', 'DIGITAL', 'DS18B20 digital temperature sensor', 'ACTIVE', '{"js_file":"ds18b20/read_ds18b20","id":"28-0416800cffff"}');
+
+INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (2, 4, 'ACTIVE', '{}');

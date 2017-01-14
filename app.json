@@ -81,6 +81,19 @@
             "env" : {
                 "NODE_PATH"     : "/piGarden"
             }
+        },
+        {
+            "name"              : "WEB",
+            "script"            : "./bin/www",
+            "watch"             : true,
+            "watch_options" : {
+                "usePolling"    : true,
+                "useFsEvents"   : true
+            },
+            "cwd"               : "/piGarden/web",
+            "env" : {
+                "NODE_PATH"     : "/piGarden"
+            }
         }
     ]
 }
