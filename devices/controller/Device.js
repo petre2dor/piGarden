@@ -7,8 +7,10 @@ exports.read = function(req, res) {
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
     .then(device => {
-        let source = require('./'+device.getOptions().js_file + config.sufix)
-        return source.read(device.getOptions())
+        let deviceOptions = device.getOptions()
+        let source = require('./'+deviceOptions.js_file + config.sufix)
+        
+        return source.read(deviceOptions)
     })
     .then(result => {
         res.status(200).json(result)
