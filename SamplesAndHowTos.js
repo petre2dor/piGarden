@@ -5,28 +5,47 @@
 // logModel.setDescription('Starting ActionRunner')
 // logModel.insert()
 
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (1, 'READ', 'TEMPERATURE', '{}', NOW(), NOW(), '{start: {every: 60}}', 'Read temperature from Area 1', 0, 'ACTIVE');
+----------------------------------------------------
+----------------------------------------------------
+-- add dummy valve actions
+--
+-- first a fixed action
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (2, 'OPEN', 'VALVE', '{"DURATION": "PT1M"}', NOW(), NOW(), '{"type": "fixed"}', 'Open VALVE in area 2', 0, 'ACTIVE');
+--
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (2, 'CLOSE', 'VALVE', '{}', NOW(), NOW(), '{"type": "fixed"}', 'Close VALVE in area 2', 0, 'INACTIVE');
 
 
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (2, 'WRITE', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read humidity from Area 2', 0, 'ACTIVE');
+-- and a cyclic one
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (3, 'OPEN', 'VALVE', '{"DURATION": "PT15M"}', NOW(), NOW(), '{"type": "cyclic", "every": "P2D"}', 'Open VALVE in area 3', 0, 'ACTIVE');
+--
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (3, 'CLOSE', 'VALVE', '{}', NOW(), NOW(), '{"type": "fixed"}', 'Close VALVE in area 3', 0, 'INACTIVE');
 
 
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (3, 'SLEEP', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read humidity from Area 2', 0, 'ACTIVE');
+-- add a fixed quatity
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (4, 'OPEN', 'VALVE', '{"QUATITY": "15L"}', NOW(), NOW(), '{"type": "fixed"}', 'Open VALVE in area 4', 0, 'ACTIVE');
+--
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (4, 'CHECK_PROGRESS', 'VALVE', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT5S"}', 'Check progress VALVE in area 4', 0, 'INACTIVE');
+--
+-- INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+-- VALUES (4, 'CLOSE', 'VALVE', '{}', NOW(), NOW(), '{"type": "fixed"}', 'Close VALVE in area 4', 0, 'INACTIVE');
 
 
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (4, 'WALK', 'TEMPERATURE', '{}', NOW(), NOW(), '{start: {every: 60}}', 'Read temperature from Area 1', 0, 'ACTIVE');
 
-
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (5, 'WASH', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read humidity from Area 2', 0, 'ACTIVE');
-
-
-INSERT INTO actions (area_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (6, 'REPEAT', 'HUMIDITY', '{}', NOW(), NOW(), '{start: {every: 30}}', 'Read humidity from Area 2', 0, 'ACTIVE');
+// -- insert devices
+// -- insert TMP36 analog temperature sensor
+// INSERT INTO devices
+// (id, name, type, description, status, options)
+// VALUES
+// (1, 'TMP36', 'ANALOG', 'TMP36 analog temperature sensor', 'ACTIVE', '{"js_file":"read_tmp36"}');
+//
+// -- set this device in area 1
+// INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (1, 1, 'ACTIVE', '{}');
 
 
 

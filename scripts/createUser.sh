@@ -1,7 +1,7 @@
 #! /bin/bash
 if [[ "$EUID" -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
-   echo "please run: sudo $(readlink -f $0)"
+   echo "please run: sudo $(readlink -f $0) or sudo !!"
    exit 1
 fi
 
@@ -20,7 +20,16 @@ else
     chown -R $PI_GARDEN_USER_NAME:$PI_GARDEN_USER_NAME $PI_GARDEN_ROOT
 
     # add PI_GARDEN_USER_NAME to spi group
-    usermod -a -G spi $PI_GARDEN_USER_NAME
+    egrep -i "^spi" /etc/group;
+    if [ $? -eq 0 ]; then
+        usermod -a -G spi $PI_GARDEN_USER_NAME
+    fi
+
+    # add PI_GARDEN_USER_NAME to gpio group
+    egrep -i "^gpio" /etc/group;
+    if [ $? -eq 0 ]; then
+        usermod -a -G gpio $PI_GARDEN_USER_NAME
+    fi
 
     sed -i '/PI_GARDEN_USER_NAME/d' /etc/environment
     echo "PI_GARDEN_USER_NAME=$PI_GARDEN_USER_NAME" >> /etc/environment
