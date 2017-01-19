@@ -1,0 +1,59 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}!
+    
+    //- API location
+    p APIEndpoint
+    input(type="text", name="APIEndpoint", value="http://localhost:3002/getStats/")#APIEndpoint
+    
+    //- Temperature
+    p Temperature: sensorId no1   |   sensorId no2   |   since
+    input(type="text", name="deviceId1", value="1")#deviceId1
+    input(type="text", name="deviceId2", value="4")#deviceId2
+    input(type="text", name="since1", value="2017-01-14T00:00:00")#since1
+    button(onClick="goTemp()")#go1 go!
+    
+    canvas#tempChart
+    
+    //- Humidity
+    p Humidity: sensorId   |   since
+    input(type="text", name="deviceId3", value="6")#deviceId3
+    input(type="text", name="since2", value="2016-12-16T19:24:00")#since2
+    button(onClick="goHum()")#go2 go!
+
+    canvas#humChart
+
+    script.
+        var chartOptions1 = !{chartOptions};
+        var ctx = document.getElementById("tempChart").getContext('2d');
+        window.myLine1 = new Chart(ctx, chartOptions1);
+        var APIEndpoint = document.getElementById('APIEndpoint').value;
+        goTemp = function(){
+            var since1 = document.getElementById('since1').value;
+            var deviceId1 = document.getElementById('deviceId1').value;
+            $.get(APIEndpoint+deviceId1+'/1/TEMPERATURE/'+since1, (data, status) => {
+                    chartOptions1.data.datasets[0].data = data.data;
+                    window.myLine1.update();
+            });
+
+            var deviceId2 = document.getElementById('deviceId2').value;
+            $.get(APIEndpoint+deviceId2+'/2/TEMPERATURE/'+since1, (data, status) => {
+                    chartOptions1.data.datasets[1].data = data.data;
+                    window.myLine1.update();
+            });
+        }
+
+        var chartOptions2 = !{chartOptions};
+        var ctx = document.getElementById("humChart").getContext('2d');
+        window.myLine2 = new Chart(ctx, chartOptions2);
+        goHum = function(){
+            var since2 = document.getElementById('since2').value;
+            var deviceId3 = document.getElementById('deviceId3').value;
+            $.get(APIEndpoint+deviceId3+'/1/HUMIDITY/'+since2, (data, status) => {
+                    chartOptions2.data.datasets[0].data = data.data;
+                    window.myLine2.update();
+            });
+        }
+		
