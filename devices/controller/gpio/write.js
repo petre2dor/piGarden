@@ -3,7 +3,7 @@ const Gpio      = require('gpio-js')
 
 exports.write = deviceOptions => {
     return new Promise((resolve, reject) => {
-        let led = new GPIO(deviceOptions.GPIOpin, 'out')
+        let led = new Gpio(deviceOptions.GPIOpin, 'out')
         led.val(deviceOptions.value)
 
         setTimeout(() => {
