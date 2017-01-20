@@ -9,6 +9,7 @@ var fs          = require('fs')
 module.exports = {
     configure: function(app) {
         app.get('/read/:deviceId', Device.read)
+        app.get('/write/:deviceId', Device.write)
         // app.get('/humidity/:deviceId', Humidity.get)
         // app.get('/valve/open/:deviceId', Valve.open)
         // app.get('/valve/close/:deviceId', Valve.close)
