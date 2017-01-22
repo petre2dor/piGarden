@@ -51,7 +51,7 @@ block content
         goHum = function(){
             var since2 = document.getElementById('since2').value;
             var deviceId3 = document.getElementById('deviceId3').value;
-            $.get('/getStats/'+deviceId3+'/1/HUMIDITY/'+since2, (data, status) => {
+            $.get('/getStats/'+deviceId3+'/2/HUMIDITY/'+since2, (data, status) => {
                     chartOptions2.data.datasets[0].data = data.data;
                     window.myLine2.update();
             });
