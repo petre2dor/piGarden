@@ -25,9 +25,9 @@ router.get('/', (req, res, next) => {
 			},
 			{
 				label: 'Inside Temperature(DHT22)',
-				borderColor: 'rgb(54, 162, 235)',
+				borderColor: 'rgb(255, 206, 86)',
 				fill: true,
-				backgroundColor: 'rgba(54, 162, 235, 0.2)',
+				backgroundColor: 'rgba(255, 206, 86, 0.2)',
 				data: data,
 			}]
 		},
