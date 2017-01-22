@@ -10,14 +10,21 @@ router.get('/', (req, res, next) => {
 		type: 'line',
 		data: {
 			datasets: [{
-				label: 'Temperature from DS18B20',
+				label: 'Outside Temperature',
 				borderColor: 'rgb(75, 192, 192)',
 				fill: true,
 				backgroundColor: 'rgba(75, 192, 192, 0.2)',
 				data: data,
 			},
 			{
-				label: 'Temperature from TMP36',
+				label: 'Inside Temperature',
+				borderColor: 'rgb(54, 162, 235)',
+				fill: true,
+				backgroundColor: 'rgba(54, 162, 235, 0.2)',
+				data: data,
+			},
+			{
+				label: 'Inside Temperature(DHT22)',
 				borderColor: 'rgb(54, 162, 235)',
 				fill: true,
 				backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -28,7 +35,7 @@ router.get('/', (req, res, next) => {
 			responsive: true,
 			title:{
 				display:true,
-				text:"Chart.js Time Point Data"
+				text:"Time Point Data"
 			},
 			scales: {
 				xAxes: [{
@@ -50,7 +57,7 @@ router.get('/', (req, res, next) => {
 			}
 		}
 	};
-	res.render('index', { title: 'Express', chartOptions: JSON.stringify(chartOptions) });
+	res.render('index', { title: 'PiGarden Demo', chartOptions: JSON.stringify(chartOptions) });
 });
 
 router.get('/getStats/:deviceId/:areaId/:type/:since', (req, res, next) => {
@@ -67,7 +74,6 @@ router.get('/getStats/:deviceId/:areaId/:type/:since', (req, res, next) => {
 	}
 
 	let ACRequest = new Request('localhost', 3003)
-	// let ACRequest = new Request('localhost', 3003)
 	ACRequest
     	.post('/graphql', {"query": `{
                               stats(
