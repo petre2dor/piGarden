@@ -12,6 +12,7 @@ echo "Setting PI_GARDEN_ENV to $1"
 echo -e "\n"
 if hash pm2 2>/dev/null; then
     pm2 restart app.json --env $1
+    pm2 save
 else
     echo "pm2 not installed yet"
 fi
