@@ -76,7 +76,7 @@ INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (2, 4, 'A
 --
 -- insert LED
 INSERT INTO devices (id, name, type, description, status, options)
-VALUES (4, 'LED', 'GPIO', 'Standard LED', 'ACTIVE', '{"js_file":"gpio/write","GPIOpin":"18","value":"1"}');
+VALUES (4, 'LED', 'GPIO', 'Standard LED', 'ACTIVE', '{"js_file":"gpio/led","GPIOpin":"18"}');
 
 -- set this device in area 2
 INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (2, 4, 'ACTIVE', '{}');
@@ -84,4 +84,4 @@ INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (2, 4, 'A
 
 -- insert an action to turn on the LED
 INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (4, 'WRITE', 'LED', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT3S"}', 'Blink LED', 0, 'INACTIVE');
+VALUES (4, 'BLINK', 'LED', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT3S"}', 'Blink LED', 0, 'INACTIVE');

@@ -25,7 +25,7 @@ exports.read = (req, res) => {
     })
 }
 
-exports.write = (req, res) => {
+exports.blink = (req, res) => {
     let deviceModel = new DeviceModel()
     deviceModel.setId(req.params.deviceId)
     deviceModel.read()
@@ -33,7 +33,7 @@ exports.write = (req, res) => {
         let deviceOptions = device.getOptions()
         let source = require('./'+deviceOptions.js_file + config.sufix)
 
-        return source.write(deviceOptions)
+        return source.blink(deviceOptions)
     })
     .then(result => {
         res.status(200).json(result)

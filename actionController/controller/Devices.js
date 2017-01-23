@@ -32,9 +32,9 @@ exports.read = (req, res) => {
         })
 }
 
-exports.write = (req, res) => {
+exports.blink = (req, res) => {
     let request = new Request('localhost', 3001)
-    request.get('/write/'+req.params.deviceId)
+    request.get('/blink/'+req.params.deviceId)
         .then(result => {
             LogModel.create({type: 'WRITE', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(result)})
             res.send(result)

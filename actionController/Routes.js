@@ -7,7 +7,7 @@ var Duration        = require('js-joda').Duration
 module.exports = {
     configure: function(app) {
         app.get('/read/:deviceId', Devices.read)
-        app.get('/write/:deviceId', Devices.write)
+        app.get('/blink/:deviceId', Devices.blink)
         app.get('/open/valve/:deviceId', Valve.open)
         app.get('/close/valve/:deviceId', Valve.close)
     }
