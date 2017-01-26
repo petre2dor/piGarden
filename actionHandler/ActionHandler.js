@@ -7,7 +7,8 @@ var Utilities       = require('util/utilities.js')
 var Duration        = require('js-joda').Duration
 
 class ActionHandler {
-    constructor(){
+    constructor()
+    {
         this.maxRetries = 30
     }
 
