@@ -16,7 +16,7 @@ exports.open = function(req, res)
             closeAction.setAreaId(action.getDeviceId())
             closeAction.setObject('VALVE')
             closeAction.setVerb('CLOSE')
-            return closeAction.getReadByDeviceObjectVerb()
+            return closeAction.get()
         })
         .then(closeAction => {
             LogModel.create({description: 'Read closing action. Setting it to ACTIVE', type: 'AC_OPEN_VALVE', device_id: req.params.deviceId, action_id: 0, area_id: 0})

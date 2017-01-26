@@ -10,7 +10,7 @@ const ChronoUnit    = require('js-joda').ChronoUnit
 
 Connection.init()
 
-let getAction = function(id){
+let getAction = id => {
     let action = new ActionModel()
     action.setId(id)
 
@@ -19,7 +19,14 @@ let getAction = function(id){
             .then(action  => {return action.getFields()})
 }
 
-let createAction = function(params){
+let getActions = params => {
+    let action = new ActionModel()
+    return action
+            .get(params)
+            .then(actions => {return action.results})
+}
+
+let createAction = params => {
     let action = new ActionModel()
     // todo catch validateExceptions for all setters
     action.setDeviceId(params.device_id)
@@ -40,7 +47,7 @@ let createAction = function(params){
             .then(action => {return action.getFields()})
 }
 
-let updateAction = function(params){
+let updateAction = params => {
     let action = new ActionModel()
     action.setId(params.id)
     return action
@@ -73,11 +80,11 @@ let getLatestStat = params => {
     StatsModel.setType(params.type)
     return StatsModel
         .getLatestRead()
-        .then(stats => { console.log(stats.getFields()); return stats.getFields() })
+        .then(stats => { return stats.getFields() })
 
 }
 
-getGroupByInterval = function(since, until){
+getGroupByInterval = (since, until) => {
     since = LocalDateTime.parse(since)
     until = LocalDateTime.parse(until)
     let diffInMin = since.until(until, ChronoUnit.MINUTES)
@@ -105,7 +112,7 @@ getGroupByInterval = function(since, until){
     }
 }
 
-let getStats = function(params){
+let getStats = params => {
     let until = params.until ? params.until : LocalDateTime.now().toString()
     let since = params.since
     let groupByInterval = getGroupByInterval(since, until)
@@ -120,6 +127,7 @@ let getStats = function(params){
 
 let Root = {
     action: params => getAction(params.id),
+    actions: params => getActions(params),
     createAction: params => createAction(params),
     updateAction: params => updateAction(params),
     latestStat: params => getLatestStat(params),

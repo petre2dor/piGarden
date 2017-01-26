@@ -129,13 +129,29 @@ class ActionModel extends PrimaryModel {
         return this.fetch(sql)
     }
 
-
-    getReadByDeviceObjectVerb(){
+    get(params){
+        let where = ''
+        if(params.device_id){
+            where += ' AND device_id = :device_id'
+            this.setDeviceId(params.device_id)
+        }
+        if(params.verb){
+            where += ' AND verb = :verb'
+            this.setVerb(params.verb)
+        }
+        if(params.object){
+            where += ' AND object = :object'
+            this.setObject(params.object)
+        }
+        if(params.status){
+            where += ' AND status = :status'
+            this.setStatus(params.status)
+        }
         let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                         next_run_time, schedule, description, is_running, status, retries
                     FROM actions
-                    WHERE device_id = :device_id AND object = :object AND verb = :verb;`
-        return this.fetch(sql)
+                    WHERE 1=1`+where+`;`
+        return this.fetchAll(sql)
     }
 }
 

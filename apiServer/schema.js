@@ -14,15 +14,15 @@ const Action = new GraphQLObjectType({
     fields: () => ({
         id:             {type: GraphQLInt, description: 'action ID'},
         device_id:      {type: GraphQLInt, description: 'ID of physical device'},
-        verb:           {type: GraphQLString, description: ''},
-        object:         {type: GraphQLString, description: ''},
+        verb:           {type: GraphQLString, description: 'E.g.: READ, WRITE, START, OPEN, STOP, CHECK_PROGRESS'},
+        object:         {type: GraphQLString, description: 'E.g.: AREA, TEMPERATURE'},
         options:        {type: GraphQLString, description: 'JSON object'},
         last_run_time:  {type: GraphQLString, description: 'Timestamp of last run'},
         next_run_time:  {type: GraphQLString, description: 'Timestamp of next scheduled run'},
         schedule:       {type: GraphQLString, description: 'JSON describing the schedule'},
         description:    {type: GraphQLString, description: 'Action\'s description'},
         is_running:     {type: GraphQLString, description: 'True if the action is currently running'},
-        status:         {type: GraphQLString, description: ''},
+        status:         {type: GraphQLString, description: 'ACTIVE/INACTIVE/WARNING/ERROR'},
         retries:        {type: GraphQLInt, description: 'No o retries'}
     })
 });
@@ -32,13 +32,12 @@ const Stat = new GraphQLObjectType({
     description: 'This describes a PiGarden Action.',
     fields: () => ({
         device_id:  {type: GraphQLInt, description: 'ID of physical device'},
-        area_id:    {type: GraphQLInt, description: ''},
-        type:       {type: GraphQLString, description: ''},
-        date:       {type: GraphQLString, description: ''},
-        value:      {type: GraphQLFloat, description: ''}
+        area_id:    {type: GraphQLInt, description: 'ID of the area(zone)'},
+        type:       {type: GraphQLString, description: 'E.g.: TEMPERATURE, HUMIDITY'},
+        date:       {type: GraphQLString, description: 'Timestamp: 2017-01-14 00:00:00'},
+        value:      {type: GraphQLFloat, description: 'Temperature/Humidity value'}
     })
 });
-
 
 const Query = new GraphQLObjectType({
     name: 'PiGarden',
@@ -51,13 +50,23 @@ const Query = new GraphQLObjectType({
                 id: {type: new GraphQLNonNull(GraphQLInt)}
             }
         },
+        actions: {
+            type: new GraphQLList(Action),
+            description: 'Get PiGarden Actions',
+            args: {
+                device_id:  {type: GraphQLInt},
+                verb:       {type: GraphQLString},
+                object:     {type: GraphQLString},
+                status:     {type: GraphQLString}
+            }
+        },
         latestStat: {
             type: Stat,
             description: 'Get latest read for a device',
             args: {
                 device_id:  {type: new GraphQLNonNull(GraphQLInt)},
-                area_id:    {type: new GraphQLNonNull(GraphQLInt)},
-                type:       {type: new GraphQLNonNull(GraphQLString)}
+                verb:       {type: new GraphQLNonNull(GraphQLString)},
+                object:     {type: new GraphQLNonNull(GraphQLString)}
             }
         },
         stats: {
@@ -101,9 +110,9 @@ const Mutation = new GraphQLObjectType({
                 verb:           {type: GraphQLString, description: ''},
                 object:         {type: GraphQLString, description: ''},
                 options:        {type: GraphQLString, description: 'JSON object'},
-                next_run_time:  {type: GraphQLString, description: 'Timestamp of next scheduled run. Default NOW'},
+                next_run_time:  {type: GraphQLString, description: 'Timestamp of next scheduled run. Default NOW()'},
                 schedule:       {type: GraphQLString, description: 'JSON describing the schedule'},
-                description:    {type: GraphQLString, description: 'Action\'s description'},
+                description:    {type: GraphQLString, description: 'Action description'},
                 status:         {type: GraphQLString, description: 'Default INACTIVE'}
             }
         }

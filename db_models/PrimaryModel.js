@@ -97,7 +97,7 @@ class PrimaryModel {
 
     fetchAll(statement, params = false, msgOnNoResults = {}){
         if (!params){
-            params = this.fields
+            params = this.fields || {}
         }
         return this
                 .query(statement, params)
@@ -124,10 +124,10 @@ class PrimaryModel {
     }
 
     getSetterFunction(field){
-        var functionName = 'set';
-        var arr = field.split('_');
+        let functionName = 'set';
+        let arr = field.split('_');
 
-        for (var i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr.length; i++) {
             functionName += Utilities.capitalize(arr[i]);
         }
         return functionName
