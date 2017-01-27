@@ -50,26 +50,26 @@
 // }
 
 
-var test = function(){
-    return new Promise( (resolve, reject) => {
-        new Promise( (r, rj) => {
-            setTimeout(r, 500)
-        })
-        .then(() => {
-            return new Promise( (r, rj) => {
-                setTimeout(r, 500)
-            })
-        })
-        .then(() => {
-            new Promise( (r, rj) => {
-                setTimeout(r, 500)
-            })
-            .then(() => {
-                resolve('saasa');
-            })
-        })
-    })
-}
+// var test = function(){
+//     return new Promise( (resolve, reject) => {
+//         new Promise( (r, rj) => {
+//             setTimeout(r, 500)
+//         })
+//         .then(() => {
+//             return new Promise( (r, rj) => {
+//                 setTimeout(r, 500)
+//             })
+//         })
+//         .then(() => {
+//             new Promise( (r, rj) => {
+//                 setTimeout(r, 500)
+//             })
+//             .then(() => {
+//                 resolve('saasa');
+//             })
+//         })
+//     })
+// }
 
 // var run = function myself () {
 //     test()
@@ -146,9 +146,3 @@ var test = function(){
 //     // led OFF
 //     led.val(0)
 // }, 1000)
-
-
-
-
-
-var delayPromise = require("util/delayPromise")

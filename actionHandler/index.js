@@ -4,28 +4,29 @@ var Request         = require('util/request.js')
 var Connection      = require('util/connection');
 var LogModel        = require('db_models/LogModel')
 var ActionHandler   = require('actionHandler/ActionHandler')
-
+const delay         = 1000 // 1 sec
 process.title = "piGarden-AH"
 
 var run = function myself () {
     ActionHandler
         .getActionAndSetRunning()
         .then(actionModel => {
-            // run the action without waiting for it to finish
-            if(actionModel.getFields()) ActionHandler.run(actionModel)
-
-            LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
-            setTimeout(myself, 1000)
+            // launch it and don't wait for result
+            ActionHandler.run(actionModel)
+            // start over
+            setTimeout(myself, delay)
         })
         .catch(reason => {
-            LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: 0, area_id: 0, device_id: 0})
-            setTimeout(myself, 1000)
+            reason === 404
+                ? LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0}) //no action found
+                : LogModel.create({type: 'AH_RUN_ERR', description: reason, action_id: 0, area_id: 0, device_id: 0}) //unexpected error
+            // start over
+            setTimeout(myself, delay)
         })
 }
 
 try {
     Connection.init();
-
     LogModel.create({action_id: 0, area_id: 0, device_id: 0, type: 'AH_START', description: 'Start ActionHandler'})
     run()
 } catch (e) {

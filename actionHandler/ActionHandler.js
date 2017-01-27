@@ -31,13 +31,6 @@ class ActionHandler {
             .then(response => {
                 return actionModel
             })
-            .catch(reason => {
-                if(reason !== 404){
-                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                    this.reschedule(actionModel, reason.httpCode)
-                }
-                return actionModel
-            })
     }
 
     // main method
@@ -48,17 +41,13 @@ class ActionHandler {
             .callController(ACRequest, actionModel)
             .then(ACResponse => {
                 LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                if(ACResponse.httpCode >= 400) throw ACResponse
 
+                if(ACResponse.httpCode >= 400) throw ACResponse
                 return this.reschedule(actionModel, ACResponse.httpCode)
             })
             .catch(reason => {
-                if(reason === 404){
-                    return {message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'}
-                }else{
-                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                    return this.reschedule(actionModel, reason.httpCode)
-                }
+                LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
+                return this.reschedule(actionModel, reason.httpCode)
             })
     }
 
@@ -91,9 +80,9 @@ class ActionHandler {
 
     getNextRunTime(schedule, httpCode){
         var LocalDateTime = require('js-joda').LocalDateTime
-        if(httpCode >= 400){
-            return LocalDateTime.now().plus(Duration.parse('PT5S')).toString()
-        }
+
+        if(httpCode >= 400) return LocalDateTime.now().plus(Duration.parse('PT5S')).toString()
+
         switch (schedule.type) {
             case 'cyclic':
                 return LocalDateTime.now().plus(Duration.parse(schedule.every)).toString()
@@ -109,10 +98,7 @@ class ActionHandler {
     getNextStatus(schedule, httpCode, retries, maxRetries)
     {
         if(httpCode >= 400){
-            if(retries < maxRetries){
-                return 'WARNING'
-            }
-            return 'ERROR'
+            return retries < maxRetries ?  'WARNING' : 'ERROR'
         }
         switch (schedule.type) {
             case 'cyclic':
