@@ -9,8 +9,11 @@ process.title = "piGarden-AH"
 
 var run = function myself () {
     ActionHandler
-        .run()
-        .then(response => {
+        .getActionAndSetRunning()
+        .then(actionModel => {
+            // run the action without waiting for it to finish
+            if(actionModel.getFields()) ActionHandler.run(actionModel)
+
             LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
             setTimeout(myself, 1000)
         })

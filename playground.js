@@ -49,28 +49,28 @@
 //
 // }
 
-//
-// var test = function(){
-//     return new Promise( (resolve, reject) => {
-//         new Promise( (r, rj) => {
-//             setTimeout(r, 500)
-//         })
-//         .then(() => {
-//             return new Promise( (r, rj) => {
-//                 setTimeout(r, 500)
-//             })
-//         })
-//         .then(() => {
-//             new Promise( (r, rj) => {
-//                 setTimeout(r, 500)
-//             })
-//             .then(() => {
-//                 resolve('saasa');
-//             })
-//         })
-//     })
-// }
-//
+
+var test = function(){
+    return new Promise( (resolve, reject) => {
+        new Promise( (r, rj) => {
+            setTimeout(r, 500)
+        })
+        .then(() => {
+            return new Promise( (r, rj) => {
+                setTimeout(r, 500)
+            })
+        })
+        .then(() => {
+            new Promise( (r, rj) => {
+                setTimeout(r, 500)
+            })
+            .then(() => {
+                resolve('saasa');
+            })
+        })
+    })
+}
+
 // var run = function myself () {
 //     test()
 //     .then(response => {
@@ -135,14 +135,20 @@
 
 // pin 18
 
-const Gpio = require('gpio-js')
+// const Gpio = require('gpio-js')
+//
+// let led = new Gpio(18, 'out')
+// // led ON
+// led.val(1)
+//
+// // after one sec
+// setTimeout(() => {
+//     // led OFF
+//     led.val(0)
+// }, 1000)
 
-let led = new Gpio(18, 'out')
-// led ON
-led.val(1)
 
-// after one sec
-setTimeout(() => {
-    // led OFF
-    led.val(0)
-}, 1000)
+
+
+
+var delayPromise = require("util/delayPromise")

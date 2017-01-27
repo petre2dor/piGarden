@@ -46,7 +46,7 @@ class ActionModel extends PrimaryModel {
     setDescription(val){
         this.fields.description = val
     }
-    setIsRunnning(val){
+    setIsRunning(val){
         this.fields.is_running = val
     }
     setStatus(val){
@@ -122,8 +122,12 @@ class ActionModel extends PrimaryModel {
         let sql = `SELECT id, device_id, verb, object, options, last_run_time,
                     next_run_time, schedule, description, is_running, status, retries
                     FROM actions
-                    WHERE (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING'))
-                        OR (status NOT IN ('ACTIVE', 'WARNING', 'ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
+                    WHERE (
+                            (next_run_time <= NOW() AND status IN ('ACTIVE', 'WARNING') AND is_running = 0)
+                                OR
+                            (status NOT IN ('ERROR', 'INACTIVE') AND next_run_time < NOW() - INTERVAL 5 minute)
+                        )
+
                     ORDER BY next_run_time ASC
                     LIMIT 1`;
         return this.fetch(sql)

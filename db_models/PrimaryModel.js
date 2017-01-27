@@ -59,7 +59,7 @@ class PrimaryModel {
     query (statement, params = false){
         let paramss = params || this.fields;
         return new Promise((resolve, reject) => {
-            Connection.acquire(function(err, conn) {
+            Connection.acquire((err, conn) => {
                 if(err) throw err
                 var query = conn.query(statement, paramss, (err, result) => {
                         conn.release()
