@@ -60,6 +60,23 @@ class DeviceModel extends PrimaryModel {
                     status = :status, options = :options
                 WHERE id = :id`
     }
+
+    get(params){
+        let where = ''
+        if(params.type){
+            where += ' AND type = :type'
+            this.setDeviceId(params.device_id)
+        }
+        
+        if(params.status){
+            where += ' AND status = :status'
+            this.setStatus(params.status)
+        }
+        let sql = `SELECT id, name, type, description, status, options
+                    FROM devices
+                    WHERE 1=1`+where+`;`
+        return this.fetchAll(sql)
+    }
 }
 
 module.exports = DeviceModel

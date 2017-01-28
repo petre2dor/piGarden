@@ -27,6 +27,20 @@ const Action = new GraphQLObjectType({
     })
 });
 
+// id, name, type, description, status, options
+const Device = new GraphQLObjectType({
+    name: 'Device',
+    description: 'This describes a physical device.',
+    fields: () => ({
+        id:             {type: GraphQLInt, description: 'device ID'},
+        name:           {type: GraphQLString, description: 'The name of the device'},
+        type:           {type: GraphQLString, description: 'E.g.: TEMPERATURE, HUMIDITY'},
+        description:    {type: GraphQLString, description: 'The description of the device'},
+        status:         {type: GraphQLString, description: 'ACTIVE/INACTIVE/WARNING/ERROR'},
+        options:        {type: GraphQLString, description: 'JSON object'}
+    })
+});
+
 const Stat = new GraphQLObjectType({
     name: 'Stat',
     description: 'This describes a PiGarden Action.',
@@ -58,6 +72,22 @@ const Query = new GraphQLObjectType({
                 verb:       {type: GraphQLString},
                 object:     {type: GraphQLString},
                 status:     {type: GraphQLString}
+            }
+        },
+        device: {
+            type: Device,
+            description: 'Get a PiGarden Device',
+            args: {
+                id: {type: new GraphQLNonNull(GraphQLInt)}
+            }
+        },
+        devices: {
+            type: new GraphQLList(Device),
+            description: 'Get PiGarden Actions',
+            args: {
+                id:     {type: GraphQLInt},
+                type:   {type: GraphQLString},
+                status: {type: GraphQLString}
             }
         },
         latestStat: {

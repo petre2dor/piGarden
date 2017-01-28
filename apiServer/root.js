@@ -6,7 +6,7 @@ const ActionModel   = require('db_models/ActionModel')
 const StatsModel    = require('db_models/StatsModel')
 const LocalDateTime = require('js-joda').LocalDateTime
 const ChronoUnit    = require('js-joda').ChronoUnit
-
+const DevicesRoot   = require('./devices/root')
 
 Connection.init()
 
@@ -126,11 +126,13 @@ let getStats = params => {
 
 
 let Root = {
-    action: params => getAction(params.id),
-    actions: params => getActions(params),
-    createAction: params => createAction(params),
-    updateAction: params => updateAction(params),
-    latestStat: params => getLatestStat(params),
-    stats: params => getStats(params)
+    action:         params => getAction(params.id),
+    actions:        params => getActions(params),
+    device:         params => DevicesRoot.getDevice(params.id),
+    devices:        params => DevicesRoot.getDevices(params),
+    createAction:   params => createAction(params),
+    updateAction:   params => updateAction(params),
+    latestStat:     params => getLatestStat(params),
+    stats:          params => getStats(params)
 }
 module.exports = Root
