@@ -128,7 +128,7 @@ const Mutation = new GraphQLObjectType({
                 options:        {type: GraphQLString, description: 'JSON object'},
                 next_run_time:  {type: GraphQLString, description: 'Timestamp of next scheduled run. Default NOW'},
                 schedule:       {type: GraphQLString, description: 'JSON describing the schedule'},
-                description:    {type: GraphQLString, description: 'Action\'s description'},
+                description:    {type: GraphQLString, description: 'Action description'},
                 status:         {type: GraphQLString, description: 'Default INACTIVE'}
             }
         },
@@ -145,15 +145,34 @@ const Mutation = new GraphQLObjectType({
                 description:    {type: GraphQLString, description: 'Action description'},
                 status:         {type: GraphQLString, description: 'Default INACTIVE'}
             }
+        },
+        createDevice: {
+            type: Device,
+            args: {
+                name:           {type: new GraphQLNonNull(GraphQLString), description: 'Name your device'},
+                type:           {type: new GraphQLNonNull(GraphQLString), description: 'What kind of a device is? TEMPERATURE, AIR_POLUTION?'},
+                description:    {type: GraphQLString, description: 'Device description'},
+                status:         {type: GraphQLString, description: 'Default INACTIVE'},
+                options:        {type: GraphQLString, description: 'JSON object'}
+            }
+        },
+        updateDevice: {
+            type: Device,
+            args: {
+                id:             {type: new GraphQLNonNull(GraphQLInt)},
+                type:           {type: GraphQLString, description: 'What kind of a device is it? TEMPERATURE, AIR_POLUTION?'},
+                name:           {type: GraphQLString, description: 'Name of device'},
+                description:    {type: GraphQLString, description: 'Device description'},
+                status:         {type: GraphQLString, description: 'Default INACTIVE'},
+                options:        {type: GraphQLString, description: 'JSON object'}
+            }
         }
     })
 })
 
-
 const Schema = new GraphQLSchema({
     query: Query,
     mutation: Mutation
-});
-
+})
 
 module.exports = Schema

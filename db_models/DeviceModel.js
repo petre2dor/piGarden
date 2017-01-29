@@ -49,13 +49,12 @@ class DeviceModel extends PrimaryModel {
     }
 
     getInsertStmt(){
-        return `INSERT INTO devices (id, name, type, description, status, options)
-                VALUES(id = :id, name = :name, type = :type,
-                    description = :description, status = :status, options = :options)`
+        return `INSERT INTO devices (name, type, description, status, options)
+                VALUES(:name, :type, :description, :status, :options)`
     }
 
     getUpdateStmt(){
-        return `UPDATE actions
+        return `UPDATE devices
                 SET name = :name, type = :type, description = :description,
                     status = :status, options = :options
                 WHERE id = :id`
@@ -67,7 +66,7 @@ class DeviceModel extends PrimaryModel {
             where += ' AND type = :type'
             this.setDeviceId(params.device_id)
         }
-        
+
         if(params.status){
             where += ' AND status = :status'
             this.setStatus(params.status)

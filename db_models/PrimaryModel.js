@@ -61,11 +61,12 @@ class PrimaryModel {
         return new Promise((resolve, reject) => {
             Connection.acquire(function(err, conn) {
                 if(err) throw err
-                var query = conn.query(statement, paramss, (err, result) => {
+                let query = conn.query(statement, paramss, (err, result) => {
                         conn.release()
                         if (!err) {
                             resolve(result)
                         } else {
+                            console.log('PrimaryModel query error:', err);
                             reject({
                                 httpCode: 403,
                                 type: 'ERROR',
