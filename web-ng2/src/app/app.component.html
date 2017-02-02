@@ -3,9 +3,9 @@
     <div class="navbar-header">
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a><=</a></li>
-          <li><a>=</a></li>
-          <li><a>=></a></li>
+          <li><a routerLink="/past" routerLinkActive="active"><=</a></li>
+          <li><a routerLink="/present" routerLinkActive="active">=</a></li>
+          <li><a routerLink="/future" routerLinkActive="active">=></a></li>
         </ul>
       </div>
     </div>
@@ -13,6 +13,6 @@
 </nav>
 <div class="container">
   <div class="row">
-    <!-- routing here -->
+    <router-outlet></router-outlet>
   </div>
 </div>

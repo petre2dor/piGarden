@@ -8,6 +8,8 @@ import { AlertModule } from 'ng2-bootstrap';
 import { PresentComponent } from './present/present.component';
 import { PastComponent } from './past/past.component';
 import { FutureComponent } from './future/future.component';
+import { routing }  from './app.routing';
+
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { FutureComponent } from './future/future.component';
     BrowserModule,
     FormsModule,
     HttpModule,
+    routing,
     AlertModule.forRoot()
   ],
   providers: [],
