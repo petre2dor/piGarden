@@ -5,10 +5,16 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { AlertModule } from 'ng2-bootstrap';
+import { PresentComponent } from './present/present.component';
+import { PastComponent } from './past/past.component';
+import { FutureComponent } from './future/future.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PresentComponent,
+    PastComponent,
+    FutureComponent
   ],
   imports: [
     BrowserModule,
