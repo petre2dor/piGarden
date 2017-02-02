@@ -20,3 +20,4 @@ curl -s https://raw.githubusercontent.com/petre2dor/piGarden/40-oneLineInstaller
 - watch the magic happen (and enjoy some music https://www.youtube.com/watch?v=qtZJiQSmJ9g)
 - swich user: `sudo su` and `su gradinar`
 - see actions running by watching the logs: `pm2 logs`
+- connect to db: `mysql -udb_gardener -pKTgdXz3SSMCY pi_garden`
