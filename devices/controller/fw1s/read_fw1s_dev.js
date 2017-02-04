@@ -1,4 +1,3 @@
-const Mcpadc    = require('mcp-spi-adc')
 const Util      = require('util/utilities')
 
 exports.read = deviceOptions => {

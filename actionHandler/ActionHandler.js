@@ -12,8 +12,7 @@ class ActionHandler {
         this.maxRetries = 30
     }
 
-    // main method
-    run()
+    getActionAndSetRunning()
     {
         var actionModel = new ActionModel()
         return actionModel
@@ -25,26 +24,30 @@ class ActionHandler {
                 if(!actionModel.getFields()) throw 404
 
                 // else
-                LogModel.create({type: 'AH_RUN', description: 'Setting action status to RUNNING', action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                actionModel.setStatus('RUNNING')
-                actionModel.update()
-
-                let ACRequest = new Request('localhost', 3000)
-                return this.callController(ACRequest, actionModel)
+                LogModel.create({type: 'AH_RUN', description: 'Setting action running flag ON', action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
+                actionModel.setIsRunning(1)
+                return actionModel.update()
             })
+            .then(response => {
+                return actionModel
+            })
+    }
+
+    // main method
+    run(actionModel)
+    {
+        let ACRequest = new Request('localhost', 3000)
+        return this
+            .callController(ACRequest, actionModel)
             .then(ACResponse => {
                 LogModel.create({type: 'AH_RUN', description: 'AC returned: '+ACResponse.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                if(ACResponse.httpCode >= 400) throw ACResponse
 
+                if(ACResponse.httpCode >= 400) throw ACResponse
                 return this.reschedule(actionModel, ACResponse.httpCode)
             })
             .catch(reason => {
-                if(reason === 404){
-                    return {message: 'There is no next action available.', httpCode: 200, type: 'SUCCESS'}
-                }else{
-                    LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
-                    return this.reschedule(actionModel, reason.httpCode)
-                }
+                LogModel.create({type: 'AH_RUN_ERR', description: reason.message, action_id: actionModel.getId(), device_id: actionModel.getDeviceId(), area_id: 0})
+                return this.reschedule(actionModel, reason.httpCode)
             })
     }
 
@@ -70,15 +73,16 @@ class ActionHandler {
         actionModel.setNextRunTime(nextRunTime)
         actionModel.setRetries(retries)
         actionModel.setStatus(nextStatus)
+        actionModel.setIsRunning(0)
 
-        return  actionModel.update()
+        return actionModel.update()
     }
 
     getNextRunTime(schedule, httpCode){
         var LocalDateTime = require('js-joda').LocalDateTime
-        if(httpCode >= 400){
-            return LocalDateTime.now().plus(Duration.parse('PT2S')).toString()
-        }
+
+        if(httpCode >= 400) return LocalDateTime.now().plus(Duration.parse('PT5S')).toString()
+
         switch (schedule.type) {
             case 'cyclic':
                 return LocalDateTime.now().plus(Duration.parse(schedule.every)).toString()
@@ -94,10 +98,7 @@ class ActionHandler {
     getNextStatus(schedule, httpCode, retries, maxRetries)
     {
         if(httpCode >= 400){
-            if(retries < maxRetries){
-                return 'WARNING'
-            }
-            return 'ERROR'
+            return retries < maxRetries ?  'WARNING' : 'ERROR'
         }
         switch (schedule.type) {
             case 'cyclic':

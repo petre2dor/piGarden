@@ -49,7 +49,7 @@
 //
 // }
 
-//
+
 // var test = function(){
 //     return new Promise( (resolve, reject) => {
 //         new Promise( (r, rj) => {
@@ -70,7 +70,7 @@
 //         })
 //     })
 // }
-//
+
 // var run = function myself () {
 //     test()
 //     .then(response => {
@@ -135,14 +135,14 @@
 
 // pin 18
 
-const Gpio = require('gpio-js')
-
-let led = new Gpio(18, 'out')
-// led ON
-led.val(1)
-
-// after one sec
-setTimeout(() => {
-    // led OFF
-    led.val(0)
-}, 1000)
+// const Gpio = require('gpio-js')
+//
+// let led = new Gpio(18, 'out')
+// // led ON
+// led.val(1)
+//
+// // after one sec
+// setTimeout(() => {
+//     // led OFF
+//     led.val(0)
+// }, 1000)
