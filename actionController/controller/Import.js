@@ -1,8 +1,6 @@
 const LogModel        = require('db_models/LogModel')
 const StatsModel      = require('db_models/StatsModel')
 const InfluxDB        = require('util/InfluxDB')
-const LocalDateTime   = require('js-joda').LocalDateTime
-const ChronoUnit      = require('js-joda').ChronoUnit
 
 exports.run = (req, res) => {
     let sql = `SELECT date, value, area_id, device_id, type, ext_data
