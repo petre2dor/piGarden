@@ -85,3 +85,20 @@ INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (2, 4, 'A
 -- insert an action to turn on the LED
 INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
 VALUES (4, 'BLINK', 'LED', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT3S"}', 'Blink LED', 0, 'INACTIVE');
+
+
+
+// add sth10
+
+--
+-- insert device
+INSERT INTO devices (id, name, type, description, status, options)
+VALUES (5, 'SHT10', 'DIGITAL', 'Soil Temperature and Humidity', 'ACTIVE', '{"js_file":"sht1x/read","dataPin":"24","clockPin":"23"}');
+
+-- set this device in area 1
+INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (1, 5, 'ACTIVE', '{}');
+
+
+-- insert an action to read the temperature and humidity
+INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+VALUES (5, 'READ', 'SHT10', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT10S"}', 'Read Soil Data', 0, 'INACTIVE');
