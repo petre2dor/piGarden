@@ -134,15 +134,44 @@
 
 
 // pin 18
+//
+// const Gpio = require('gpio-js')
+//
+// let led = new Gpio(18, 'out')
+// // led ON
+// led.val(1)
+//
+// // after one sec
+// setTimeout(() => {
+//     // led OFF
+//     led.val(0)
+// }, 1000)
 
-const Gpio = require('gpio-js')
 
-let led = new Gpio(18, 'out')
-// led ON
-led.val(1)
+const Influx = require('influx')
 
-// after one sec
-setTimeout(() => {
-    // led OFF
-    led.val(0)
-}, 1000)
+const influx = new Influx.InfluxDB({
+    host: 'localhost',
+    database: 'piGarden',
+    schema: [
+        {
+            measurement: 'temperature',
+            fields: {
+                value: Influx.FieldType.INTEGER
+            },
+            tags: [
+                'device',
+                'area'
+            ]
+        }
+    ]
+})
+
+influx.writePoints([{
+    measurement: 'temperature',
+    tags: { device: 1, area: 1 },
+    fields: { value: 24 },
+    timestamp: 1487148030
+}]).catch(err => {
+    console.error(`Error saving data to InfluxDB! ${err.stack}`)
+})
