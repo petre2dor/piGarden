@@ -1,4 +1,6 @@
 
+mysql -udb_gardener -pKTgdXz3SSMCY pi_garden
+
 // logModel.setAreaId(1)
 // logModel.setDeviceId(1)
 // logModel.setType('ACTION_RUNNER')

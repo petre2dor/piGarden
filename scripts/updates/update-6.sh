@@ -13,6 +13,7 @@ case `uname -m` in
         echo 'armv7 (raspberry)'
         LOCAL_DEB="$PI_GARDEN_ROOTinstallers/influxdb/influxdb-1.2.0_linux_armhf.tar.gz"
         tar xvfz influxdb-1.2.0_linux_armhf.tar.gz --transform="s|./influxdb-1.2.0-1||" --show-transformed-names
+        systemctl enable influxdb
         ;;
     *)
         echo 'wtf?!'
@@ -22,3 +23,8 @@ esac
 
 apt-get update
 apt-get -fy install
+
+chmod +x /etc/init.d/influxd
+service influxdb start
+
+curl -i -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE piGarden"
