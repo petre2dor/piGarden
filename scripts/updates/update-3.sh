@@ -17,7 +17,7 @@ echo "PM2_HOME=/home/$PI_GARDEN_USER_NAME/.pm2/" >> /etc/environment
 
 
 # update 5
-apt -y install build-essential g++
+apt -y install curl build-essential g++
 
 . /etc/environment
 
