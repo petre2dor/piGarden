@@ -16,6 +16,7 @@ exports.read = (req, res) => {
         res.status(200).json(result)
     })
     .catch(e => {
+        console.log(e);
         res.status(404).json({
             httpCode: 404,
             type: 'ERROR',
