@@ -5,12 +5,12 @@ if [[ "$EUID" -ne 0 ]]; then
    exit 1
 fi
 
-cd ~
 
 sudo apt-get update
-sudo apt-get install build-essential python-dev
+sudo apt-get -y install build-essential python-dev
 
 
+cd ~
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 cd Adafruit_Python_DHT
 
