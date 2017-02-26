@@ -21,3 +21,8 @@ esac
 dpkg -i $LOCAL_DEB
 apt-get update
 apt-get -fy install
+
+sed -i "s/;http_port = 3000/http_port = 3002/g" /etc/grafana/grafana.ini
+systemctl daemon-reload
+systemctl start grafana-server
+systemctl enable grafana-server.service
