@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# installs Grafana; it does a arch check to determine the proper .deb file to be used
+# installs InfluxDB; it does a arch check to determine the proper .deb file to be used
 . /etc/environment
 LOCAL_DEB=''
 case `uname -m` in
@@ -24,6 +24,13 @@ case `uname -m` in
         exit 1
         ;;
 esac
+# security stuff
+sed -i 's/# bind-address = ":8086"/bind-address = "127.0.0.1:8086"/g' /etc/influxdb/influxdb.conf
+sed -i 's/# hostname = "localhost"/# hostname = "localhost"\nbind-address = "127.0.0.1:8088"/g' /etc/influxdb/influxdb.conf
+
+
+
+
 systemctl daemon-reload
 systemctl enable influxdb
 systemctl start influxdb
