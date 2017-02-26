@@ -11,3 +11,7 @@ echo 'dtoverlay=w1-gpio' >> /boot/config.txt
 . /etc/environment
 cd $PI_GARDEN_ROOT
 npm install ds18b20-raspi
+
+# ls -al /sys/bus/w1/devices/
+echo "w1 devices list:"
+ls -al /sys/bus/w1/devices/ | grep "28" | awk '{print $9;}'
