@@ -11,16 +11,7 @@
             "cwd"               : "/piGarden/actionHandler",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_dev" : {
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_devpi" : {
-                "PI_GARDEN_ENV" : "DEVPI"
-            },
-            "env_production" : {
-                "PI_GARDEN_ENV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "remus"
             }
         },
         {
@@ -34,16 +25,7 @@
             "cwd"               : "/piGarden/actionController",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_dev" : {
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_devpi" : {
-                "PI_GARDEN_ENV" : "DEVPI"
-            },
-            "env_production" : {
-                "PI_GARDEN_ENV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "remus"
             }
         },
         {
@@ -57,16 +39,7 @@
             "cwd"               : "/piGarden/devices",
             "env" : {
                 "NODE_PATH"     : "/piGarden",
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_dev" : {
-                "PI_GARDEN_ENV" : "DEV"
-            },
-            "env_devpi" : {
-                "PI_GARDEN_ENV" : "DEVPI"
-            },
-            "env_production" : {
-                "PI_GARDEN_ENV" : "PRODUCTION"
+                "PI_GARDEN_ENV" : "remus"
             }
         },
         {
