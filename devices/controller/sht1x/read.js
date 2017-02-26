@@ -1,55 +1,57 @@
 const os = require('os')
+const spawn = require('child_process').spawn
 
 exports.read = deviceOptions => {
-        APICall = spawn('sht', ['-v', '-trd', deviceOptions.clockPin, deviceOptions.dataPin]);
-        if (typeof APICall != "undefined") {
-            APICall.stdout.on('data', data => {
-                console.log('backend: ' + data)
-                APIOutput += data
-            })
-            APICall.stderr.on('data', data => {
-                console.log('backend: ' + data)
-                APIOutput += data
-            })
+    let getDataFromOutput = output => {
+        let multiline = output.split(os.EOL)
+        let temperature, rh, dew_point = null
+        multiline.forEach(element => {
+            let line = element.split(':')
+            switch (line[0].trim()) {
+                case 'temperature':
+                    temperature = line[1].trim()
+                    break;
+                case 'rh':
+                    rh = line[1].trim()
+                    break;
+                case 'dew_point':
+                    dew_point = line[1].trim()
+                    break;
+            }
+        })
 
-            return new Promise((resolve, reject) => {
-                APICall.on('close', code => {
-                    console.log('exitcode: ' + code)
-                    console.log('output: ' + APIOutput)
-
-                    resolve({ httpCode: 200, type: 'SUCCESS', data: getDataFromOutput(APIOutput), message: 'Read sht10 successfuly from dataPin: '+deviceOptions.dataPin+', clockPin: '+deviceOptions.clockPin})
-                });
-                APICall.on('error', code => {
-                    console.log('errorcode: ' + code)
-                    reject({
-                            httpCode: 403,
-                            type: 'ERROR',
-                            message: 'Error reading sht10 from dataPin: '+deviceOptions.dataPin+', clockPin: '+deviceOptions.clockPin,
-                            data: 'exitcode: ' + code + ' output: ' + APIOutput
-                        })
-                })
-            })
-        }
+        return [{"type": "TEMPERATURE", "value": temperature}, {"type": "HUMIDITY", "value": rh}, {"type": "DEW", "value": dew_point}]
     }
-}
 
 
-getDataFromOutput = output => {
-    let multiline = output.split(os.EOL)
-    multiline.forEach(element => {
-        let line = element.split(':')
-        switch (line[0].trim()) {
-            case 'temperature':
-                let temperature = line[1].trim()
-                break;
-            case 'rh':
-                let rh = line[1].trim()
-                break;
-            case 'dew_point':
-                let dew_point = line[1].trim()
-                break;
-        }
-    })
+    let APICall = spawn('sht', ['-v', '-trd', deviceOptions.clockPin, deviceOptions.dataPin])
+    let APIOutput = ''
+    if (typeof APICall != "undefined") {
+        APICall.stdout.on('data', data => {
+            console.log('backend: ' + data)
+            APIOutput += data
+        })
+        APICall.stderr.on('data', data => {
+            console.log('backend: ' + data)
+            APIOutput += data
+        })
 
-    return [{"type": "TEMPERATURE", "value": temperature}, {"type": "HUMIDITY", "value": rh}, {"type": "DEW", "value": dew_point}]
+        return new Promise((resolve, reject) => {
+            APICall.on('close', code => {
+                console.log('exitcode: ' + code)
+                console.log('output: ' + APIOutput)
+
+                resolve({ httpCode: 200, type: 'SUCCESS', data: getDataFromOutput(APIOutput), message: 'Read sht10 successfuly from dataPin: '+deviceOptions.dataPin+', clockPin: '+deviceOptions.clockPin})
+            });
+            APICall.on('error', code => {
+                console.log('errorcode: ' + code)
+                reject({
+                        httpCode: 403,
+                        type: 'ERROR',
+                        message: 'Error reading sht10 from dataPin: '+deviceOptions.dataPin+', clockPin: '+deviceOptions.clockPin,
+                        data: 'exitcode: ' + code + ' output: ' + APIOutput
+                    })
+            })
+        })
+    }
 }
