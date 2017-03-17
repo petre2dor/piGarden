@@ -1,8 +1,0 @@
-# DML
-# CONTEXT-DATABASE: piGarden
-
-treasures,captain_id=dread_pirate_roberts value=801 1439856000
-treasures,captain_id=flint value=29 1439856000
-treasures,captain_id=sparrow value=38 1439856000
-treasures,captain_id=tetra value=47 1439856000
-treasures,captain_id=crunch value=109 1439858880
