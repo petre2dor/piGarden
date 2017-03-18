@@ -30,7 +30,7 @@ exports.open = function(req, res)
         })
         .then(() => {
             LogModel.create({description: 'Closing action updated. Calling /device endpoint.', type: 'AC_OPEN_VALVE', device_id: req.params.deviceId, action_id: 0, area_id: 0})
-            var request = new Request('localhost', 3001)
+            var request = new Request('127.0.0.1', 3001)
             return request.get('/valve/open/2')
         })
         .then(result => {
@@ -51,7 +51,7 @@ exports.close = function(req, res)
     action.read()
         .then(action => {
             LogModel.create({description: 'Read action. Calling /device endpoint.', type: 'AC_OPEN_VALVE', device_id: req.params.deviceId, action_id: 0, area_id: 0})
-            var request = new Request('localhost', 3001)
+            var request = new Request('127.0.0.1', 3001)
             return request.get('/valve/close/2')
         })
         .then(result => {

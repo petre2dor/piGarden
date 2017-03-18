@@ -6,7 +6,7 @@ describe("request.js", function() {
 	var promiseHelper
 
     beforeEach(function() {
-        request = new Request('localhost', 3000)
+        request = new Request('127.0.0.1', 3000)
 
         getPromise = new Promise(function(resolve, reject) {
 			promiseHelper = {
@@ -37,5 +37,5 @@ describe("request.js", function() {
     		})
 		})
 	})
-    // todo -> finish testing for post and failed requests 
+    // todo -> finish testing for post and failed requests
 })

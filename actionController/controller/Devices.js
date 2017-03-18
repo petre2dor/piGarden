@@ -5,7 +5,7 @@ var StatsModel      = require('db_models/StatsModel')
 var StatsController = require('./Stats')
 
 exports.read = (req, res) => {
-    let request = new Request('localhost', 3001)
+    let request = new Request('127.0.0.1', 3001)
     request.get('/read/'+req.params.deviceId)
         .then(result => {
             LogModel.create({type: 'READ', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(result)})
@@ -33,7 +33,7 @@ exports.read = (req, res) => {
 }
 
 exports.blink = (req, res) => {
-    let request = new Request('localhost', 3001)
+    let request = new Request('127.0.0.1', 3001)
     request.get('/blink/'+req.params.deviceId)
         .then(result => {
             LogModel.create({type: 'WRITE', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(result)})

@@ -29,7 +29,7 @@ class ActionHandler {
                 actionModel.setStatus('RUNNING')
                 actionModel.update()
 
-                let ACRequest = new Request('localhost', 3000)
+                let ACRequest = new Request('127.0.0.1', 3000)
                 return this.callController(ACRequest, actionModel)
             })
             .then(ACResponse => {

@@ -3,6 +3,6 @@
 const Influx = require('influx')
 
 module.exports = new Influx.InfluxDB({
-                        host: 'localhost',
+                        host: '127.0.0.1',
                         database: 'piGarden'
                     })

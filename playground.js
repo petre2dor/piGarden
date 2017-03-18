@@ -151,7 +151,7 @@
 const Influx = require('influx')
 
 const influx = new Influx.InfluxDB({
-    host: 'localhost',
+    host: '127.0.0.1',
     database: 'piGarden',
     schema: [
         {

@@ -2,7 +2,7 @@
 const http = require('http')
 const querystring = require('querystring')
 class Request {
-    constructor(host = 'localhost', port = 3000) {
+    constructor(host = '127.0.0.1', port = 3000) {
         this.options = {
             host: host,
             port: port

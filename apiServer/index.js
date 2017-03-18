@@ -11,4 +11,4 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true,
 }))
 app.listen(3003)
-console.log('Running a GraphQL API server at localhost:3003/graphql');
+console.log('Running a GraphQL API server at 127.0.0.1:3003/graphql');
