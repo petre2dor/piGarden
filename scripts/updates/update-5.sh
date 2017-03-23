@@ -1,6 +1,9 @@
 #! /bin/bash
 
 # installs Grafana; it does a arch check to determine the proper .deb file to be used
+echo "************************************"
+echo "*******Installing Grafana***********"
+echo "************************************"
 . /etc/environment
 LOCAL_DEB=''
 case `uname -m` in
@@ -13,7 +16,7 @@ case `uname -m` in
         LOCAL_DEB="$PI_GARDEN_ROOT/installers/grafana/grafana_4.1.2-1487023783_armhf.deb"
         ;;
     *)
-        echo 'wtf?!'
+        echo 'Unknown architecture. Installer available only for x86_64 and armv7 (raspberry)'
         exit 1
         ;;
 esac

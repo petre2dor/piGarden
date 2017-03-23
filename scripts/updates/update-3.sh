@@ -15,25 +15,12 @@ sed -i '/PM2_HOME/d' /etc/environment
 echo "PM2_HOME=/home/$PI_GARDEN_USER_NAME/.pm2/" >> /etc/environment
 
 
+echo "***************************"
+echo "***save current version****"
+echo "***************************"
+echo "VERSION_CURRENT=3" > $PI_GARDEN_ROOT/scripts/patch.version
 
-# update 5
-apt -y install curl build-essential g++
-
-. /etc/environment
-
-sudo su $PI_GARDEN_USER_NAME -c 'pm2 list'
-chmod -R go+w "/home/$PI_GARDEN_USER_NAME/.pm2/"
-sudo su -c "env PATH=$PATH:/usr/bin/node pm2 startup ubuntu -u $PI_GARDEN_USER_NAME --hp /home/$PI_GARDEN_USER_NAME"
-sudo su -c "env PATH=$PATH:/usr/bin/node pm2 logrotate -u $PI_GARDEN_USER_NAME"
-cd /piGarden
-sudo su $PI_GARDEN_USER_NAME -c "pm2 start $PI_GARDEN_ROOT/app.json"
-sudo su $PI_GARDEN_USER_NAME -c 'pm2 save'
-
-# update 13
-. /etc/environment;
-sed -i '/NODE_PATH/d' /etc/environment
-sed -i '/PI_GARDEN_ENV/d' /etc/environment
-
-sudo su $PI_GARDEN_USER_NAME -c 'pm2 kill'
-sudo su $PI_GARDEN_USER_NAME -c "pm2 start $PI_GARDEN_ROOT/app.json"
-sudo su $PI_GARDEN_USER_NAME -c 'pm2 save'
+echo "************************************"
+echo "***shuting down. please restart and run: cd /piGarden/scripts && sudo ./initialSetup.sh***************"
+echo "************************************"
+shutdown now

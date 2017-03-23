@@ -25,9 +25,9 @@ echo "*************************"
 echo "**********Install maria DB***********"
 echo "*************************"
 
-debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password password $PI_GARDEN_MYSQL_ROOT_PASS"
-debconf-set-selections <<< "mariadb-server-5.5 mysql-server/root_password_again password $PI_GARDEN_MYSQL_ROOT_PASS"
-apt -y install mariadb-server-5.5
+debconf-set-selections <<< "mariadb-server mysql-server/root_password password $PI_GARDEN_MYSQL_ROOT_PASS"
+debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password $PI_GARDEN_MYSQL_ROOT_PASS"
+apt -y install mariadb-server
 
 
 echo "*************************"

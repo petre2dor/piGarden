@@ -1,6 +1,9 @@
 #! /bin/bash
 
 # installs InfluxDB; it does a arch check to determine the proper .deb file to be used
+echo "************************************"
+echo "*******Installing InfluxDB**********"
+echo "************************************"
 . /etc/environment
 LOCAL_DEB=''
 case `uname -m` in
@@ -20,16 +23,13 @@ case `uname -m` in
         chown -R influxdb /var/lib/influxdb/
         ;;
     *)
-        echo 'wtf?!'
+        echo 'Unknown architecture. Installer available only for x86_64 and armv7 (raspberry)'
         exit 1
         ;;
 esac
 # security stuff
 sed -i 's/# bind-address = ":8086"/bind-address = "127.0.0.1:8086"/g' /etc/influxdb/influxdb.conf
 sed -i 's/# hostname = "localhost"/# hostname = "localhost"\nbind-address = "127.0.0.1:8088"/g' /etc/influxdb/influxdb.conf
-
-
-
 
 systemctl daemon-reload
 systemctl enable influxdb
