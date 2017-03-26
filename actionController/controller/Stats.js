@@ -15,7 +15,7 @@ exports.persistDeviceRead = function(deviceId, type, value) {
         while (areaDevice.getAreaId()) {
             LogModel.create({type: 'PERSIST_DEVICE_READ', action_id: 0, device_id: deviceId, area_id: areaDevice.getAreaId(), description: 'saving ' + type + ": " + value})
             // save to mysql
-            StatsModel.create({area_id: areaDevice.getAreaId(), device_id: deviceId, type: type, value: value})
+            // StatsModel.create({area_id: areaDevice.getAreaId(), device_id: deviceId, type: type, value: value})
 
             //save to InfluxDB
             InfluxDB

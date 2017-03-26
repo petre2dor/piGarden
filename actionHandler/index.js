@@ -11,7 +11,7 @@ var run = function myself () {
     ActionHandler
         .run()
         .then(response => {
-            LogModel.create({type: 'AH_RUN', description: '---', action_id: 0, area_id: 0, device_id: 0})
+            console.log('---');
             setTimeout(myself, 1000)
         })
         .catch(reason => {
