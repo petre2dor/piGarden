@@ -90,7 +90,7 @@ VALUES (4, 'BLINK', 'LED', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT3
 
 
 
-// add sth10
+// add sth10 - Soil Temperature and Humidity
 
 --
 -- insert device
@@ -104,3 +104,23 @@ INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (1, 5, 'A
 -- insert an action to read the temperature and humidity
 INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
 VALUES (5, 'READ', 'SHT10', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT10S"}', 'Read Soil Data', 0, 'INACTIVE');
+
+
+
+
+
+
+// add mh-rd - rain detector
+
+--
+-- insert device
+INSERT INTO devices (id, name, type, description, status, options)
+VALUES (6, 'MH_RD', 'DIGITAL', 'Rain Detector', 'ACTIVE', '{"js_file":"md-rd/read","GPIOpin":"23"}');
+
+-- set this device in area 1
+INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (1, 6, 'ACTIVE', '{}');
+
+
+-- insert an action to read the temperature and humidity
+INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
+VALUES (6, 'READ', 'MH-RD', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT60S"}', 'Check if it\'s raining', 0, 'INACTIVE');
