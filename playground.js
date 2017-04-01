@@ -147,6 +147,7 @@
 //     led.val(0)
 // }, 1000)
 
+// update devices set options = '{"js_file":"gpio/md-rd/read","GPIOpin":"23"}' where id = 6;
 
 const Influx = require('influx')
 
