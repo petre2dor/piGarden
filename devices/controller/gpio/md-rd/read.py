@@ -20,4 +20,4 @@ while timePassed < readTime:
         timePassed += readEvery
         time.sleep(readEvery)
 GPIO.cleanup(PIN)
-print '{"httpCode": "200", "type": "SUCCESS", "message": "All good.", "data": {"type": "RAINING", "value": "'+str(int(watherDetected))+'"}}'
+print '{"httpCode": "200", "type": "SUCCESS", "message": "All good.", "data": [{"type": "RAINING", "value": "'+str(int(watherDetected))+'"}]}'
