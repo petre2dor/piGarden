@@ -3,10 +3,13 @@ import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-GPIO.setup(18,GPIO.OUT)
 
-GPIO.output(18,GPIO.HIGH)
+PIN = int(sys.argv[1])
+
+GPIO.setup(PIN, GPIO.OUT)
+
+GPIO.output(PIN, GPIO.HIGH)
 time.sleep(0.2)
-GPIO.output(18,GPIO.LOW)
+GPIO.output(PIN, GPIO.LOW)
 
-print '{"httpCode": "200", "type": "SUCCESS", "message": "Blick successful (pin '+sys.argv[1]+')."}'
+print '{"httpCode": "200", "type": "SUCCESS", "message": "Blick successful (pin '+str(PIN)+')."}'
