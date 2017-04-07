@@ -1,2 +1,2 @@
 #! /bin/bash
-pip install sht-sensor
+sudo pip3 install sht-sensor
