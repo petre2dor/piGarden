@@ -21,6 +21,16 @@ curl -s https://raw.githubusercontent.com/petre2dor/piGarden/40-oneLineInstaller
 - swich user: `sudo su gradinar`
 - see actions running by watching the logs: `pm2 logs`
 - connect to db: `mysql -udb_gardener -pKTgdXz3SSMCY pi_garden`
+- grafana: http://localhost:3002 (admin/admin)
+    - adding a source
+        - Type: InfluxDB
+        - URL: http://localhost:8086
+        - Access: proxy
+    - add dashboards...
+    - add users....
+    - todo save a default config and import it automatically
+- graphql: http://localhost:3003/graphql
+
 
 
 ## getting updates
