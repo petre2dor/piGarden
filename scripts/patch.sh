@@ -3,7 +3,7 @@
 # this file is run by cronjob
 #
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
+   echo "This script must be run as sudo" 1>&2
    echo "please run: sudo $(readlink -f $0)"
    exit 1
 fi
@@ -19,7 +19,7 @@ VERSION_TARGET_FILE="./patch.target"
 
 # get current version
 if [ ! -f "$VERSION_CURRENT_FILE" ]; then
-	echo "VERSION_CURRENT=0" > $VERSION_CURRENT_FILE
+	echo "VERSION_CURRENT=0" > ${VERSION_CURRENT_FILE}
 fi
 
 . "$VERSION_CURRENT_FILE"
