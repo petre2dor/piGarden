@@ -130,7 +130,7 @@ INSERT INTO areas_devices(area_id, device_id, status, options) VALUES (2, 2, 'AC
 --
 -- insert DHT22 analog temperature and humidity sensor
 INSERT INTO devices (id, name, type, description, status, options)
-VALUES (3, 'DHT22', 'DIGITAL', 'DHT22 digital temperature/humidity sensor', 'ACTIVE', '{"js_file":"dht22/read_dht22","GPIOpin":"22"}');
+VALUES (3, 'DHT22', 'DIGITAL', 'DHT22 digital temperature/humidity sensor', 'ACTIVE', '{"js_file":"dht22/read_dht22","GPIOpin":"23"}');
 
 -- set this device in area 1
 INSERT INTO areas_devices (area_id, device_id, status, options)
@@ -138,4 +138,4 @@ VALUES (1, 3, 'ACTIVE', '{}');
 
 -- insert an action for this device
 INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
-VALUES (3, 'READ', 'TEMPERATURE_HUMIDITY', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT30S"}', 'Read temperature and humidity from device 3', 0, 'INACTIVE');
+VALUES (3, 'READ', 'TEMPERATURE_HUMIDITY', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT1M"}', 'Read temperature and humidity from device 3', 0, 'ACTIVE');
