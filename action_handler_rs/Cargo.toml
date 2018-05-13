@@ -1,0 +1,9 @@
+[package]
+name = "action_handler_rs"
+version = "0.1.0"
+authors = ["Petre Tudor <petre.tudor@protonmail.com>"]
+
+[dependencies]
+mysql_async = "0.14.1"
+tokio-core = "0.1.17"
+futures = "0.2.1"
