@@ -44,3 +44,49 @@ exports.blink = (req, res) => {
             res.send(err)
         })
 }
+
+exports.receive = (req, res) => {
+    let deviceModel = new DeviceModel()
+    deviceModel.setId(req.params.deviceId)
+    deviceModel.read()
+        .then(device => {  
+            let deviceOptions = device.getOptions()
+            if (!deviceOptions.token ||
+                !req.body.token 
+                || deviceOptions.token !== req.body.token
+            ){
+                res.status(403).json({
+                    httpCode: 403,
+                    type: 'ERROR',
+                    message: 'Invalid token provided',
+                    data: {}
+                })
+            } else {
+                data = JSON.parse(req.body.data)
+                
+                LogModel.create({ type: 'READ', action_id: 0, device_id: req.params.deviceId, area_id: 0, description: JSON.stringify(data) })
+                data.data.forEach(element => {
+                    StatsController.persistDeviceRead(req.params.deviceId, element.type, element.value)
+                    console.log(element.type + ': ' + element.value);
+                })
+
+                res.send({
+                    httpCode: 200,
+                    type: 'SUCCESS',
+                    message: 'Device data successfully saved.'
+                })
+            }
+        })
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(e => {
+            console.log(e);
+            res.status(404).json({
+                httpCode: 404,
+                type: 'ERROR',
+                message: e.message,
+                data: e
+            })
+        })
+}

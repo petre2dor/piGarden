@@ -133,3 +133,9 @@ INSERT INTO areas_devices (area_id, device_id, status, options) VALUES (1, 6, 'A
 -- insert an action to read the temperature and humidity
 INSERT INTO actions (device_id, verb, object, options, last_run_time, next_run_time, schedule, description, is_running, status)
 VALUES (6, 'READ', 'MH-RD', '{}', NOW(), NOW(), '{"type": "cyclic", "every": "PT60S"}', 'Check if it\'s raining', 0, 'INACTIVE');
+
+
+
+// adding devices from Fomo's place
+INSERT INTO devices(id, name, type, description, status, options) VALUES(4, 'Fomo Inside', 'DIGITAL', 'DS18B20 digital temperature sensor', 'ACTIVE', '{"token":"9u8432y3truehgnvief43"}');
+INSERT INTO devices(id, name, type, description, status, options) VALUES(5, 'Fomo Outside', 'DIGITAL', 'DS18B20 digital temperature sensor', 'ACTIVE', '{"token":"3290jfrnu3n82yy1209eefm2m328rf9o"}');

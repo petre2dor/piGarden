@@ -12,5 +12,6 @@ module.exports = {
         app.get('/open/valve/:deviceId', Valve.open)
         app.get('/close/valve/:deviceId', Valve.close)
         app.get('/influxDBImport', Import.run)
+        app.post('/receive/:deviceId', Devices.receive)
     }
 }
