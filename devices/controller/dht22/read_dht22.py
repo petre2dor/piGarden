@@ -44,7 +44,7 @@ humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 # the results will be null (because Linux can't
 # guarantee the timing of calls to read the sensor).
 # If this happens try again!
-if humidity is not None and temperature is not None:
+if humidity is not None and temperature is not None and humidity <= 100:
     # print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
     print '{"httpCode": "200", "type": "SUCCESS", "message": "All good.", "data": [{"type": "TEMPERATURE", "value": "'+str(temperature)+'"}, {"type": "HUMIDITY", "value": "'+str(humidity)+'"}]}'
 else:
